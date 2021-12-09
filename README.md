@@ -1,11 +1,12 @@
-# Репозиторий проекта MUse
+# Репозиторий проекта PostSys
 
-# Технологии Приложения
-  - Windows Forms
+## Технологии Приложения:
+* MS .NET 6 Core
+* WinForms
+* Entity Framework Tools
 
-# База данных
-  - MS SQL
-  - Файл с базой данных расположен в “ExamApp/bin/Debug/Data/Database.mdf”
-
-# Запуск
-  - Файл exe расположен в «MUse.Program.prj/bin/Debug/ExamApp.exe» 
+## База данных:
+* MS SQL
+* Файл с базой данной расположен в "src/shared/DataBase"
+* Необходимо подключить на сервер - (localdb)\MSSQLLocalDB или же сменить путь подключения в:
+  "src/postSys.application.prj/App.Config", переменная connectionString
