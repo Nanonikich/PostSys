@@ -75,6 +75,7 @@
 			// toolStrip1
 			// 
 			this.toolStrip1.AutoSize = false;
+			this.toolStrip1.BackColor = System.Drawing.SystemColors.ActiveCaption;
 			this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._btnAdd,
@@ -82,7 +83,7 @@
             this._btnDelete});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(800, 48);
+			this.toolStrip1.Size = new System.Drawing.Size(800, 50);
 			this.toolStrip1.TabIndex = 0;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -119,6 +120,7 @@
 			// toolStrip2
 			// 
 			this.toolStrip2.AutoSize = false;
+			this.toolStrip2.BackColor = System.Drawing.SystemColors.ActiveCaption;
 			this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Left;
 			this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -127,9 +129,9 @@
             this._btnRecipients,
             this._btnPlots,
             this._btnStreetCity});
-			this.toolStrip2.Location = new System.Drawing.Point(0, 48);
+			this.toolStrip2.Location = new System.Drawing.Point(0, 50);
 			this.toolStrip2.Name = "toolStrip2";
-			this.toolStrip2.Size = new System.Drawing.Size(126, 402);
+			this.toolStrip2.Size = new System.Drawing.Size(129, 400);
 			this.toolStrip2.TabIndex = 2;
 			this.toolStrip2.Text = "toolStrip2";
 			// 
@@ -138,6 +140,7 @@
 			this._btnPostmens.AutoSize = false;
 			this._btnPostmens.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this._btnPostmens.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._btnPostmens.ForeColor = System.Drawing.Color.Black;
 			this._btnPostmens.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this._btnPostmens.Name = "_btnPostmens";
 			this._btnPostmens.Size = new System.Drawing.Size(123, 35);
@@ -149,6 +152,7 @@
 			this._btnSenders.AutoSize = false;
 			this._btnSenders.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this._btnSenders.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._btnSenders.ForeColor = System.Drawing.Color.Black;
 			this._btnSenders.Image = ((System.Drawing.Image)(resources.GetObject("_btnSenders.Image")));
 			this._btnSenders.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this._btnSenders.Name = "_btnSenders";
@@ -161,6 +165,7 @@
 			this._btnRecipients.AutoSize = false;
 			this._btnRecipients.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this._btnRecipients.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._btnRecipients.ForeColor = System.Drawing.Color.Black;
 			this._btnRecipients.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this._btnRecipients.Name = "_btnRecipients";
 			this._btnRecipients.Size = new System.Drawing.Size(123, 35);
@@ -172,6 +177,7 @@
 			this._btnPlots.AutoSize = false;
 			this._btnPlots.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this._btnPlots.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._btnPlots.ForeColor = System.Drawing.Color.Black;
 			this._btnPlots.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this._btnPlots.Name = "_btnPlots";
 			this._btnPlots.Size = new System.Drawing.Size(123, 35);
@@ -183,6 +189,7 @@
 			this._btnStreetCity.AutoSize = false;
 			this._btnStreetCity.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this._btnStreetCity.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._btnStreetCity.ForeColor = System.Drawing.Color.Black;
 			this._btnStreetCity.Image = ((System.Drawing.Image)(resources.GetObject("_btnStreetCity.Image")));
 			this._btnStreetCity.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this._btnStreetCity.Name = "_btnStreetCity";
@@ -196,8 +203,8 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 450);
 			this.Controls.Add(this.toolStrip2);
-			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this._dgvAddresses);
+			this.Controls.Add(this.toolStrip1);
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Адреса";

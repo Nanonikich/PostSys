@@ -78,7 +78,7 @@
 			this._btnAdd.Name = "_btnAdd";
 			this._btnAdd.Size = new System.Drawing.Size(121, 31);
 			this._btnAdd.TabIndex = 8;
-			this._btnAdd.Text = "Add";
+			this._btnAdd.Text = "Добавить";
 			this._btnAdd.UseVisualStyleBackColor = true;
 			this._btnAdd.Click += new System.EventHandler(this.OnAddClick);
 			// 
@@ -89,7 +89,7 @@
 			this._btnCancel.Name = "_btnCancel";
 			this._btnCancel.Size = new System.Drawing.Size(121, 31);
 			this._btnCancel.TabIndex = 9;
-			this._btnCancel.Text = "Cancel";
+			this._btnCancel.Text = "Отменить";
 			this._btnCancel.UseVisualStyleBackColor = true;
 			this._btnCancel.Click += new System.EventHandler(this.OnCancelClick);
 			// 
@@ -100,7 +100,7 @@
 			this._btnEdit.Name = "_btnEdit";
 			this._btnEdit.Size = new System.Drawing.Size(121, 31);
 			this._btnEdit.TabIndex = 8;
-			this._btnEdit.Text = "Edit";
+			this._btnEdit.Text = "Изменить";
 			this._btnEdit.UseVisualStyleBackColor = true;
 			this._btnEdit.Click += new System.EventHandler(this.OnEditClick);
 			// 
@@ -260,6 +260,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.SystemColors.ActiveCaption;
 			this.ClientSize = new System.Drawing.Size(297, 385);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this._txtApartment);

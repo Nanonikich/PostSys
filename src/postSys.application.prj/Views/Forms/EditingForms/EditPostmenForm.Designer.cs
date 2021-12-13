@@ -166,7 +166,7 @@
 			this._btnEdit.Name = "_btnEdit";
 			this._btnEdit.Size = new System.Drawing.Size(137, 32);
 			this._btnEdit.TabIndex = 20;
-			this._btnEdit.Text = "Редактировать";
+			this._btnEdit.Text = "Изменить";
 			this._btnEdit.UseVisualStyleBackColor = true;
 			this._btnEdit.Click += new System.EventHandler(this.OnEditClick);
 			// 
@@ -185,6 +185,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.SystemColors.ActiveCaption;
 			this.ClientSize = new System.Drawing.Size(322, 378);
 			this.Controls.Add(this._cbxPlot);
 			this.Controls.Add(this._btnAdd);

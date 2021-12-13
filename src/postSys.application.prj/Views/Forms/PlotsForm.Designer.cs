@@ -177,6 +177,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.SystemColors.ActiveCaption;
 			this.ClientSize = new System.Drawing.Size(854, 347);
 			this.Controls.Add(this._cbxStreet);
 			this.Controls.Add(this._txtHouses);

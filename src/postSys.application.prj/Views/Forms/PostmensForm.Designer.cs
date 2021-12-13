@@ -43,6 +43,7 @@
 			// toolStrip1
 			// 
 			this.toolStrip1.AutoSize = false;
+			this.toolStrip1.BackColor = System.Drawing.SystemColors.ActiveCaption;
 			this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._cbxPlot,
