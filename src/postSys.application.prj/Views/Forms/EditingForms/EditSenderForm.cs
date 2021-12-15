@@ -110,9 +110,9 @@ namespace postSys.application.prj.Views.Forms
 			using PostSysContext db = new();
 
 			if (!string.IsNullOrEmpty(_txtSurname.Text) && !string.IsNullOrEmpty(_txtName.Text) &&
-				!string.IsNullOrEmpty(_txtPatronymic.Text) && !string.IsNullOrEmpty(_cbxCity.Text) &&
-				!string.IsNullOrEmpty(_cbxStreet.Text) && !string.IsNullOrEmpty(_cbxHome.Text) &&
-				!string.IsNullOrEmpty(_txtApartment.Text) && !string.IsNullOrEmpty(_txtPhone.Text))
+				!string.IsNullOrEmpty(_cbxCity.Text) && !string.IsNullOrEmpty(_cbxStreet.Text) && 
+				!string.IsNullOrEmpty(_cbxHome.Text) && !string.IsNullOrEmpty(_txtApartment.Text) && 
+				!string.IsNullOrEmpty(_txtPhone.Text))
 			{
 				db.Senders.Add(new Sender
 				{
@@ -145,9 +145,9 @@ namespace postSys.application.prj.Views.Forms
 			using PostSysContext db = new();
 
 			if (!string.IsNullOrEmpty(_txtSurname.Text) && !string.IsNullOrEmpty(_txtName.Text) &&
-				!string.IsNullOrEmpty(_txtPatronymic.Text) && !string.IsNullOrEmpty(_cbxCity.Text) &&
-				!string.IsNullOrEmpty(_cbxStreet.Text) && !string.IsNullOrEmpty(_cbxHome.Text) &&
-				!string.IsNullOrEmpty(_txtApartment.Text) && !string.IsNullOrEmpty(_txtPhone.Text))
+				!string.IsNullOrEmpty(_cbxCity.Text) && !string.IsNullOrEmpty(_cbxStreet.Text) && 
+				!string.IsNullOrEmpty(_cbxHome.Text) && !string.IsNullOrEmpty(_txtApartment.Text) && 
+				!string.IsNullOrEmpty(_txtPhone.Text))
 			{
 				foreach (var item in (from senders in db.Senders
 									  where senders.SenderId.Equals(_senderId)

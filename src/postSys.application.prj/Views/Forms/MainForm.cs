@@ -9,7 +9,8 @@ namespace postSys.application.prj.Views.Forms
 		
 		public bool ButtonEditClick { get; set; }
 		public List<Address> DgvCurrentRow { get; set; } = null!;
-		
+		private string CurrentRowInDgv { get; set; }
+
 		#endregion
 
 		#region .ctor
@@ -25,6 +26,13 @@ namespace postSys.application.prj.Views.Forms
 
 		public void ShowTable()
 		{
+			if (_dgvAddresses.CurrentRow != null)
+			{
+				CurrentRowInDgv = _dgvAddresses.CurrentRow.Cells[1].Value.ToString();
+			}
+
+			timer.Start();
+
 			using PostSysContext db = new();
 
 			_dgvAddresses.DataSource = (from address in db.Addresses
@@ -32,7 +40,7 @@ namespace postSys.application.prj.Views.Forms
 										join city in db.Cities on address.AddressCity equals city.CityId
 										join street in db.Streets on address.AddressStreet equals street.StreetId
 										select new
-										{	
+										{
 											ID = address.AddressId,
 											Участок = addressPostmenNavigation.PostmenPlot,
 											Получатель = address.AddressRecipientNavigation.RecipientSurname,
@@ -42,9 +50,21 @@ namespace postSys.application.prj.Views.Forms
 											Квартира = address.AddressApartment,
 											Почтальон = addressPostmenNavigation.PostmenSurname,
 											Товары = address.AddressGoods
-											
+
 										}).ToList();
 			db.Dispose();
+
+			if (_dgvAddresses != null)
+			{
+				// закрашивание ряда
+				foreach (DataGridViewRow row in _dgvAddresses.Rows)
+				{
+					if (row.Cells[1].Value.ToString().Equals(CurrentRowInDgv))
+					{
+						_dgvAddresses.CurrentCell = row.Cells[1];
+					}
+				}
+			}
 		}
 
 		#endregion
@@ -110,6 +130,8 @@ namespace postSys.application.prj.Views.Forms
 		private void OnCitiesClick(object sender, EventArgs e) => new StreetCityForm().ShowDialog();
 
 		private void OnPlotsClick(object sender, EventArgs e) => new PlotsForm().ShowDialog();
+
+		private void OnTimerTick(object sender, EventArgs e) => ShowTable();
 
 		private void MainForm_FormClosed(object sender, FormClosedEventArgs e) => Environment.Exit(0);
 

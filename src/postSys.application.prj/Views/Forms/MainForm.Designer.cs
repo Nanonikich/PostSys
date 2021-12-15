@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this._dgvAddresses = new System.Windows.Forms.DataGridView();
@@ -41,6 +42,7 @@
 			this._btnRecipients = new System.Windows.Forms.ToolStripButton();
 			this._btnPlots = new System.Windows.Forms.ToolStripButton();
 			this._btnStreetCity = new System.Windows.Forms.ToolStripButton();
+			this.timer = new System.Windows.Forms.Timer(this.components);
 			((System.ComponentModel.ISupportInitialize)(this._dgvAddresses)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
@@ -197,6 +199,11 @@
 			this._btnStreetCity.Text = "Улица / Город";
 			this._btnStreetCity.Click += new System.EventHandler(this.OnCitiesClick);
 			// 
+			// timer
+			// 
+			this.timer.Interval = 2000;
+			this.timer.Tick += new System.EventHandler(this.OnTimerTick);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -233,5 +240,6 @@
 		private ToolStripButton _btnPlots;
 		private ToolStripButton _btnStreetCity;
 		private ToolStripButton _btnSenders;
+		private System.Windows.Forms.Timer timer;
 	}
 }
