@@ -30,6 +30,7 @@
 		{
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StreetCityForm));
 			this.label1 = new System.Windows.Forms.Label();
 			this._txtCity = new System.Windows.Forms.TextBox();
 			this._btnAddCity = new System.Windows.Forms.Button();
@@ -203,6 +204,7 @@
 			this.Controls.Add(this._txtCity);
 			this.Controls.Add(this.label1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "StreetCityForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -9,7 +9,7 @@ namespace postSys.application.prj.Views.Forms
 		
 		public bool ButtonEditClick { get; set; }
 		public List<Address> DgvCurrentRow { get; set; } = null!;
-		private string CurrentRowInDgv { get; set; }
+		private string ?CurrentRowInDgv { get; set; }
 
 		#endregion
 

@@ -116,6 +116,7 @@
 			this.ClientSize = new System.Drawing.Size(800, 450);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this._dgvRecipients);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "RecipientsForm";
 			this.Text = "Получатели";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

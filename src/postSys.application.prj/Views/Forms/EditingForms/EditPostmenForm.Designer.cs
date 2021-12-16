@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditPostmenForm));
 			this._btnAdd = new System.Windows.Forms.Button();
 			this._btnCancel = new System.Windows.Forms.Button();
 			this._txtSurname = new System.Windows.Forms.TextBox();
@@ -201,6 +202,7 @@
 			this.Controls.Add(this._txtSurname);
 			this.Controls.Add(this._btnCancel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "EditPostmenForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

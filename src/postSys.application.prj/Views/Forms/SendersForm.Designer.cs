@@ -116,6 +116,7 @@
 			this.ClientSize = new System.Drawing.Size(800, 450);
 			this.Controls.Add(this._dgvSenders);
 			this.Controls.Add(this.toolStrip1);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "SendersForm";
 			this.Text = "Отправители";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

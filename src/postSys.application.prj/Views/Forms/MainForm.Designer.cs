@@ -212,6 +212,7 @@
 			this.Controls.Add(this.toolStrip2);
 			this.Controls.Add(this._dgvAddresses);
 			this.Controls.Add(this.toolStrip1);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Адреса";
