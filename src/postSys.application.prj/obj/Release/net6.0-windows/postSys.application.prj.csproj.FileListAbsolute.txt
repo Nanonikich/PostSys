@@ -59,3 +59,5 @@ C:\Users\Acer\Desktop\PostSys\src\postSys.application.prj\obj\Release\net6.0-win
 C:\Users\Acer\Desktop\PostSys\src\postSys.application.prj\obj\Release\net6.0-windows\ref\postSys.application.prj.dll
 C:\Users\Acer\Desktop\PostSys\src\postSys.application.prj\obj\Release\net6.0-windows\postSys.application.prj.pdb
 C:\Users\Acer\Desktop\PostSys\src\postSys.application.prj\obj\Release\net6.0-windows\postSys.application.prj.genruntimeconfig.cache
+C:\Users\Acer\Desktop\PostSys\src\postSys.application.prj\obj\Release\net6.0-windows\postSys.application.prj.Views.Forms.EditingForms.EditUserForm.resources
+C:\Users\Acer\Desktop\PostSys\src\postSys.application.prj\obj\Release\net6.0-windows\postSys.application.prj.Views.Forms.UsersForm.resources

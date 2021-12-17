@@ -5,6 +5,8 @@ namespace postSys.application.prj.Views.Forms
 {
 	public partial class MainForm : Form
 	{
+		private string _activeUser;
+
 		#region Properties
 		
 		public bool ButtonEditClick { get; set; }
@@ -15,8 +17,10 @@ namespace postSys.application.prj.Views.Forms
 
 		#region .ctor
 
-		public MainForm()
+		public MainForm(string activeUser)
 		{
+			_activeUser = activeUser;
+
 			InitializeComponent();
 		}
 
@@ -71,7 +75,15 @@ namespace postSys.application.prj.Views.Forms
 
 		#region Events
 
-		private void MainFormLoad(object sender, EventArgs e) => ShowTable();
+		private void MainFormLoad(object sender, EventArgs e)
+		{
+			if (_activeUser != "Admin")
+			{
+				_btnUsers.Visible = false;
+			}
+
+			ShowTable();
+		}
 
 		private void OnAddClick(object sender, EventArgs e) => new EditAddressForm(this).ShowDialog();
 
@@ -130,6 +142,8 @@ namespace postSys.application.prj.Views.Forms
 		private void OnCitiesClick(object sender, EventArgs e) => new StreetCityForm().ShowDialog();
 
 		private void OnPlotsClick(object sender, EventArgs e) => new PlotsForm().ShowDialog();
+
+		private void OnUsersClick(object sender, EventArgs e) => new UsersForm().ShowDialog();
 
 		private void OnTimerTick(object sender, EventArgs e) => ShowTable();
 

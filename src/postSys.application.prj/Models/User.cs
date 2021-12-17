@@ -12,7 +12,6 @@ namespace postSys.application.prj
         public string UserEmail { get; set; } = null!;
         public string UserPhone { get; set; } = null!;
         public string UserCity { get; set; } = null!;
-        public string UserAddress { get; set; } = null!;
         public string UserUsername { get; set; } = null!;
         public string UserPassword { get; set; } = null!;
         public int UserStatus { get; set; }

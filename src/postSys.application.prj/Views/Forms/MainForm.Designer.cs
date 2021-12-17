@@ -43,6 +43,7 @@
 			this._btnPlots = new System.Windows.Forms.ToolStripButton();
 			this._btnStreetCity = new System.Windows.Forms.ToolStripButton();
 			this.timer = new System.Windows.Forms.Timer(this.components);
+			this._btnUsers = new System.Windows.Forms.ToolStripButton();
 			((System.ComponentModel.ISupportInitialize)(this._dgvAddresses)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
@@ -130,7 +131,8 @@
             this._btnSenders,
             this._btnRecipients,
             this._btnPlots,
-            this._btnStreetCity});
+            this._btnStreetCity,
+            this._btnUsers});
 			this.toolStrip2.Location = new System.Drawing.Point(0, 50);
 			this.toolStrip2.Name = "toolStrip2";
 			this.toolStrip2.Size = new System.Drawing.Size(129, 400);
@@ -204,6 +206,18 @@
 			this.timer.Interval = 2000;
 			this.timer.Tick += new System.EventHandler(this.OnTimerTick);
 			// 
+			// _btnUsers
+			// 
+			this._btnUsers.AutoSize = false;
+			this._btnUsers.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this._btnUsers.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._btnUsers.Image = ((System.Drawing.Image)(resources.GetObject("_btnUsers.Image")));
+			this._btnUsers.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this._btnUsers.Name = "_btnUsers";
+			this._btnUsers.Size = new System.Drawing.Size(123, 35);
+			this._btnUsers.Text = "Пользователи";
+			this._btnUsers.Click += new System.EventHandler(this.OnUsersClick);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -242,5 +256,6 @@
 		private ToolStripButton _btnStreetCity;
 		private ToolStripButton _btnSenders;
 		private System.Windows.Forms.Timer timer;
+		private ToolStripButton _btnUsers;
 	}
 }

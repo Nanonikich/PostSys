@@ -270,8 +270,6 @@ namespace postSys.application.prj
 
 				entity.Property(e => e.UserId).HasColumnName("user_id");
 
-				entity.Property(e => e.UserAddress).HasColumnName("user_address");
-
 				entity.Property(e => e.UserCity)
 					.HasMaxLength(30)
 					.HasColumnName("user_city");
