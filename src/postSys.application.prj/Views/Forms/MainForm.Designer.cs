@@ -78,7 +78,6 @@
 			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
 			this._dgvAddresses.DefaultCellStyle = dataGridViewCellStyle2;
-			this._dgvAddresses.GridColor = System.Drawing.SystemColors.Control;
 			this._dgvAddresses.Location = new System.Drawing.Point(129, 50);
 			this._dgvAddresses.MultiSelect = false;
 			this._dgvAddresses.Name = "_dgvAddresses";
