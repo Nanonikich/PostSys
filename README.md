@@ -20,6 +20,5 @@
 ![alt text](screenshots/Hello.png "Авторизация")
 ![alt text](screenshots/Recipients.png "Окно с Получателями + окно редактора")
 ![alt text](screenshots/Plots.png "Окно с Участками")
-![alt text](screenshots/StreetsCities.png "Редактор Улиц/Городов")
 ![alt text](screenshots/Addresses.png "Главное меню с Адресами + окно редактора")
 
