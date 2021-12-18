@@ -101,6 +101,45 @@ namespace postSys.application.prj.Views.Forms
 			}
 		}
 
+		private void OnSearchSenderOrRecipientTextChanged(object sender, EventArgs e)
+		{
+			using PostSysContext db = new();
+
+			if (_txtSearchSender.Text == "" && _txtSearchRecipient.Text == "")
+			{
+				ShowTable();
+			}
+			else
+			{
+				_dgvRecipients.DataSource = (from recipient in db.Recipients
+											 where recipient.RecipientSenderNavigation.SenderSurname.Contains(_txtSearchSender.Text.ToLower()) &&
+												   recipient.RecipientSurname.Contains(_txtSearchRecipient.Text.ToLower())
+											 select new
+											 {
+												 ID = recipient.RecipientId,
+												 Серия = recipient.RecipientSeries,
+												 Номер = recipient.RecipientNumber,
+												 Фамилия = recipient.RecipientSurname,
+												 Имя = recipient.RecipientName,
+												 Отчество = recipient.RecipientPatronymic,
+												 Город = recipient.RecipientCityNavigation.CityName,
+												 Улица = recipient.RecipientStreetNavigation.CodeAddressStreetNavigation.StreetName,
+												 Дом = recipient.RecipientHome,
+												 Квартира = recipient.RecipientApartment,
+												 Телефон = recipient.RecipientPhone,
+												 Отправитель = recipient.RecipientSenderNavigation.SenderSurname
+											 }).ToList();
+			}
+
+			db.Dispose();
+		}
+
+		private void OnTxtBoxesKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+				e.SuppressKeyPress = true;
+		}
+
 		#endregion
 	}
 }

@@ -18,8 +18,6 @@
 ### Сриншоты Приложения:
 
 ![alt text](screenshots/Hello.png "Авторизация")
-![alt text](screenshots/Postmens.png "Окно с Почтальонами")
-![alt text](screenshots/Senders.png "Окно с Отправителями")
 ![alt text](screenshots/Recipients.png "Окно с Получателями + окно редактора")
 ![alt text](screenshots/Plots.png "Окно с Участками")
 ![alt text](screenshots/StreetsCities.png "Редактор Улиц/Городов")

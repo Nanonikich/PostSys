@@ -21,30 +21,37 @@ namespace mUse.application.prj.Views.Forms
 
 		private void OnLoginClick(object sender, EventArgs e)
 		{
-			using PostSysContext db = new();
-
-			IEnumerable<User> users() => from user in db.Users
-
-										 where user.UserUsername == _txtUsername.Text && user.UserPassword == _txtPassword.Text
-										 select user;
-
-			if (users().ToList().Count != 0)
+			try
 			{
-				foreach (var x in from item in users().ToList()
-								  let x = (from status in db.Statuses where status.StatusId == item.UserStatus select status.StatusName).First().ToString()
-								  select x)
+				using PostSysContext db = new();
+
+				IEnumerable<User> users() => from user in db.Users
+
+											 where user.UserUsername == _txtUsername.Text && user.UserPassword == _txtPassword.Text
+											 select user;
+
+				if (users().ToList().Count != 0)
 				{
-					new MainForm(x).Show();
-					Hide();
-					break;
-				}
+					foreach (var x in from item in users().ToList()
+									  let x = (from status in db.Statuses where status.StatusId == item.UserStatus select status.StatusName).First().ToString()
+									  select x)
+					{
+						new MainForm(x).Show();
+						Hide();
+						break;
+					}
 
-				db.Dispose();
+					db.Dispose();
+				}
+				else
+				{
+					db.Dispose();
+					MessageBox.Show("Неверный логин или пароль");
+				}
 			}
-			else
+			catch
 			{
-				db.Dispose();
-				MessageBox.Show("Неверный логин или пароль");
+				MessageBox.Show("Нет подключения к базе данных");
 			}
 		}
 

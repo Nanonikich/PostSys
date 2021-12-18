@@ -35,6 +35,10 @@
 			this._btnAdd = new System.Windows.Forms.ToolStripButton();
 			this._btnEdit = new System.Windows.Forms.ToolStripButton();
 			this._btnDelete = new System.Windows.Forms.ToolStripButton();
+			this._txtSearchRecipient = new System.Windows.Forms.ToolStripTextBox();
+			this._lblRecipient = new System.Windows.Forms.ToolStripLabel();
+			this._txtSearchSender = new System.Windows.Forms.ToolStripTextBox();
+			this._lblSender = new System.Windows.Forms.ToolStripLabel();
 			((System.ComponentModel.ISupportInitialize)(this._dgvRecipients)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -72,7 +76,11 @@
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._btnAdd,
             this._btnEdit,
-            this._btnDelete});
+            this._btnDelete,
+            this._txtSearchSender,
+            this._lblSender,
+            this._txtSearchRecipient,
+            this._lblRecipient});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(800, 51);
@@ -109,6 +117,44 @@
 			this._btnDelete.Size = new System.Drawing.Size(40, 48);
 			this._btnDelete.Click += new System.EventHandler(this.OnDeleteClick);
 			// 
+			// _txtSearchRecipient
+			// 
+			this._txtSearchRecipient.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this._txtSearchRecipient.AutoSize = false;
+			this._txtSearchRecipient.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._txtSearchRecipient.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._txtSearchRecipient.Name = "_txtSearchRecipient";
+			this._txtSearchRecipient.Size = new System.Drawing.Size(160, 26);
+			this._txtSearchRecipient.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTxtBoxesKeyDown);
+			this._txtSearchRecipient.TextChanged += new System.EventHandler(this.OnSearchSenderOrRecipientTextChanged);
+			// 
+			// _lblRecipient
+			// 
+			this._lblRecipient.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this._lblRecipient.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._lblRecipient.Name = "_lblRecipient";
+			this._lblRecipient.Size = new System.Drawing.Size(75, 48);
+			this._lblRecipient.Text = "Получатель:";
+			// 
+			// _txtSearchSender
+			// 
+			this._txtSearchSender.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this._txtSearchSender.AutoSize = false;
+			this._txtSearchSender.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._txtSearchSender.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._txtSearchSender.Name = "_txtSearchSender";
+			this._txtSearchSender.Size = new System.Drawing.Size(160, 26);
+			this._txtSearchSender.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTxtBoxesKeyDown);
+			this._txtSearchSender.TextChanged += new System.EventHandler(this.OnSearchSenderOrRecipientTextChanged);
+			// 
+			// _lblSender
+			// 
+			this._lblSender.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this._lblSender.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._lblSender.Name = "_lblSender";
+			this._lblSender.Size = new System.Drawing.Size(80, 48);
+			this._lblSender.Text = "Отправитель:";
+			// 
 			// RecipientsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -135,5 +181,9 @@
 		private ToolStripButton _btnAdd;
 		private ToolStripButton _btnEdit;
 		private ToolStripButton _btnDelete;
+		private ToolStripTextBox _txtSearchRecipient;
+		private ToolStripLabel _lblSender;
+		private ToolStripTextBox _txtSearchSender;
+		private ToolStripLabel _lblRecipient;
 	}
 }

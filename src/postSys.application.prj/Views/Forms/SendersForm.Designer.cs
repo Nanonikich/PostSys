@@ -29,11 +29,13 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SendersForm));
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this._btnAdd = new System.Windows.Forms.ToolStripButton();
 			this._btnEdit = new System.Windows.Forms.ToolStripButton();
 			this._btnDelete = new System.Windows.Forms.ToolStripButton();
+			this._txtSearchSender = new System.Windows.Forms.ToolStripTextBox();
+			this._lblSearch = new System.Windows.Forms.ToolStripLabel();
 			this._dgvSenders = new System.Windows.Forms.DataGridView();
 			this.toolStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this._dgvSenders)).BeginInit();
@@ -47,7 +49,9 @@
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._btnAdd,
             this._btnEdit,
-            this._btnDelete});
+            this._btnDelete,
+            this._txtSearchSender,
+            this._lblSearch});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(800, 51);
@@ -84,6 +88,25 @@
 			this._btnDelete.Size = new System.Drawing.Size(40, 48);
 			this._btnDelete.Click += new System.EventHandler(this.OnDeleteClick);
 			// 
+			// _txtSearchSender
+			// 
+			this._txtSearchSender.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this._txtSearchSender.AutoSize = false;
+			this._txtSearchSender.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._txtSearchSender.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._txtSearchSender.Name = "_txtSearchSender";
+			this._txtSearchSender.Size = new System.Drawing.Size(160, 26);
+			this._txtSearchSender.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnSearchSenderKeyDown);
+			this._txtSearchSender.TextChanged += new System.EventHandler(this.OnSearchSenderTextChanged);
+			// 
+			// _lblSearch
+			// 
+			this._lblSearch.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this._lblSearch.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._lblSearch.Name = "_lblSearch";
+			this._lblSearch.Size = new System.Drawing.Size(132, 48);
+			this._lblSearch.Text = "Фамилия отправителя:";
+			// 
 			// _dgvSenders
 			// 
 			this._dgvSenders.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -91,14 +114,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._dgvSenders.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 			this._dgvSenders.BackgroundColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this._dgvSenders.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this._dgvSenders.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			this._dgvSenders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this._dgvSenders.Location = new System.Drawing.Point(0, 54);
 			this._dgvSenders.MultiSelect = false;
@@ -135,5 +158,7 @@
 		private ToolStripButton _btnEdit;
 		private ToolStripButton _btnDelete;
 		private DataGridView _dgvSenders;
+		private ToolStripTextBox _txtSearchSender;
+		private ToolStripLabel _lblSearch;
 	}
 }

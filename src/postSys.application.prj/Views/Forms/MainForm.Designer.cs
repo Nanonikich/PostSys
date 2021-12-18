@@ -30,20 +30,25 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this._dgvAddresses = new System.Windows.Forms.DataGridView();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this._btnAdd = new System.Windows.Forms.ToolStripButton();
 			this._btnEdit = new System.Windows.Forms.ToolStripButton();
 			this._btnDelete = new System.Windows.Forms.ToolStripButton();
+			this._txtSearchPostmen = new System.Windows.Forms.ToolStripTextBox();
+			this._lblSearchPostmen = new System.Windows.Forms.ToolStripLabel();
+			this._txtSearchRecipient = new System.Windows.Forms.ToolStripTextBox();
+			this._lblSearchRecipient = new System.Windows.Forms.ToolStripLabel();
 			this.toolStrip2 = new System.Windows.Forms.ToolStrip();
 			this._btnPostmens = new System.Windows.Forms.ToolStripButton();
 			this._btnSenders = new System.Windows.Forms.ToolStripButton();
 			this._btnRecipients = new System.Windows.Forms.ToolStripButton();
 			this._btnPlots = new System.Windows.Forms.ToolStripButton();
 			this._btnStreetCity = new System.Windows.Forms.ToolStripButton();
-			this.timer = new System.Windows.Forms.Timer(this.components);
 			this._btnUsers = new System.Windows.Forms.ToolStripButton();
+			this.timer = new System.Windows.Forms.Timer(this.components);
 			((System.ComponentModel.ISupportInitialize)(this._dgvAddresses)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
@@ -65,13 +70,22 @@
 			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this._dgvAddresses.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this._dgvAddresses.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this._dgvAddresses.Location = new System.Drawing.Point(129, 48);
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this._dgvAddresses.DefaultCellStyle = dataGridViewCellStyle2;
+			this._dgvAddresses.GridColor = System.Drawing.SystemColors.Control;
+			this._dgvAddresses.Location = new System.Drawing.Point(129, 50);
 			this._dgvAddresses.MultiSelect = false;
 			this._dgvAddresses.Name = "_dgvAddresses";
 			this._dgvAddresses.RowHeadersVisible = false;
 			this._dgvAddresses.RowTemplate.Height = 25;
 			this._dgvAddresses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this._dgvAddresses.Size = new System.Drawing.Size(671, 402);
+			this._dgvAddresses.Size = new System.Drawing.Size(671, 400);
 			this._dgvAddresses.TabIndex = 0;
 			this._dgvAddresses.TabStop = false;
 			// 
@@ -83,7 +97,11 @@
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._btnAdd,
             this._btnEdit,
-            this._btnDelete});
+            this._btnDelete,
+            this._txtSearchPostmen,
+            this._lblSearchPostmen,
+            this._txtSearchRecipient,
+            this._lblSearchRecipient});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(800, 50);
@@ -119,6 +137,44 @@
 			this._btnDelete.Name = "_btnDelete";
 			this._btnDelete.Size = new System.Drawing.Size(40, 48);
 			this._btnDelete.Click += new System.EventHandler(this.OnDeleteClick);
+			// 
+			// _txtSearchPostmen
+			// 
+			this._txtSearchPostmen.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this._txtSearchPostmen.AutoSize = false;
+			this._txtSearchPostmen.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._txtSearchPostmen.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._txtSearchPostmen.Name = "_txtSearchPostmen";
+			this._txtSearchPostmen.Size = new System.Drawing.Size(160, 26);
+			this._txtSearchPostmen.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTxtBoxesKeyDown);
+			this._txtSearchPostmen.TextChanged += new System.EventHandler(this.OnSearchRecipientOrPostmenTextChanged);
+			// 
+			// _lblSearchPostmen
+			// 
+			this._lblSearchPostmen.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this._lblSearchPostmen.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._lblSearchPostmen.Name = "_lblSearchPostmen";
+			this._lblSearchPostmen.Size = new System.Drawing.Size(70, 47);
+			this._lblSearchPostmen.Text = "Почтальон:";
+			// 
+			// _txtSearchRecipient
+			// 
+			this._txtSearchRecipient.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this._txtSearchRecipient.AutoSize = false;
+			this._txtSearchRecipient.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._txtSearchRecipient.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._txtSearchRecipient.Name = "_txtSearchRecipient";
+			this._txtSearchRecipient.Size = new System.Drawing.Size(160, 26);
+			this._txtSearchRecipient.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTxtBoxesKeyDown);
+			this._txtSearchRecipient.TextChanged += new System.EventHandler(this.OnSearchRecipientOrPostmenTextChanged);
+			// 
+			// _lblSearchRecipient
+			// 
+			this._lblSearchRecipient.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this._lblSearchRecipient.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._lblSearchRecipient.Name = "_lblSearchRecipient";
+			this._lblSearchRecipient.Size = new System.Drawing.Size(75, 47);
+			this._lblSearchRecipient.Text = "Получатель:";
 			// 
 			// toolStrip2
 			// 
@@ -201,11 +257,6 @@
 			this._btnStreetCity.Text = "Улица / Город";
 			this._btnStreetCity.Click += new System.EventHandler(this.OnCitiesClick);
 			// 
-			// timer
-			// 
-			this.timer.Interval = 2000;
-			this.timer.Tick += new System.EventHandler(this.OnTimerTick);
-			// 
 			// _btnUsers
 			// 
 			this._btnUsers.AutoSize = false;
@@ -217,6 +268,11 @@
 			this._btnUsers.Size = new System.Drawing.Size(123, 35);
 			this._btnUsers.Text = "Пользователи";
 			this._btnUsers.Click += new System.EventHandler(this.OnUsersClick);
+			// 
+			// timer
+			// 
+			this.timer.Interval = 2000;
+			this.timer.Tick += new System.EventHandler(this.OnTimerTick);
 			// 
 			// MainForm
 			// 
@@ -257,5 +313,9 @@
 		private ToolStripButton _btnSenders;
 		private System.Windows.Forms.Timer timer;
 		private ToolStripButton _btnUsers;
+		private ToolStripTextBox _txtSearchPostmen;
+		private ToolStripTextBox _txtSearchRecipient;
+		private ToolStripLabel _lblSearchRecipient;
+		private ToolStripLabel _lblSearchPostmen;
 	}
 }

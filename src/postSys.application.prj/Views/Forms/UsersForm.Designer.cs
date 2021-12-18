@@ -29,12 +29,14 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UsersForm));
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this._btnAdd = new System.Windows.Forms.ToolStripButton();
 			this._btnEdit = new System.Windows.Forms.ToolStripButton();
 			this._btnDelete = new System.Windows.Forms.ToolStripButton();
 			this._dgvUsers = new System.Windows.Forms.DataGridView();
+			this._txtSearchUser = new System.Windows.Forms.ToolStripTextBox();
+			this._lblSearch = new System.Windows.Forms.ToolStripLabel();
 			this.toolStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this._dgvUsers)).BeginInit();
 			this.SuspendLayout();
@@ -47,7 +49,9 @@
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._btnAdd,
             this._btnEdit,
-            this._btnDelete});
+            this._btnDelete,
+            this._txtSearchUser,
+            this._lblSearch});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(800, 50);
@@ -93,14 +97,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._dgvUsers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 			this._dgvUsers.BackgroundColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this._dgvUsers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this._dgvUsers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
 			this._dgvUsers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this._dgvUsers.Location = new System.Drawing.Point(0, 51);
 			this._dgvUsers.MultiSelect = false;
@@ -110,6 +114,25 @@
 			this._dgvUsers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this._dgvUsers.Size = new System.Drawing.Size(800, 399);
 			this._dgvUsers.TabIndex = 2;
+			// 
+			// _txtSearchUser
+			// 
+			this._txtSearchUser.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this._txtSearchUser.AutoSize = false;
+			this._txtSearchUser.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._txtSearchUser.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._txtSearchUser.Name = "_txtSearchUser";
+			this._txtSearchUser.Size = new System.Drawing.Size(160, 26);
+			this._txtSearchUser.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnSearchUserKeyDown);
+			this._txtSearchUser.TextChanged += new System.EventHandler(this.OnSearchUserTextChanged);
+			// 
+			// _lblSearch
+			// 
+			this._lblSearch.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this._lblSearch.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this._lblSearch.Name = "_lblSearch";
+			this._lblSearch.Size = new System.Drawing.Size(116, 47);
+			this._lblSearch.Text = "Поиск по фамилии:";
 			// 
 			// UsersForm
 			// 
@@ -138,5 +161,7 @@
 		private ToolStripButton _btnAdd;
 		private ToolStripButton _btnEdit;
 		private ToolStripButton _btnDelete;
+		private ToolStripTextBox _txtSearchUser;
+		private ToolStripLabel _lblSearch;
 	}
 }

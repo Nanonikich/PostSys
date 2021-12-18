@@ -96,6 +96,41 @@ namespace postSys.application.prj.Views.Forms
 			}
 		}
 
+		private void OnSearchSenderTextChanged(object sender, EventArgs e)
+		{
+			using PostSysContext db = new();
+
+			if (_txtSearchSender.Text == "")
+			{
+				ShowTable();
+			}
+			else
+			{
+				_dgvSenders.DataSource = (from senders in db.Senders
+										  where senders.SenderSurname.Contains(_txtSearchSender.Text.ToLower())
+										  select new
+										  {
+											  ID = senders.SenderId,
+											  Фамилия = senders.SenderSurname,
+											  Имя = senders.SenderName,
+											  Отчество = senders.SenderPatronymic,
+											  Город = senders.SenderCityNavigation.CityName,
+											  Улица = senders.SenderStreetNavigation.CodeAddressStreetNavigation.StreetName,
+											  Дом = senders.SenderHome,
+											  Квартира = senders.SenderApartment,
+											  Телефон = senders.SenderPhone
+										  }).ToList();
+			}
+
+			db.Dispose();
+		}
+
+		private void OnSearchSenderKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+				e.SuppressKeyPress = true;
+		}
+
 		#endregion
 	}
 }

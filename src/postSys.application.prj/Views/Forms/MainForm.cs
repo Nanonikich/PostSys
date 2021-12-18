@@ -5,10 +5,14 @@ namespace postSys.application.prj.Views.Forms
 {
 	public partial class MainForm : Form
 	{
-		private string _activeUser;
+		#region Fields
+
+		private readonly string _activeUser;
+
+		#endregion
 
 		#region Properties
-		
+
 		public bool ButtonEditClick { get; set; }
 		public List<Address> DgvCurrentRow { get; set; } = null!;
 		private string ?CurrentRowInDgv { get; set; }
@@ -128,6 +132,47 @@ namespace postSys.application.prj.Views.Forms
 			}
 		}
 
+		private void OnSearchRecipientOrPostmenTextChanged(object sender, EventArgs e)
+		{
+			using PostSysContext db = new();
+
+			if (_txtSearchRecipient.Text == "" && _txtSearchPostmen.Text == "")
+			{
+				ShowTable();
+			}
+			else
+			{
+				_dgvAddresses.DataSource = (from address in db.Addresses
+											let addressPostmenNavigation = address.AddressPostmenNavigation
+											join city in db.Cities on address.AddressCity equals city.CityId
+											join street in db.Streets on address.AddressStreet equals street.StreetId
+											where address.AddressRecipientNavigation.RecipientSurname.Contains(_txtSearchRecipient.Text.ToLower()) &&
+												  address.AddressPostmenNavigation.PostmenSurname.Contains(_txtSearchPostmen.Text.ToLower())
+											select new
+											{
+												ID = address.AddressId,
+												Участок = addressPostmenNavigation.PostmenPlot,
+												Получатель = address.AddressRecipientNavigation.RecipientSurname,
+												Город = city.CityName,
+												Улица = street.StreetName,
+												Дом = address.AddressHome,
+												Квартира = address.AddressApartment,
+												Почтальон = addressPostmenNavigation.PostmenSurname,
+												Товары = address.AddressGoods
+
+											}).ToList();
+				timer.Stop();
+			}
+
+			db.Dispose();
+		}
+
+		private void OnTxtBoxesKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+				e.SuppressKeyPress = true;
+		}
+
 		/// <summary>
 		/// Left Buttons
 		/// </summary>
@@ -150,5 +195,6 @@ namespace postSys.application.prj.Views.Forms
 		private void MainForm_FormClosed(object sender, FormClosedEventArgs e) => Environment.Exit(0);
 
 		#endregion
+
 	}
 }
