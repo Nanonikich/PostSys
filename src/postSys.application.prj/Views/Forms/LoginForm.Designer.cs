@@ -62,10 +62,12 @@
 			// 
 			this._txtUsername.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this._txtUsername.Location = new System.Drawing.Point(48, 234);
+			this._txtUsername.MaxLength = 30;
 			this._txtUsername.Multiline = true;
 			this._txtUsername.Name = "_txtUsername";
 			this._txtUsername.Size = new System.Drawing.Size(192, 28);
 			this._txtUsername.TabIndex = 8;
+			this._txtUsername.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtBoxesKeyDown);
 			// 
 			// label2
 			// 
@@ -81,10 +83,12 @@
 			// 
 			this._txtPassword.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this._txtPassword.Location = new System.Drawing.Point(48, 301);
+			this._txtPassword.MaxLength = 20;
 			this._txtPassword.Multiline = true;
 			this._txtPassword.Name = "_txtPassword";
 			this._txtPassword.Size = new System.Drawing.Size(192, 28);
 			this._txtPassword.TabIndex = 10;
+			this._txtPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtBoxesKeyDown);
 			// 
 			// _btnLogin
 			// 

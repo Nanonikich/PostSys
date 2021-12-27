@@ -55,6 +55,19 @@ namespace mUse.application.prj.Views.Forms
 			}
 		}
 
+		/// <summary>
+		/// Checking for Enter
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void TxtBoxesKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				e.SuppressKeyPress = true;
+			}
+		}
+
 		private void LoginForm_FormClosed(object sender, FormClosedEventArgs e) => Environment.Exit(0);
 
 		#endregion
