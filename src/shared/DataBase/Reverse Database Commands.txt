@@ -1,3 +1,3 @@
-Scaffold-DbContext "Data Source=DESKTOP-E9S2NF8;Initial Catalog=POST;Integrated Security=True" Microsoft.EntityFrameworkCore.SqlServer
+Scaffold-DbContext "Data Source=DESKTOP-3FCQL29;Initial Catalog=PostSys;Integrated Security=True" Microsoft.EntityFrameworkCore.SqlServer
 
 optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["PostDB"].ConnectionString);

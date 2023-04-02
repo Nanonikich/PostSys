@@ -1,200 +1,201 @@
-﻿using mUse.application.prj.Views.Forms;
-using System.Data;
+﻿using System.Data;
 
-namespace postSys.application.prj.Views.Forms
+using PostSys.Application.Views.Forms.EditingForms;
+using PostSys.Models;
+using PostSys.Application.ViewModels;
+
+namespace PostSys.Application.Views.Forms;
+
+/// <summary>Главная форма.</summary>
+public partial class MainForm : Form
 {
-	public partial class MainForm : Form
+	private readonly (int Id, string Status) _activeUser;
+
+	#region Properties
+
+	public bool ButtonEditClick { get; set; }
+
+	public List<Address> DgvCurrentRow { get; set; } = null!;
+
+	private string? CurrentRowInDgv { get; set; }
+
+	#endregion
+
+	#region .ctor
+
+	/// <summary>Создаёт экземпляр класса <see cref="MainForm"/>.</summary>
+	/// <param name="activeUserId">Идентификатор пользователя системы.</param>
+	/// <param name="activeUserId">Статус пользователя системы.</param>
+	public MainForm(int activeUserId, string activeUserStatus)
 	{
-		#region Fields
+		_activeUser = (activeUserId, activeUserStatus);
 
-		private readonly string _activeUser;
+		InitializeComponent();
+	}
 
-		#endregion
+	#endregion
 
-		#region Properties
+	#region Methods
 
-		public bool ButtonEditClick { get; set; }
-		public List<Address> DgvCurrentRow { get; set; } = null!;
-		private string ?CurrentRowInDgv { get; set; }
-
-		#endregion
-
-		#region .ctor
-
-		public MainForm(string activeUser)
+	/// <summary>Загрузка таблицы.</summary>
+	public void ShowTable()
+	{
+		if(_dgvAddresses.CurrentRow != null)
 		{
-			_activeUser = activeUser;
-
-			InitializeComponent();
+			CurrentRowInDgv = _dgvAddresses.CurrentRow.Cells[1].Value.ToString();
 		}
 
-		#endregion
+		timer.Start();
 
-		#region Methods
+		using PostSysContext db = new();
 
-		public void ShowTable()
+		_dgvAddresses.DataSource = db.Addresses.Select(x => new
 		{
-			if (_dgvAddresses.CurrentRow != null)
+			ID = x.AddressId,
+			Участок = x.AddressPostmenNavigation.PostmenPlot,
+			Получатель = x.AddressRecipientNavigation.RecipientSurname,
+			Город = x.AddressRecipientNavigation.RecipientCityNavigation.CityName,
+			Улица = x.AddressRecipientNavigation.RecipientStreetNavigation.CodeAddressStreetNavigation.StreetName,
+			Дом = x.AddressHome,
+			Квартира = x.AddressApartment,
+			Почтальон = x.AddressPostmenNavigation.PostmenSurname,
+			Товары = x.AddressGoods,
+		}).ToList();
+
+		db.Dispose();
+
+		if(_dgvAddresses != null)
+		{
+			// закрашивание ряда
+			foreach(DataGridViewRow row in _dgvAddresses.Rows)
 			{
-				CurrentRowInDgv = _dgvAddresses.CurrentRow.Cells[1].Value.ToString();
-			}
-
-			timer.Start();
-
-			using PostSysContext db = new();
-
-			_dgvAddresses.DataSource = (from address in db.Addresses
-										let addressPostmenNavigation = address.AddressPostmenNavigation
-										join city in db.Cities on address.AddressCity equals city.CityId
-										join street in db.Streets on address.AddressStreet equals street.StreetId
-										select new
-										{
-											ID = address.AddressId,
-											Участок = addressPostmenNavigation.PostmenPlot,
-											Получатель = address.AddressRecipientNavigation.RecipientSurname,
-											Город = city.CityName,
-											Улица = street.StreetName,
-											Дом = address.AddressHome,
-											Квартира = address.AddressApartment,
-											Почтальон = addressPostmenNavigation.PostmenSurname,
-											Товары = address.AddressGoods
-
-										}).ToList();
-			db.Dispose();
-
-			if (_dgvAddresses != null)
-			{
-				// закрашивание ряда
-				foreach (DataGridViewRow row in _dgvAddresses.Rows)
+				if(row.Cells[1].Value.ToString().Equals(CurrentRowInDgv))
 				{
-					if (row.Cells[1].Value.ToString().Equals(CurrentRowInDgv))
-					{
-						_dgvAddresses.CurrentCell = row.Cells[1];
-					}
+					_dgvAddresses.CurrentCell = row.Cells[1];
 				}
 			}
 		}
+	}
 
-		#endregion
+	#endregion
 
-		#region Events
+	#region Handlers
 
-		private void MainFormLoad(object sender, EventArgs e)
+	private void MainFormLoad(object sender, EventArgs e)
+	{
+		if(_activeUser.Status != "Admin")
+			_btnUsers.Visible = false;
+
+		ShowTable();
+	}
+
+	private void OnAddClick(object sender, EventArgs e) => new EditAddressForm(this).ShowDialog();
+
+	private void OnEditClick(object sender, EventArgs e)
+	{
+		if(_dgvAddresses.CurrentRow != null)
 		{
-			if (_activeUser != "Admin")
-			{
-				_btnUsers.Visible = false;
-			}
+			ButtonEditClick = true;
 
-			ShowTable();
+			using PostSysContext db = new();
+
+			DgvCurrentRow = db.Addresses
+				.Where(x => x.AddressId == (int)_dgvAddresses.CurrentRow.Cells[0].Value)
+				.Select(x => x).ToList();
+
+			db.Dispose();
+
+			new EditAddressForm(this).ShowDialog();
 		}
-
-		private void OnAddClick(object sender, EventArgs e) => new EditAddressForm(this).ShowDialog();
-
-		private void OnEditClick(object sender, EventArgs e)
+		else
 		{
-			if (_dgvAddresses.CurrentRow != null)
-			{
-				ButtonEditClick = true;
-
-				using PostSysContext db = new();
-				DgvCurrentRow = (from addresses in db.Addresses
-								 where addresses.AddressId.ToString() == _dgvAddresses.CurrentRow.Cells[0].Value.ToString()
-								 select addresses).ToList();
-				db.Dispose();
-
-				new EditAddressForm(this).ShowDialog();
-			}
-			else
-			{
-				MessageBox.Show("В таблице нет данных");
-			}
+			MessageBox.Show("В таблице нет данных.");
 		}
+	}
 
-		private void OnDeleteClick(object sender, EventArgs e)
-		{
-			if (_dgvAddresses.CurrentRow != null)
-			{
-				using PostSysContext db = new();
-
-				db.Remove((from address in db.Addresses
-						   where address.AddressId.ToString() == _dgvAddresses.CurrentRow.Cells[0].Value.ToString()
-						   select address).First());
-
-				db.SaveChanges();
-				db.Dispose();
-
-				ShowTable();
-			}
-			else
-			{
-				MessageBox.Show("В таблице нет данных");
-			}
-		}
-
-		private void OnSearchRecipientOrPostmenTextChanged(object sender, EventArgs e)
+	private void OnDeleteClick(object sender, EventArgs e)
+	{
+		if(_dgvAddresses.CurrentRow != null)
 		{
 			using PostSysContext db = new();
 
-			if (_txtSearchRecipient.Text == "" && _txtSearchPostmen.Text == "")
-			{
-				ShowTable();
-			}
-			else
-			{
-				_dgvAddresses.DataSource = (from address in db.Addresses
-											let addressPostmenNavigation = address.AddressPostmenNavigation
-											join city in db.Cities on address.AddressCity equals city.CityId
-											join street in db.Streets on address.AddressStreet equals street.StreetId
-											where address.AddressRecipientNavigation.RecipientSurname.Contains(_txtSearchRecipient.Text.ToLower()) &&
-												  address.AddressPostmenNavigation.PostmenSurname.Contains(_txtSearchPostmen.Text.ToLower())
-											select new
-											{
-												ID = address.AddressId,
-												Участок = addressPostmenNavigation.PostmenPlot,
-												Получатель = address.AddressRecipientNavigation.RecipientSurname,
-												Город = city.CityName,
-												Улица = street.StreetName,
-												Дом = address.AddressHome,
-												Квартира = address.AddressApartment,
-												Почтальон = addressPostmenNavigation.PostmenSurname,
-												Товары = address.AddressGoods
+			db.Remove(db.Addresses
+				.Where(x => x.AddressId == (int)_dgvAddresses.CurrentCell.Value)
+				.Select(x => x).First());
 
-											}).ToList();
-				timer.Stop();
-			}
-
+			db.SaveChanges();
 			db.Dispose();
-		}
 
-		private void OnTxtBoxesKeyDown(object sender, KeyEventArgs e)
+			ShowTable();
+		}
+		else
 		{
-			if (e.KeyCode == Keys.Enter)
-				e.SuppressKeyPress = true;
+			MessageBox.Show("В таблице нет данных.");
+		}
+	}
+
+	/// <summary>Поиск отправителя или почтальона.</summary>
+	/// <param name="sender">Объект события.</param>
+	/// <param name="e">Событие.</param>
+	private void OnSearchRecipientOrPostmenTextChanged(object sender, EventArgs e)
+	{
+		using PostSysContext db = new();
+
+		if(_txtSearchRecipient.Text == "" && _txtSearchPostmen.Text == "")
+		{
+			ShowTable();
+		}
+		else
+		{
+			_dgvAddresses.DataSource = db.Addresses
+				.Where(s => s.AddressRecipientNavigation.RecipientSurname.Contains(_txtSearchRecipient.Text.ToLower()) &&
+							s.AddressPostmenNavigation.PostmenSurname.Contains(_txtSearchPostmen.Text.ToLower()))
+				.Select(x => new
+				{
+					ID = x.AddressId,
+					Участок = x.AddressPostmenNavigation.PostmenPlot,
+					Получатель = x.AddressRecipientNavigation.RecipientSurname,
+					Город = x.AddressRecipientNavigation.RecipientCityNavigation.CityName,
+					Улица = x.AddressRecipientNavigation.RecipientStreetNavigation.CodeAddressStreetNavigation.StreetName,
+					Дом = x.AddressHome,
+					Квартира = x.AddressApartment,
+					Почтальон = x.AddressPostmenNavigation.PostmenSurname,
+					Товары = x.AddressGoods
+
+				}).ToList();
+			timer.Stop();
 		}
 
-		/// <summary>
-		/// Left Buttons
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnPostmensClick(object sender, EventArgs e) => new PostmensForm().ShowDialog();
-
-		private void OnSendersClick(object sender, EventArgs e) => new SendersForm().ShowDialog();
-
-		private void OnClientsClick(object sender, EventArgs e) => new RecipientsForm().ShowDialog();
-
-		private void OnCitiesClick(object sender, EventArgs e) => new StreetCityForm().ShowDialog();
-
-		private void OnPlotsClick(object sender, EventArgs e) => new PlotsForm().ShowDialog();
-
-		private void OnUsersClick(object sender, EventArgs e) => new UsersForm().ShowDialog();
-
-		private void OnTimerTick(object sender, EventArgs e) => ShowTable();
-
-		private void MainForm_FormClosed(object sender, FormClosedEventArgs e) => Environment.Exit(0);
-
-		#endregion
-
+		db.Dispose();
 	}
+
+	private void OnTxtBoxesKeyDown(object sender, KeyEventArgs e)
+	{
+		if(e.KeyCode == Keys.Enter)
+		{
+			e.SuppressKeyPress = true;
+		}
+	}
+
+
+	private void OnPostmensClick(object sender, EventArgs e) => new PostmensForm().ShowDialog();
+
+	private void OnSendersClick(object sender, EventArgs e) => new SendersForm().ShowDialog();
+
+	private void OnClientsClick(object sender, EventArgs e) => new RecipientsForm().ShowDialog();
+
+	private void OnCitiesClick(object sender, EventArgs e) => new StreetCityForm().ShowDialog();
+
+	private void OnPlotsClick(object sender, EventArgs e) => new PlotsForm().ShowDialog();
+
+	private void OnUsersClick(object sender, EventArgs e) => new UsersForm().ShowDialog();
+
+
+	private void OnTimerTick(object sender, EventArgs e) => ShowTable();
+
+	private void MainFormClosed(object sender, FormClosedEventArgs e)
+		=> System.Windows.Forms.Application.Exit();
+
+	#endregion
+
 }

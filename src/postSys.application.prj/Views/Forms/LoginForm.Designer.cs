@@ -1,137 +1,136 @@
-﻿namespace mUse.application.prj.Views.Forms
+﻿namespace PostSys.Application.Views.Forms;
+
+partial class LoginForm
 {
-	partial class LoginForm
+	/// <summary>
+	/// Required designer variable.
+	/// </summary>
+	private System.ComponentModel.IContainer components = null;
+
+	/// <summary>
+	/// Clean up any resources being used.
+	/// </summary>
+	/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+	protected override void Dispose(bool disposing)
 	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
-
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing)
+		if(disposing && (components != null))
 		{
-			if (disposing && (components != null))
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
+			components.Dispose();
 		}
-
-		#region Windows Form Designer generated code
-
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
-			this._loginPicture = new System.Windows.Forms.PictureBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this._txtUsername = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this._txtPassword = new System.Windows.Forms.TextBox();
-			this._btnLogin = new System.Windows.Forms.Button();
-			((System.ComponentModel.ISupportInitialize)(this._loginPicture)).BeginInit();
-			this.SuspendLayout();
-			// 
-			// _loginPicture
-			// 
-			this._loginPicture.Image = ((System.Drawing.Image)(resources.GetObject("_loginPicture.Image")));
-			this._loginPicture.Location = new System.Drawing.Point(62, 26);
-			this._loginPicture.Name = "_loginPicture";
-			this._loginPicture.Size = new System.Drawing.Size(165, 147);
-			this._loginPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this._loginPicture.TabIndex = 6;
-			this._loginPicture.TabStop = false;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.label1.Location = new System.Drawing.Point(48, 206);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(52, 19);
-			this.label1.TabIndex = 7;
-			this.label1.Text = "Логин";
-			// 
-			// _txtUsername
-			// 
-			this._txtUsername.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this._txtUsername.Location = new System.Drawing.Point(48, 234);
-			this._txtUsername.MaxLength = 30;
-			this._txtUsername.Multiline = true;
-			this._txtUsername.Name = "_txtUsername";
-			this._txtUsername.Size = new System.Drawing.Size(192, 28);
-			this._txtUsername.TabIndex = 8;
-			this._txtUsername.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtBoxesKeyDown);
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.label2.Location = new System.Drawing.Point(48, 279);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(58, 19);
-			this.label2.TabIndex = 9;
-			this.label2.Text = "Пароль";
-			// 
-			// _txtPassword
-			// 
-			this._txtPassword.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this._txtPassword.Location = new System.Drawing.Point(48, 301);
-			this._txtPassword.MaxLength = 20;
-			this._txtPassword.Multiline = true;
-			this._txtPassword.Name = "_txtPassword";
-			this._txtPassword.Size = new System.Drawing.Size(192, 28);
-			this._txtPassword.TabIndex = 10;
-			this._txtPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtBoxesKeyDown);
-			// 
-			// _btnLogin
-			// 
-			this._btnLogin.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this._btnLogin.Location = new System.Drawing.Point(48, 356);
-			this._btnLogin.Name = "_btnLogin";
-			this._btnLogin.Size = new System.Drawing.Size(192, 36);
-			this._btnLogin.TabIndex = 11;
-			this._btnLogin.Text = "Войти";
-			this._btnLogin.UseVisualStyleBackColor = true;
-			this._btnLogin.Click += new System.EventHandler(this.OnLoginClick);
-			// 
-			// LoginForm
-			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(283, 415);
-			this.Controls.Add(this._btnLogin);
-			this.Controls.Add(this._txtPassword);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this._txtUsername);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this._loginPicture);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox = false;
-			this.Name = "LoginForm";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Вход";
-			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LoginForm_FormClosed);
-			((System.ComponentModel.ISupportInitialize)(this._loginPicture)).EndInit();
-			this.ResumeLayout(false);
-			this.PerformLayout();
-
-		}
-
-		#endregion
-
-		private PictureBox _loginPicture;
-		private Label label1;
-		private TextBox _txtUsername;
-		private Label label2;
-		private TextBox _txtPassword;
-		private Button _btnLogin;
+		base.Dispose(disposing);
 	}
+
+	#region Windows Form Designer generated code
+
+	/// <summary>
+	/// Required method for Designer support - do not modify
+	/// the contents of this method with the code editor.
+	/// </summary>
+	private void InitializeComponent()
+	{
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
+		_loginPicture = new PictureBox();
+		label1 = new Label();
+		_txtUsername = new TextBox();
+		label2 = new Label();
+		_txtPassword = new TextBox();
+		_btnLogin = new Button();
+		((System.ComponentModel.ISupportInitialize)_loginPicture).BeginInit();
+		SuspendLayout();
+		// 
+		// _loginPicture
+		// 
+		_loginPicture.Image = (Image)resources.GetObject("_loginPicture.Image");
+		_loginPicture.Location = new Point(62, 26);
+		_loginPicture.Name = "_loginPicture";
+		_loginPicture.Size = new Size(165, 147);
+		_loginPicture.SizeMode = PictureBoxSizeMode.Zoom;
+		_loginPicture.TabIndex = 6;
+		_loginPicture.TabStop = false;
+		// 
+		// label1
+		// 
+		label1.AutoSize = true;
+		label1.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point);
+		label1.Location = new Point(48, 206);
+		label1.Name = "label1";
+		label1.Size = new Size(52, 19);
+		label1.TabIndex = 7;
+		label1.Text = "Логин";
+		// 
+		// _txtUsername
+		// 
+		_txtUsername.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point);
+		_txtUsername.Location = new Point(48, 234);
+		_txtUsername.MaxLength = 30;
+		_txtUsername.Multiline = true;
+		_txtUsername.Name = "_txtUsername";
+		_txtUsername.Size = new Size(192, 28);
+		_txtUsername.TabIndex = 8;
+		_txtUsername.KeyDown += TxtBoxesKeyDown;
+		// 
+		// label2
+		// 
+		label2.AutoSize = true;
+		label2.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point);
+		label2.Location = new Point(48, 279);
+		label2.Name = "label2";
+		label2.Size = new Size(58, 19);
+		label2.TabIndex = 9;
+		label2.Text = "Пароль";
+		// 
+		// _txtPassword
+		// 
+		_txtPassword.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point);
+		_txtPassword.Location = new Point(48, 301);
+		_txtPassword.MaxLength = 20;
+		_txtPassword.Multiline = true;
+		_txtPassword.Name = "_txtPassword";
+		_txtPassword.Size = new Size(192, 28);
+		_txtPassword.TabIndex = 10;
+		_txtPassword.KeyDown += TxtBoxesKeyDown;
+		// 
+		// _btnLogin
+		// 
+		_btnLogin.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point);
+		_btnLogin.Location = new Point(48, 356);
+		_btnLogin.Name = "_btnLogin";
+		_btnLogin.Size = new Size(192, 36);
+		_btnLogin.TabIndex = 11;
+		_btnLogin.Text = "Войти";
+		_btnLogin.UseVisualStyleBackColor = true;
+		_btnLogin.Click += OnLoginClick;
+		// 
+		// LoginForm
+		// 
+		AutoScaleDimensions = new SizeF(7F, 15F);
+		AutoScaleMode = AutoScaleMode.Font;
+		ClientSize = new Size(283, 415);
+		Controls.Add(_btnLogin);
+		Controls.Add(_txtPassword);
+		Controls.Add(label2);
+		Controls.Add(_txtUsername);
+		Controls.Add(label1);
+		Controls.Add(_loginPicture);
+		FormBorderStyle = FormBorderStyle.FixedSingle;
+		Icon = (Icon)resources.GetObject("$this.Icon");
+		MaximizeBox = false;
+		MinimizeBox = false;
+		Name = "LoginForm";
+		StartPosition = FormStartPosition.CenterScreen;
+		Text = "Вход";
+		FormClosed += LoginFormClosed;
+		((System.ComponentModel.ISupportInitialize)_loginPicture).EndInit();
+		ResumeLayout(false);
+		PerformLayout();
+	}
+
+	#endregion
+
+	private PictureBox _loginPicture;
+	private Label label1;
+	private TextBox _txtUsername;
+	private Label label2;
+	private TextBox _txtPassword;
+	private Button _btnLogin;
 }

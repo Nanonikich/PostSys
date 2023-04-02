@@ -1,75 +1,65 @@
-﻿using postSys.application.prj;
-using postSys.application.prj.Views.Forms;
-using System.Data;
+﻿using Microsoft.Data.SqlClient;
 
-namespace mUse.application.prj.Views.Forms
+using PostSys.Application.ViewModels;
+
+namespace PostSys.Application.Views.Forms;
+
+/// <summary>Форма авторизации.</summary>
+public partial class LoginForm : Form
 {
-	public partial class LoginForm : Form
+	#region .ctor
+
+	/// <summary>Создаёт экземпляр класса <see cref="LoginForm"/>.</summary>
+	public LoginForm()
 	{
-		#region .ctor
+		InitializeComponent();
 
-		public LoginForm()
-		{
-			InitializeComponent();
-
-			_txtPassword.UseSystemPasswordChar = true;
-		}
-
-		#endregion
-
-		#region Events
-
-		private void OnLoginClick(object sender, EventArgs e)
-		{
-			try
-			{
-				using PostSysContext db = new();
-
-				IEnumerable<User> users() => from user in db.Users
-
-											 where user.UserUsername == _txtUsername.Text && user.UserPassword == _txtPassword.Text
-											 select user;
-
-				if (users().ToList().Count != 0)
-				{
-					foreach (var x in from item in users().ToList()
-									  let x = (from status in db.Statuses where status.StatusId == item.UserStatus select status.StatusName).First().ToString()
-									  select x)
-					{
-						new MainForm(x).Show();
-						Hide();
-						break;
-					}
-
-					db.Dispose();
-				}
-				else
-				{
-					db.Dispose();
-					MessageBox.Show("Неверный логин или пароль");
-				}
-			}
-			catch
-			{
-				MessageBox.Show("Нет подключения к базе данных");
-			}
-		}
-
-		/// <summary>
-		/// Checking for Enter
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void TxtBoxesKeyDown(object sender, KeyEventArgs e)
-		{
-			if (e.KeyCode == Keys.Enter)
-			{
-				e.SuppressKeyPress = true;
-			}
-		}
-
-		private void LoginForm_FormClosed(object sender, FormClosedEventArgs e) => Environment.Exit(0);
-
-		#endregion
+		_txtPassword.UseSystemPasswordChar = true;
 	}
+
+	#endregion
+
+	#region Handlers
+
+	private void OnLoginClick(object sender, EventArgs e)
+	{
+		try
+		{
+			using PostSysContext db = new();
+
+			var user = db.Users.FirstOrDefault(x => x.UserUsername == _txtUsername.Text &&
+													x.UserPassword == _txtPassword.Text);
+
+			if(user != default)
+			{
+				new MainForm(user.UserId, db.Statuses.First(x => user.UserStatus == x.StatusId).StatusName).Show();
+				Hide();
+
+				db.Dispose();
+			}
+			else
+			{
+				db.Dispose();
+				MessageBox.Show("Неверный логин или пароль.");
+			}
+		}
+		catch(SqlException)
+		{
+			MessageBox.Show("Нет подключения к базе данных.");
+		}
+	}
+
+	private void TxtBoxesKeyDown(object sender, KeyEventArgs e)
+	{
+		if(e.KeyCode == Keys.Enter)
+		{
+			e.SuppressKeyPress = true;
+		}
+	}
+
+	private void LoginFormClosed(object sender, FormClosedEventArgs e)
+		=> System.Windows.Forms.Application.Exit();
+
+	#endregion
+
 }

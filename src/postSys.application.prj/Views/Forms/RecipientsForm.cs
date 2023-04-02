@@ -1,145 +1,150 @@
 ﻿using System.Data;
 
-namespace postSys.application.prj.Views.Forms
+using PostSys.Application.Views.Forms.EditingForms;
+using PostSys.Models;
+using PostSys.Application.ViewModels;
+
+namespace PostSys.Application.Views.Forms;
+
+/// <summary>Форма с информацией о получателях.</summary>
+public partial class RecipientsForm : Form
 {
-	public partial class RecipientsForm : Form
+	public bool ButtonEditClick { get; set; }
+
+	public List<Recipient> DgvCurrentRow { get; set; } = null!;
+
+	/// <summary>Создаёт экземпляр класса <see cref="RecipientsForm"/>.</summary>
+	public RecipientsForm()
 	{
-		#region Properties
+		InitializeComponent();
+	}
 
-		public bool ButtonEditClick { get; set; }
-		public List<Recipient> DgvCurrentRow { get; set; } = null!;
 
-		#endregion
+	#region Methods
 
-		#region .ctor
-		public RecipientsForm()
+	/// <summary>Загрузка таблицы с информацией о получателях.</summary>
+	public void ShowTable()
+	{
+		using PostSysContext db = new();
+
+		_dgvRecipients.DataSource = db.Recipients.Select(x => new
 		{
-			InitializeComponent();
-		}
-		#endregion
+			ID = x.RecipientId,
+			Серия = x.RecipientSeries,
+			Номер = x.RecipientNumber,
+			Фамилия = x.RecipientSurname,
+			Имя = x.RecipientName,
+			Отчество = x.RecipientPatronymic,
+			Город = x.RecipientCityNavigation.CityName,
+			Улица = x.RecipientStreetNavigation.CodeAddressStreetNavigation.StreetName,
+			Дом = x.RecipientHome,
+			Квартира = x.RecipientApartment,
+			Телефон = x.RecipientPhone,
+			Отправитель = x.RecipientSenderNavigation.SenderSurname,
+		}).ToList();
 
-		#region Methods
-		public void ShowTable()
+		db.Dispose();
+	}
+
+	#endregion
+
+	#region Handlers
+
+	private void RecipientsFormLoad(object sender, EventArgs e) => ShowTable();
+
+	private void OnAddClick(object sender, EventArgs e) => new EditRecipientForm(this).ShowDialog();
+
+	private void OnEditClick(object sender, EventArgs e)
+	{
+		if(_dgvRecipients.CurrentRow != null)
 		{
+			ButtonEditClick = true;
+
 			using PostSysContext db = new();
 
-			_dgvRecipients.DataSource = (from recipient in db.Recipients
-										 select new
-										 {
-										  ID = recipient.RecipientId,
-										  Серия = recipient.RecipientSeries,
-										  Номер = recipient.RecipientNumber,
-										  Фамилия = recipient.RecipientSurname,
-										  Имя = recipient.RecipientName,
-										  Отчество = recipient.RecipientPatronymic,
-										  Город = recipient.RecipientCityNavigation.CityName,
-										  Улица = recipient.RecipientStreetNavigation.CodeAddressStreetNavigation.StreetName,
-										  Дом = recipient.RecipientHome,
-										  Квартира = recipient.RecipientApartment,
-										  Телефон = recipient.RecipientPhone,
-										  Отправитель = recipient.RecipientSenderNavigation.SenderSurname
-										 }).ToList();
+			DgvCurrentRow = db.Recipients
+				.Where(x => x.RecipientId == (int)_dgvRecipients.CurrentRow.Cells[0].Value)
+				.Select(x => x).ToList();
+
 			db.Dispose();
+
+			new EditRecipientForm(this).ShowDialog();
 		}
-
-		#endregion
-
-		#region Events
-
-		private void ClientsForm_Load(object sender, EventArgs e)
+		else
 		{
-			ShowTable();
+			MessageBox.Show("В таблице нет данных.");
 		}
+	}
 
-		private void OnAddClick(object sender, EventArgs e) => new EditRecipientForm(this).ShowDialog();
-
-		private void OnEditClick(object sender, EventArgs e)
+	private void OnDeleteClick(object sender, EventArgs e)
+	{
+		try
 		{
-			if (_dgvRecipients.CurrentRow != null)
+			if(_dgvRecipients.CurrentRow != null)
 			{
-				ButtonEditClick = true;
-
 				using PostSysContext db = new();
-				DgvCurrentRow = (from recipients in db.Recipients
-								 where recipients.RecipientId.ToString() == _dgvRecipients.CurrentRow.Cells[0].Value.ToString()
-								 select recipients).ToList();
+
+				db.Remove(db.Recipients
+					.Where(x => x.RecipientId == (int)_dgvRecipients.CurrentRow.Cells[0].Value)
+					.Select(x => x).First());
+
+				db.SaveChanges();
 				db.Dispose();
 
-				new EditRecipientForm(this).ShowDialog();
-			}
-			else
-			{
-				MessageBox.Show("В таблице нет данных");
-			}
-		}
-
-		private void OnDeleteClick(object sender, EventArgs e)
-		{
-			try
-			{
-				if (_dgvRecipients.CurrentRow != null)
-				{
-					using PostSysContext db = new();
-
-					db.Remove((from recipients in db.Recipients
-							   where recipients.RecipientId.ToString() == _dgvRecipients.CurrentRow.Cells[0].Value.ToString()
-							   select recipients).First());
-
-					db.SaveChanges();
-					db.Dispose();
-
-					ShowTable();
-				}
-				else
-				{
-					MessageBox.Show("В таблице нет данных");
-				}
-			}
-			catch
-			{
-				MessageBox.Show("Получатель используется");
-			}
-		}
-
-		private void OnSearchSenderOrRecipientTextChanged(object sender, EventArgs e)
-		{
-			using PostSysContext db = new();
-
-			if (_txtSearchSender.Text == "" && _txtSearchRecipient.Text == "")
-			{
 				ShowTable();
 			}
 			else
 			{
-				_dgvRecipients.DataSource = (from recipient in db.Recipients
-											 where recipient.RecipientSenderNavigation.SenderSurname.Contains(_txtSearchSender.Text.ToLower()) &&
-												   recipient.RecipientSurname.Contains(_txtSearchRecipient.Text.ToLower())
-											 select new
-											 {
-												 ID = recipient.RecipientId,
-												 Серия = recipient.RecipientSeries,
-												 Номер = recipient.RecipientNumber,
-												 Фамилия = recipient.RecipientSurname,
-												 Имя = recipient.RecipientName,
-												 Отчество = recipient.RecipientPatronymic,
-												 Город = recipient.RecipientCityNavigation.CityName,
-												 Улица = recipient.RecipientStreetNavigation.CodeAddressStreetNavigation.StreetName,
-												 Дом = recipient.RecipientHome,
-												 Квартира = recipient.RecipientApartment,
-												 Телефон = recipient.RecipientPhone,
-												 Отправитель = recipient.RecipientSenderNavigation.SenderSurname
-											 }).ToList();
+				MessageBox.Show("В таблице нет данных.");
 			}
-
-			db.Dispose();
 		}
-
-		private void OnTxtBoxesKeyDown(object sender, KeyEventArgs e)
+		catch
 		{
-			if (e.KeyCode == Keys.Enter)
-				e.SuppressKeyPress = true;
+			MessageBox.Show("Получатель используется.");
+		}
+	}
+
+	/// <summary>Поиск получателя по фамилии.</summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void OnSearchSenderOrRecipientTextChanged(object sender, EventArgs e)
+	{
+		using PostSysContext db = new();
+
+		if(_txtSearchSender.Text == "" && _txtSearchRecipient.Text == "")
+		{
+			ShowTable();
+		}
+		else
+		{
+			_dgvRecipients.DataSource = db.Recipients
+				.Where(x => x.RecipientSenderNavigation.SenderSurname.Contains(_txtSearchSender.Text.ToLower()) &&
+							x.RecipientSurname.Contains(_txtSearchRecipient.Text.ToLower()))
+				.Select(x => new
+				{
+					ID = x.RecipientId,
+					Серия = x.RecipientSeries,
+					Номер = x.RecipientNumber,
+					Фамилия = x.RecipientSurname,
+					Имя = x.RecipientName,
+					Отчество = x.RecipientPatronymic,
+					Город = x.RecipientCityNavigation.CityName,
+					Улица = x.RecipientStreetNavigation.CodeAddressStreetNavigation.StreetName,
+					Дом = x.RecipientHome,
+					Квартира = x.RecipientApartment,
+					Телефон = x.RecipientPhone,
+					Отправитель = x.RecipientSenderNavigation.SenderSurname,
+				}).ToList();
 		}
 
-		#endregion
+		db.Dispose();
 	}
+
+	private void OnTxtBoxesKeyDown(object sender, KeyEventArgs e)
+	{
+		if(e.KeyCode == Keys.Enter)
+			e.SuppressKeyPress = true;
+	}
+
+	#endregion
 }

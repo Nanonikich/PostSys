@@ -1,170 +1,166 @@
 ﻿using System.Data;
 
-namespace postSys.application.prj.Views.Forms
+using PostSys.Models;
+using PostSys.Application.ViewModels;
+
+namespace PostSys.Application.Views.Forms;
+
+/// <summary>Форма с адресами.</summary>
+public partial class StreetCityForm : Form
 {
-	public partial class StreetCityForm : Form
+	/// <summary>Создаёт экземпляр класса <see cref="StreetCityForm"/>.</summary>
+	public StreetCityForm()
 	{
-		#region .ctor
+		InitializeComponent();
+	}
 
-		public StreetCityForm()
+
+	#region Methods
+
+	/// <summary>Загрузка таблицы с улицами.</summary>
+	private void ShowTableStreet()
+	{
+		using PostSysContext db = new();
+
+		_dgvStreets.DataSource = db.Streets.Select(x => new
 		{
-			InitializeComponent();
-		}
+			ID = x.StreetId,
+			Улица = x.StreetName,
+		}).ToList();
 
-		#endregion
+		db.Dispose();
 
-		#region Methods
+		_dgvStreets.Columns[0].Visible = false;
+	}
 
-		private void ShowTableStreet()
+	/// <summary>Загрузка таблицы с городами.</summary>
+	private void ShowTableCity()
+	{
+		using PostSysContext db = new();
+
+		_dgvCities.DataSource = db.Cities.Select(x => new
 		{
-			using PostSysContext db = new();
+			ID = x.CityId,
+			Город = x.CityName
+		}).ToList();
 
-			_dgvStreets.DataSource = (from street in db.Streets
-									  select new { 
-										  ID = street.StreetId, 
-										  Улица = street.StreetName 
-												}).ToList();
-			db.Dispose();
+		db.Dispose();
 
-			_dgvStreets.Columns[0].Visible = false;
-		}
+		_dgvCities.Columns[0].Visible = false;
+	}
 
-		private void ShowTableCity()
-		{
-			using PostSysContext db = new();
+	#endregion
 
-			_dgvCities.DataSource = (from city in db.Cities
-									 select new { 
-										 ID = city.CityId, 
-										 Город = city.CityName 
-												}).ToList();
-			db.Dispose();
+	#region Handlers
 
-			_dgvCities.Columns[0].Visible = false;
-		}
+	private void StreetCityFormLoad(object sender, EventArgs e)
+		=> ShowTableStreet();
 
-		#endregion
-
-		#region Events
-
-		private void CitiesFormLoad(object sender, EventArgs e)
+	private void TabControlSelectedIndexChanged(object sender, EventArgs e)
+	{
+		if(_tabControl.SelectedIndex == 0)
 		{
 			ShowTableStreet();
+		}
+		else
+		{
 			ShowTableCity();
 		}
+	}
 
-		/// <summary>
-		/// Working with streets
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnAddStreetClick(object sender, EventArgs e)
+	private void OnAddStreetClick(object sender, EventArgs e)
+	{
+		using PostSysContext db = new();
+
+		try
 		{
-			using PostSysContext db = new();
-			try
+			if(!string.IsNullOrEmpty(_txtStreet.Text))
 			{
-				if (!string.IsNullOrEmpty(_txtStreet.Text))
-				{
-					db.Streets.Add(new Street { StreetName = _txtStreet.Text });
-
-					db.SaveChanges();
-					db.Dispose();
-
-					_txtStreet.Clear();
-					ShowTableStreet();
-				}
-			}
-			catch
-			{
-				db.Dispose();
-				MessageBox.Show("Улица уже есть в таблице");
-			}
-		}
-
-		private void OnDeleteStreetClick(object sender, EventArgs e)
-		{
-			if (_dgvStreets.CurrentRow != null)
-			{
-				using PostSysContext db = new();
-
-				db.Remove((from street in db.Streets
-						   where street.StreetId.ToString() == _dgvStreets.CurrentRow.Cells[0].Value.ToString()
-						   select street).First());
+				db.Streets.Add(new Street { StreetName = _txtStreet.Text });
 
 				db.SaveChanges();
 				db.Dispose();
 
+				_txtStreet.Clear();
 				ShowTableStreet();
 			}
-			else
-			{
-				MessageBox.Show("В таблице нет данных");
-			}
-		}
 
-		/// <summary>
-		/// Working with cities
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnAddCityClick(object sender, EventArgs e)
+			db?.Dispose();
+		}
+		catch
+		{
+			db.Dispose();
+			MessageBox.Show("Улица уже есть в таблице.");
+		}
+	}
+
+	private void OnDeleteStreetClick(object sender, EventArgs e)
+	{
+		if(_dgvStreets.CurrentRow != null)
 		{
 			using PostSysContext db = new();
-			try
-			{
-				if (!string.IsNullOrEmpty(_txtCity.Text))
-				{
-					db.Cities.Add(new City { CityName = _txtCity.Text });
 
-					db.SaveChanges();
-					db.Dispose();
+			db.Remove(db.Streets
+				.Where(x => x.StreetId == (int)_dgvStreets.CurrentRow.Cells[0].Value)
+				.Select(x => x).First());
 
-					_txtCity.Clear();
+			db.SaveChanges();
+			db.Dispose();
 
-					ShowTableCity();
-				}
-			}
-			catch
-			{
-				db.Dispose();
-				MessageBox.Show("Город уже есть в таблице");
-			}
+			ShowTableStreet();
 		}
-
-		private void OnDeleteCityClick(object sender, EventArgs e)
+		else
 		{
-			if (_dgvCities.CurrentRow != null)
-			{
-				using PostSysContext db = new();
+			MessageBox.Show("В таблице нет данных.");
+		}
+	}
 
-				db.Remove((from city in db.Cities
-						   where city.CityId.ToString() == _dgvCities.CurrentRow.Cells[0].Value.ToString()
-						   select city).First());
+	private void OnAddCityClick(object sender, EventArgs e)
+	{
+		using PostSysContext db = new();
+
+		try
+		{
+			if(!string.IsNullOrEmpty(_txtCity.Text))
+			{
+				db.Cities.Add(new City { CityName = _txtCity.Text });
 
 				db.SaveChanges();
 				db.Dispose();
+
+				_txtCity.Clear();
 
 				ShowTableCity();
 			}
-			else
-			{
-				MessageBox.Show("В таблице нет данных");
-			}
 		}
-
-		/// <summary>
-		/// Checking for Enter
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void TxtBoxesKeyDown(object sender, KeyEventArgs e)
+		catch
 		{
-			if (e.KeyCode == Keys.Enter)
-			{
-				e.SuppressKeyPress = true;
-			}
+			db.Dispose();
+			MessageBox.Show("Город уже есть в таблице.");
 		}
-
-		#endregion
 	}
+
+	private void OnDeleteCityClick(object sender, EventArgs e)
+	{
+		if(_dgvCities.CurrentRow != null)
+		{
+			using PostSysContext db = new();
+
+			db.Remove(db.Cities
+				.Where(x => x.CityId == (int)_dgvCities.CurrentRow.Cells[0].Value)
+				.Select(x => x).First());
+
+			db.SaveChanges();
+			db.Dispose();
+
+			ShowTableCity();
+		}
+		else
+		{
+			MessageBox.Show("В таблице нет данных.");
+		}
+	}
+
+	#endregion
+
 }

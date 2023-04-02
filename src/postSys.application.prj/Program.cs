@@ -1,19 +1,17 @@
-using mUse.application.prj.Views.Forms;
-using postSys.application.prj.Views.Forms;
+using PostSys.Application.Views.Forms;
 
-namespace muse
+namespace PostSys.Application;
+
+public static class Program
 {
-	internal static class Program
+	/// <summary>
+	///  The main entry point for the application.
+	/// </summary>
+	[STAThread]
+	static void Main()
 	{
-		/// <summary>
-		///  The main entry point for the application.
-		/// </summary>
-		[STAThread]
-		static void Main()
-		{
-			ApplicationConfiguration.Initialize();
-			new LoginForm().Show();
-			Application.Run();
-		}
+		ApplicationConfiguration.Initialize();
+		new LoginForm().Show();
+		System.Windows.Forms.Application.Run();
 	}
 }

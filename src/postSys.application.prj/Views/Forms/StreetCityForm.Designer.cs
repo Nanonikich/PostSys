@@ -1,234 +1,264 @@
-﻿namespace postSys.application.prj.Views.Forms
+﻿namespace PostSys.Application.Views.Forms;
+
+partial class StreetCityForm
 {
-	partial class StreetCityForm
+	/// <summary>
+	/// Required designer variable.
+	/// </summary>
+	private System.ComponentModel.IContainer components = null;
+
+	/// <summary>
+	/// Clean up any resources being used.
+	/// </summary>
+	/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+	protected override void Dispose(bool disposing)
 	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
-
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing)
+		if(disposing && (components != null))
 		{
-			if (disposing && (components != null))
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
+			components.Dispose();
 		}
-
-		#region Windows Form Designer generated code
-
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StreetCityForm));
-			this.label1 = new System.Windows.Forms.Label();
-			this._txtCity = new System.Windows.Forms.TextBox();
-			this._btnAddCity = new System.Windows.Forms.Button();
-			this._btnDeleteCity = new System.Windows.Forms.Button();
-			this._dgvCities = new System.Windows.Forms.DataGridView();
-			this._dgvStreets = new System.Windows.Forms.DataGridView();
-			this.label2 = new System.Windows.Forms.Label();
-			this._txtStreet = new System.Windows.Forms.TextBox();
-			this._btnAddStreet = new System.Windows.Forms.Button();
-			this._btnDeleteStreet = new System.Windows.Forms.Button();
-			this.panel1 = new System.Windows.Forms.Panel();
-			((System.ComponentModel.ISupportInitialize)(this._dgvCities)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this._dgvStreets)).BeginInit();
-			this.SuspendLayout();
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.label1.Location = new System.Drawing.Point(12, 239);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(49, 19);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "Город";
-			// 
-			// _txtCity
-			// 
-			this._txtCity.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this._txtCity.Location = new System.Drawing.Point(12, 261);
-			this._txtCity.MaxLength = 30;
-			this._txtCity.Multiline = true;
-			this._txtCity.Name = "_txtCity";
-			this._txtCity.Size = new System.Drawing.Size(178, 28);
-			this._txtCity.TabIndex = 4;
-			this._txtCity.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtBoxesKeyDown);
-			// 
-			// _btnAddCity
-			// 
-			this._btnAddCity.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this._btnAddCity.Location = new System.Drawing.Point(12, 368);
-			this._btnAddCity.Name = "_btnAddCity";
-			this._btnAddCity.Size = new System.Drawing.Size(178, 30);
-			this._btnAddCity.TabIndex = 5;
-			this._btnAddCity.Text = "Добавить";
-			this._btnAddCity.UseVisualStyleBackColor = true;
-			this._btnAddCity.Click += new System.EventHandler(this.OnAddCityClick);
-			// 
-			// _btnDeleteCity
-			// 
-			this._btnDeleteCity.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this._btnDeleteCity.Location = new System.Drawing.Point(12, 404);
-			this._btnDeleteCity.Name = "_btnDeleteCity";
-			this._btnDeleteCity.Size = new System.Drawing.Size(178, 30);
-			this._btnDeleteCity.TabIndex = 6;
-			this._btnDeleteCity.Text = "Удалить";
-			this._btnDeleteCity.UseVisualStyleBackColor = true;
-			this._btnDeleteCity.Click += new System.EventHandler(this.OnDeleteCityClick);
-			// 
-			// _dgvCities
-			// 
-			this._dgvCities.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-			this._dgvCities.BackgroundColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this._dgvCities.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-			this._dgvCities.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this._dgvCities.Location = new System.Drawing.Point(203, 228);
-			this._dgvCities.MultiSelect = false;
-			this._dgvCities.Name = "_dgvCities";
-			this._dgvCities.RowHeadersVisible = false;
-			this._dgvCities.RowTemplate.Height = 25;
-			this._dgvCities.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this._dgvCities.Size = new System.Drawing.Size(253, 212);
-			this._dgvCities.TabIndex = 4;
-			this._dgvCities.TabStop = false;
-			// 
-			// _dgvStreets
-			// 
-			this._dgvStreets.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-			this._dgvStreets.BackgroundColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this._dgvStreets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-			this._dgvStreets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this._dgvStreets.Location = new System.Drawing.Point(203, 0);
-			this._dgvStreets.MultiSelect = false;
-			this._dgvStreets.Name = "_dgvStreets";
-			this._dgvStreets.RowHeadersVisible = false;
-			this._dgvStreets.RowTemplate.Height = 25;
-			this._dgvStreets.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this._dgvStreets.Size = new System.Drawing.Size(253, 206);
-			this._dgvStreets.TabIndex = 5;
-			this._dgvStreets.TabStop = false;
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.label2.Location = new System.Drawing.Point(12, 9);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(51, 19);
-			this.label2.TabIndex = 6;
-			this.label2.Text = "Улица";
-			// 
-			// _txtStreet
-			// 
-			this._txtStreet.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this._txtStreet.Location = new System.Drawing.Point(12, 31);
-			this._txtStreet.MaxLength = 30;
-			this._txtStreet.Multiline = true;
-			this._txtStreet.Name = "_txtStreet";
-			this._txtStreet.Size = new System.Drawing.Size(178, 28);
-			this._txtStreet.TabIndex = 1;
-			this._txtStreet.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtBoxesKeyDown);
-			// 
-			// _btnAddStreet
-			// 
-			this._btnAddStreet.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this._btnAddStreet.Location = new System.Drawing.Point(12, 134);
-			this._btnAddStreet.Name = "_btnAddStreet";
-			this._btnAddStreet.Size = new System.Drawing.Size(178, 30);
-			this._btnAddStreet.TabIndex = 2;
-			this._btnAddStreet.Text = "Добавить";
-			this._btnAddStreet.UseVisualStyleBackColor = true;
-			this._btnAddStreet.Click += new System.EventHandler(this.OnAddStreetClick);
-			// 
-			// _btnDeleteStreet
-			// 
-			this._btnDeleteStreet.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this._btnDeleteStreet.Location = new System.Drawing.Point(12, 170);
-			this._btnDeleteStreet.Name = "_btnDeleteStreet";
-			this._btnDeleteStreet.Size = new System.Drawing.Size(178, 30);
-			this._btnDeleteStreet.TabIndex = 3;
-			this._btnDeleteStreet.Text = "Удалить";
-			this._btnDeleteStreet.UseVisualStyleBackColor = true;
-			this._btnDeleteStreet.Click += new System.EventHandler(this.OnDeleteStreetClick);
-			// 
-			// panel1
-			// 
-			this.panel1.BackColor = System.Drawing.SystemColors.ActiveBorder;
-			this.panel1.Location = new System.Drawing.Point(0, 206);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(456, 22);
-			this.panel1.TabIndex = 10;
-			// 
-			// StreetCityForm
-			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-			this.ClientSize = new System.Drawing.Size(456, 440);
-			this.Controls.Add(this.panel1);
-			this.Controls.Add(this._btnDeleteStreet);
-			this.Controls.Add(this._btnAddStreet);
-			this.Controls.Add(this._txtStreet);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this._dgvStreets);
-			this.Controls.Add(this._dgvCities);
-			this.Controls.Add(this._btnDeleteCity);
-			this.Controls.Add(this._btnAddCity);
-			this.Controls.Add(this._txtCity);
-			this.Controls.Add(this.label1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox = false;
-			this.Name = "StreetCityForm";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Редактор улицы/города";
-			this.Load += new System.EventHandler(this.CitiesFormLoad);
-			((System.ComponentModel.ISupportInitialize)(this._dgvCities)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this._dgvStreets)).EndInit();
-			this.ResumeLayout(false);
-			this.PerformLayout();
-
-		}
-
-		#endregion
-
-		private Label label1;
-		private TextBox _txtCity;
-		private Button _btnAddCity;
-		private Button _btnDeleteCity;
-		private DataGridView _dgvCities;
-		private DataGridView _dgvStreets;
-		private Label label2;
-		private TextBox _txtStreet;
-		private Button _btnAddStreet;
-		private Button _btnDeleteStreet;
-		private Panel panel1;
+		base.Dispose(disposing);
 	}
+
+	#region Windows Form Designer generated code
+
+	/// <summary>
+	/// Required method for Designer support - do not modify
+	/// the contents of this method with the code editor.
+	/// </summary>
+	private void InitializeComponent()
+	{
+		DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+		DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StreetCityForm));
+		_tabControl = new TabControl();
+		tabPage1 = new TabPage();
+		_btnDeleteStreet = new Button();
+		_btnAddStreet = new Button();
+		_txtStreet = new TextBox();
+		_lblStreet = new Label();
+		_dgvStreets = new DataGridView();
+		tabPage2 = new TabPage();
+		_dgvCities = new DataGridView();
+		_btnDeleteCity = new Button();
+		_btnAddCity = new Button();
+		_txtCity = new TextBox();
+		_lblCity = new Label();
+		_tabControl.SuspendLayout();
+		tabPage1.SuspendLayout();
+		((System.ComponentModel.ISupportInitialize)_dgvStreets).BeginInit();
+		tabPage2.SuspendLayout();
+		((System.ComponentModel.ISupportInitialize)_dgvCities).BeginInit();
+		SuspendLayout();
+		// 
+		// _tabControl
+		// 
+		_tabControl.Controls.Add(tabPage1);
+		_tabControl.Controls.Add(tabPage2);
+		_tabControl.Location = new Point(1, 1);
+		_tabControl.Name = "_tabControl";
+		_tabControl.SelectedIndex = 0;
+		_tabControl.Size = new Size(474, 272);
+		_tabControl.TabIndex = 11;
+		_tabControl.SelectedIndexChanged += TabControlSelectedIndexChanged;
+		// 
+		// tabPage1
+		// 
+		tabPage1.BackColor = SystemColors.ActiveCaption;
+		tabPage1.Controls.Add(_btnDeleteStreet);
+		tabPage1.Controls.Add(_btnAddStreet);
+		tabPage1.Controls.Add(_txtStreet);
+		tabPage1.Controls.Add(_lblStreet);
+		tabPage1.Controls.Add(_dgvStreets);
+		tabPage1.Location = new Point(4, 24);
+		tabPage1.Name = "tabPage1";
+		tabPage1.Padding = new Padding(3);
+		tabPage1.Size = new Size(466, 244);
+		tabPage1.TabIndex = 0;
+		tabPage1.Text = "Улицы";
+		// 
+		// _btnDeleteStreet
+		// 
+		_btnDeleteStreet.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point);
+		_btnDeleteStreet.Location = new Point(12, 202);
+		_btnDeleteStreet.Name = "_btnDeleteStreet";
+		_btnDeleteStreet.Size = new Size(178, 30);
+		_btnDeleteStreet.TabIndex = 9;
+		_btnDeleteStreet.Text = "Удалить";
+		_btnDeleteStreet.UseVisualStyleBackColor = true;
+		_btnDeleteStreet.Click += OnDeleteStreetClick;
+		// 
+		// _btnAddStreet
+		// 
+		_btnAddStreet.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point);
+		_btnAddStreet.Location = new Point(12, 166);
+		_btnAddStreet.Name = "_btnAddStreet";
+		_btnAddStreet.Size = new Size(178, 30);
+		_btnAddStreet.TabIndex = 8;
+		_btnAddStreet.Text = "Добавить";
+		_btnAddStreet.UseVisualStyleBackColor = true;
+		_btnAddStreet.Click += OnAddStreetClick;
+		// 
+		// _txtStreet
+		// 
+		_txtStreet.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point);
+		_txtStreet.Location = new Point(12, 50);
+		_txtStreet.MaxLength = 30;
+		_txtStreet.Multiline = true;
+		_txtStreet.Name = "_txtStreet";
+		_txtStreet.Size = new Size(178, 28);
+		_txtStreet.TabIndex = 7;
+		// 
+		// _lblStreet
+		// 
+		_lblStreet.AutoSize = true;
+		_lblStreet.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point);
+		_lblStreet.Location = new Point(12, 28);
+		_lblStreet.Name = "_lblStreet";
+		_lblStreet.Size = new Size(51, 19);
+		_lblStreet.TabIndex = 11;
+		_lblStreet.Text = "Улица";
+		// 
+		// _dgvStreets
+		// 
+		_dgvStreets.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+		_dgvStreets.BackgroundColor = SystemColors.Control;
+		dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+		dataGridViewCellStyle1.BackColor = SystemColors.Control;
+		dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+		dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+		dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+		dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+		dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+		_dgvStreets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+		_dgvStreets.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+		_dgvStreets.Location = new Point(203, 19);
+		_dgvStreets.MultiSelect = false;
+		_dgvStreets.Name = "_dgvStreets";
+		_dgvStreets.RowHeadersVisible = false;
+		_dgvStreets.RowTemplate.Height = 25;
+		_dgvStreets.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+		_dgvStreets.Size = new Size(253, 212);
+		_dgvStreets.TabIndex = 10;
+		_dgvStreets.TabStop = false;
+		// 
+		// tabPage2
+		// 
+		tabPage2.BackColor = SystemColors.ActiveCaption;
+		tabPage2.Controls.Add(_dgvCities);
+		tabPage2.Controls.Add(_btnDeleteCity);
+		tabPage2.Controls.Add(_btnAddCity);
+		tabPage2.Controls.Add(_txtCity);
+		tabPage2.Controls.Add(_lblCity);
+		tabPage2.Location = new Point(4, 24);
+		tabPage2.Name = "tabPage2";
+		tabPage2.Padding = new Padding(3);
+		tabPage2.Size = new Size(466, 244);
+		tabPage2.TabIndex = 1;
+		tabPage2.Text = "Города";
+		// 
+		// _dgvCities
+		// 
+		_dgvCities.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+		_dgvCities.BackgroundColor = SystemColors.Control;
+		dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+		dataGridViewCellStyle2.BackColor = SystemColors.Control;
+		dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+		dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+		dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+		dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+		dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+		_dgvCities.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+		_dgvCities.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+		_dgvCities.Location = new Point(203, 19);
+		_dgvCities.MultiSelect = false;
+		_dgvCities.Name = "_dgvCities";
+		_dgvCities.RowHeadersVisible = false;
+		_dgvCities.RowTemplate.Height = 25;
+		_dgvCities.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+		_dgvCities.Size = new Size(253, 212);
+		_dgvCities.TabIndex = 8;
+		_dgvCities.TabStop = false;
+		// 
+		// _btnDeleteCity
+		// 
+		_btnDeleteCity.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point);
+		_btnDeleteCity.Location = new Point(12, 202);
+		_btnDeleteCity.Name = "_btnDeleteCity";
+		_btnDeleteCity.Size = new Size(178, 30);
+		_btnDeleteCity.TabIndex = 11;
+		_btnDeleteCity.Text = "Удалить";
+		_btnDeleteCity.UseVisualStyleBackColor = true;
+		_btnDeleteCity.Click += OnDeleteCityClick;
+		// 
+		// _btnAddCity
+		// 
+		_btnAddCity.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point);
+		_btnAddCity.Location = new Point(12, 166);
+		_btnAddCity.Name = "_btnAddCity";
+		_btnAddCity.Size = new Size(178, 30);
+		_btnAddCity.TabIndex = 10;
+		_btnAddCity.Text = "Добавить";
+		_btnAddCity.UseVisualStyleBackColor = true;
+		_btnAddCity.Click += OnAddCityClick;
+		// 
+		// _txtCity
+		// 
+		_txtCity.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point);
+		_txtCity.Location = new Point(12, 50);
+		_txtCity.MaxLength = 30;
+		_txtCity.Multiline = true;
+		_txtCity.Name = "_txtCity";
+		_txtCity.Size = new Size(178, 28);
+		_txtCity.TabIndex = 9;
+		// 
+		// _lblCity
+		// 
+		_lblCity.AutoSize = true;
+		_lblCity.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point);
+		_lblCity.Location = new Point(12, 28);
+		_lblCity.Name = "_lblCity";
+		_lblCity.Size = new Size(49, 19);
+		_lblCity.TabIndex = 7;
+		_lblCity.Text = "Город";
+		// 
+		// StreetCityForm
+		// 
+		AutoScaleDimensions = new SizeF(7F, 15F);
+		AutoScaleMode = AutoScaleMode.Font;
+		BackColor = SystemColors.ActiveCaption;
+		ClientSize = new Size(477, 277);
+		Controls.Add(_tabControl);
+		FormBorderStyle = FormBorderStyle.FixedDialog;
+		Icon = (Icon)resources.GetObject("$this.Icon");
+		MaximizeBox = false;
+		Name = "StreetCityForm";
+		StartPosition = FormStartPosition.CenterScreen;
+		Text = "Редактор улицы/города";
+		Load += StreetCityFormLoad;
+		_tabControl.ResumeLayout(false);
+		tabPage1.ResumeLayout(false);
+		tabPage1.PerformLayout();
+		((System.ComponentModel.ISupportInitialize)_dgvStreets).EndInit();
+		tabPage2.ResumeLayout(false);
+		tabPage2.PerformLayout();
+		((System.ComponentModel.ISupportInitialize)_dgvCities).EndInit();
+		ResumeLayout(false);
+	}
+
+	#endregion
+
+	private TabControl _tabControl;
+	private TabPage tabPage1;
+	private Button _btnDeleteStreet;
+	private Button _btnAddStreet;
+	private TextBox _txtStreet;
+	private Label _lblStreet;
+	private DataGridView _dgvStreets;
+	private TabPage tabPage2;
+	private DataGridView _dgvCities;
+	private Button _btnDeleteCity;
+	private Button _btnAddCity;
+	private TextBox _txtCity;
+	private Label _lblCity;
 }
