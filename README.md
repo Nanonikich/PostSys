@@ -1,7 +1,7 @@
 # Репозиторий проекта PostSys
 
 ## Технологии Приложения:
-* MS .NET 6 Core
+* MS .NET 7 Core
 * WinForms
 * Entity Framework Tools
 
