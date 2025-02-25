@@ -1,0 +1,16 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Design.PreviewWith>
+    <Border Padding="20">
+      <TextBlock Text="Пример стиля Border" FontSize="16" />
+    </Border>
+  </Design.PreviewWith>
+
+  <!--Стиль для границ Border-->
+  <Style Selector="Border.BorderOfWindow">
+    <Setter Property="Background" Value="#808080"/>
+      <Setter Property="Height" Value="2"/>
+  </Style>
+
+</Styles>

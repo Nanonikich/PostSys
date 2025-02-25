@@ -1,0 +1,31 @@
+﻿{
+  "Kind": "SingleResult",
+  "RequestIndex": null,
+  "VariableIndex": null,
+  "Label": null,
+  "Path": null,
+  "Data": {
+    "postmen": {
+      "items": [
+        {
+          "id": "c499f7b5-2392-49d0-87f4-341eff31632e",
+          "fullname": {
+            "surname": "default_surname1",
+            "name": "default_name1",
+            "patronymic": "default_patronymic1"
+          },
+          "postmanPackageId": "00000000-0000-0000-0000-000000000000",
+          "email": "nano@gmail.com",
+          "password": "555555"
+        }
+      ]
+    }
+  },
+  "Items": null,
+  "Errors": null,
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null,
+  "IsDataSet": true
+}

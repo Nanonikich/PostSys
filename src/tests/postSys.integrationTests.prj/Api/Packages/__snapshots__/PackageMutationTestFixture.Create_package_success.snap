@@ -1,0 +1,30 @@
+﻿{
+  "Kind": "SingleResult",
+  "RequestIndex": null,
+  "VariableIndex": null,
+  "Label": null,
+  "Path": null,
+  "Data": {
+    "packageById": {
+      "dimensions": {
+        "length": 25.0,
+        "height": 60.0,
+        "weight": 82.6
+      },
+      "address": {
+        "longitude": 122,
+        "latitude": 160
+      },
+      "status": "OnWarehouse",
+      "packageClientId": "1bc4e5a7-3a9d-47a7-8ac6-6ba823283037",
+      "packagePostmanId": "1447174a-4c4d-4b7b-9415-5ad2dcb14fe7"
+    }
+  },
+  "Items": null,
+  "Errors": null,
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null,
+  "IsDataSet": true
+}

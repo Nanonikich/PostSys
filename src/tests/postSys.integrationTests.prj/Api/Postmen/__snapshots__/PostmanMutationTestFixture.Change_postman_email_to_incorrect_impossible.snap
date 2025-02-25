@@ -1,0 +1,40 @@
+﻿{
+  "Kind": "SingleResult",
+  "RequestIndex": null,
+  "VariableIndex": null,
+  "Label": null,
+  "Path": null,
+  "Data": null,
+  "Items": null,
+  "Errors": [
+    {
+      "Message": "Invalid email. (Parameter 'emailResult')",
+      "Code": "INVALID_ARGUMENT",
+      "Path": {
+        "Name": "changePostmanEmail",
+        "Parent": {
+          "Parent": null,
+          "Length": 0,
+          "IsRoot": true
+        },
+        "Length": 1,
+        "IsRoot": false
+      },
+      "Locations": [
+        {
+          "Line": 3,
+          "Column": 13
+        }
+      ],
+      "Extensions": {
+        "code": "INVALID_ARGUMENT"
+      },
+      "Exception": null
+    }
+  ],
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null,
+  "IsDataSet": true
+}

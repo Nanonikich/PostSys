@@ -1,0 +1,42 @@
+﻿{
+  "Kind": "SingleResult",
+  "RequestIndex": null,
+  "VariableIndex": null,
+  "Label": null,
+  "Path": null,
+  "Data": {
+    "postmen": {
+      "items": [
+        {
+          "id": "90fc8fe1-076e-4d98-9087-c7938062480c",
+          "fullname": {
+            "surname": "default_surname1",
+            "name": "default_name1",
+            "patronymic": "default_patronymic1"
+          },
+          "postmanPackageId": "c47fdd92-1721-4188-a895-8742d4591535",
+          "email": "nano@gmail.com",
+          "password": "555555"
+        },
+        {
+          "id": "57776c5f-a4b0-4712-b4f3-3afa0181527e",
+          "fullname": {
+            "surname": "default_surname2",
+            "name": "default_name2",
+            "patronymic": "default_patronymic2"
+          },
+          "postmanPackageId": "35064716-0ef1-4f85-be26-aa8435b5e187",
+          "email": "nanonano@gmail.com",
+          "password": "556622"
+        }
+      ]
+    }
+  },
+  "Items": null,
+  "Errors": null,
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null,
+  "IsDataSet": true
+}

@@ -1,22 +1,41 @@
-name: PostSys
+name: PostSys CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ['*']
   pull_request:
-    branches: [ "master" ]
+    branches: ['*']
 
 jobs:
-
   build:
-
     runs-on: windows-latest
 
-    env:
-      Master_script: build.cmd
-
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout code 🏃
+        uses: actions/checkout@v4
 
-    - name: Build
-      run: $env:Master_script
+      - name: Cache NuGet packages 📦
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Setup .NET 📥
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies 🔧
+        run: |
+          dotnet restore ./src/postSys.service.prj/postSys.service.csproj
+          dotnet restore ./src/postSys.gui.prj/postSys.gui.csproj
+
+      - name: Build all projects 🧱
+        run: |
+          dotnet build ./src/postSys.service.prj/postSys.service.csproj --configuration Release --no-restore
+          dotnet build ./src/postSys.gui.prj/postSys.gui.csproj --configuration Release --no-restore
+
+      - name: Run tests of Service 🧪
+        run: dotnet test ./src/tests/postSys.unitTests.prj/postSys.unitTests.csproj --configuration Release --no-build --no-restore -p:ParallelizeTestCollections=true

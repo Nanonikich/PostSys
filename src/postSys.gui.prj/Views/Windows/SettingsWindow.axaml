@@ -1,0 +1,38 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PostSys.Gui.ViewModels"
+        Width="480" Height="150"
+        x:Class="PostSys.Gui.Views.Windows.SettingsWindow"
+        x:DataType="vm:SettingsWindowViewModel"
+        Icon="avares://PostSys.Gui.Common/Assets/logo.ico"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Title="Settings">
+
+  <Window.Styles>
+    <Style Selector="TextBlock">
+      <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="TextBox">
+      <Setter Property="Height" Value="40"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+  </Window.Styles>
+
+  <Grid RowDefinitions="*, *, *" ColumnDefinitions="0.4*, *" Margin="10">
+    <TextBlock Text="Service address:"/>
+    <TextBox Grid.Column="1"
+             MaxLength="40"
+             Text="{Binding ServiceAddress, Mode=TwoWay}"/>
+    <TextBlock Grid.Row="1"
+               Text="Yandex.API key:"/>
+    <TextBox Grid.Row="1" Grid.Column="1"
+             MaxLength="36"
+             Text="{Binding YandexApiKey, Mode=TwoWay}"/>
+    <Button Grid.Row="2" Grid.Column="1"
+            Content="OK"
+            Command="{Binding ApplySettingsCommand}"
+            HorizontalAlignment="Right"/>
+  </Grid>
+
+</Window>

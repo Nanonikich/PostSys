@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:PostSys.Gui.ViewModels"
+             x:Class="PostSys.Gui.Views.Controls.AuthorizationView"
+             x:DataType="vm:AuthorizationViewModel">
+
+  <UserControl.Styles>
+    <Style Selector="TextBox">
+      <Setter Property="Height" Value="40"/>
+        <Setter Property="Margin" Value="0, 5"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+      </Style>
+  </UserControl.Styles>
+
+  <Grid RowDefinitions="Auto, Auto, Auto"
+        ColumnDefinitions="*, *, *"
+        Margin="20"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Center">
+    <TextBox Grid.Column="1"
+             Text="{Binding Email, Mode=TwoWay}"
+             MaxLength="25"
+             Watermark="Email"/>
+    <TextBox Grid.Row="1"
+             Grid.Column="1"
+             Text="{Binding Password, Mode=TwoWay}"
+             PasswordChar="*"
+             MaxLength="12"
+             Watermark="Password"/>
+    <Button Grid.Row="2"
+            Grid.Column="1"
+            Content="Log In"
+            Height="40"
+            Margin="0, 10"
+            VerticalContentAlignment="Center"
+            HorizontalContentAlignment="Center"
+            HorizontalAlignment="Stretch"
+            Command="{Binding AuthorizationCommand}"/>
+  </Grid>
+
+</UserControl>

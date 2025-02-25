@@ -1,0 +1,38 @@
+﻿{
+  "Kind": "SingleResult",
+  "RequestIndex": null,
+  "VariableIndex": null,
+  "Label": null,
+  "Path": null,
+  "Data": {
+    "clients": {
+      "items": [
+        {
+          "id": "2d8e0834-eced-4170-b798-d7a509fa9da8",
+          "fullname": {
+            "surname": "default_surname1",
+            "name": "default_name1",
+            "patronymic": "default_patronymic1"
+          },
+          "phoneNumber": "8906-548-22-68"
+        },
+        {
+          "id": "39d5d8a6-a1e4-4ab7-854c-be6037d3ff9e",
+          "fullname": {
+            "surname": "default_surname2",
+            "name": "default_name2",
+            "patronymic": "default_patronymic2"
+          },
+          "phoneNumber": "8906-548-22-68"
+        }
+      ]
+    }
+  },
+  "Items": null,
+  "Errors": null,
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null,
+  "IsDataSet": true
+}

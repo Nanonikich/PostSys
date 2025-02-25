@@ -1,0 +1,24 @@
+﻿{
+  "Kind": "SingleResult",
+  "RequestIndex": null,
+  "VariableIndex": null,
+  "Label": null,
+  "Path": null,
+  "Data": {
+    "changePostmanEmail": {
+      "isSuccess": null,
+      "errors": [
+        {
+          "message": "Invalid email. (Parameter 'emailResult')"
+        }
+      ]
+    }
+  },
+  "Items": null,
+  "Errors": null,
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null,
+  "IsDataSet": true
+}

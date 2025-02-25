@@ -1,0 +1,19 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:PostSys.Gui.Common.Converters;assembly=postSys.gui.common"
+             xmlns:locConverters="using:PostSys.Gui.Converters"
+             x:Class="PostSys.Gui.App"
+             RequestedThemeVariant="Dark">
+
+  <Application.Resources>
+    <converters:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter" />
+    <locConverters:StatusToStringConverter x:Key="StatusToStringConverter" />
+  </Application.Resources>
+
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://postSys.gui.common/Styles/ThemeUiStyle.axaml" />
+    <StyleInclude Source="avares://postSys.gui/Styles/BorderStyle.axaml" />
+  </Application.Styles>
+
+</Application>

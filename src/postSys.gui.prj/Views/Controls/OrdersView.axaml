@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:PostSys.Gui.ViewModels"
+             xmlns:views="using:PostSys.Gui.Views.Controls"
+             x:Class="PostSys.Gui.Views.Controls.OrdersView"
+             x:DataType="vm:OrdersViewModel">
+
+  <ScrollViewer>
+    <ItemsControl ItemsSource="{Binding OrderDescriptionViewModels}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <views:OrderDescriptionView />
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </ScrollViewer>
+
+</UserControl>

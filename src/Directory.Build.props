@@ -1,8 +1,16 @@
 <Project>
-
+  <!-- Этот файл применяется автоматически для всех проектов. Больше информации можно найти здесь: https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build  -->
   <PropertyGroup>
-    <LangVersion>12</LangVersion>
-    <NoWarn>$(NoWarn);NETSDK1138;NU1803</NoWarn>
+    <Authors>Nanonikich</Authors>
+    <Owners>$(Authors)</Owners>
+    <RepositoryUrl>https://github/Nanonikich/PostSys</RepositoryUrl>
+    <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
+    <LangVersion>preview</LangVersion>
+    <TargetFramework>net8.0</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb;</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Nullable>enable</Nullable>
+    <IsPackable>False</IsPackable>
   </PropertyGroup>
-
 </Project>

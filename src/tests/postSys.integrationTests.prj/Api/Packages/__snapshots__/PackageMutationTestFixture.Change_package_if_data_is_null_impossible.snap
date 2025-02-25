@@ -1,0 +1,40 @@
+﻿{
+  "Kind": "SingleResult",
+  "RequestIndex": null,
+  "VariableIndex": null,
+  "Label": null,
+  "Path": null,
+  "Data": null,
+  "Items": null,
+  "Errors": [
+    {
+      "Message": "Client does not exist!",
+      "Code": "INVALID_ARGUMENT",
+      "Path": {
+        "Name": "changePackage",
+        "Parent": {
+          "Parent": null,
+          "Length": 0,
+          "IsRoot": true
+        },
+        "Length": 1,
+        "IsRoot": false
+      },
+      "Locations": [
+        {
+          "Line": 3,
+          "Column": 13
+        }
+      ],
+      "Extensions": {
+        "code": "INVALID_ARGUMENT"
+      },
+      "Exception": null
+    }
+  ],
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null,
+  "IsDataSet": true
+}

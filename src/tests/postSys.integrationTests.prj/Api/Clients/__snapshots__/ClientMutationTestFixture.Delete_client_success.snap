@@ -1,0 +1,29 @@
+﻿{
+  "Kind": "SingleResult",
+  "RequestIndex": null,
+  "VariableIndex": null,
+  "Label": null,
+  "Path": null,
+  "Data": {
+    "clients": {
+      "items": [
+        {
+          "id": "5724e567-47b9-4189-b7bc-ba1f76cce669",
+          "fullname": {
+            "surname": "default_surname1",
+            "name": "default_name1",
+            "patronymic": "default_patronymic1"
+          },
+          "phoneNumber": "8906-548-22-68"
+        }
+      ]
+    }
+  },
+  "Items": null,
+  "Errors": null,
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null,
+  "IsDataSet": true
+}

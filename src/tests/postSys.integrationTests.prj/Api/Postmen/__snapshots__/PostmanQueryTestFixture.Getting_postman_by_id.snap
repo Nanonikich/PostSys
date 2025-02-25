@@ -1,0 +1,25 @@
+﻿{
+  "Kind": "SingleResult",
+  "RequestIndex": null,
+  "VariableIndex": null,
+  "Label": null,
+  "Path": null,
+  "Data": {
+    "postmanById": {
+      "fullname": {
+        "surname": "default_surname",
+        "name": "default_name",
+        "patronymic": "default_patronymic"
+      },
+      "email": "nano@gmail.com",
+      "password": "555555"
+    }
+  },
+  "Items": null,
+  "Errors": null,
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null,
+  "IsDataSet": true
+}

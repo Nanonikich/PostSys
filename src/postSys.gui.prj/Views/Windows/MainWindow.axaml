@@ -1,0 +1,72 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:locConverters="using:PostSys.Gui.Converters"
+        xmlns:vm="using:PostSys.Gui.ViewModels"
+        xmlns:views="using:PostSys.Gui.Views.Controls"
+        MinWidth="876" MinHeight="526"
+        x:Class="PostSys.Gui.Views.Windows.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="avares://PostSys.Gui.Common/Assets/logo.ico"
+        WindowStartupLocation="CenterScreen"
+        Title="PostSys">
+
+  <Window.Resources>
+    <locConverters:ViewModelToViewConverter x:Key="ViewModelToViewConverter" />
+  </Window.Resources>
+
+  <Window.Styles>
+    <Style Selector="Button.ButtonOfMainWindow">
+      <Setter Property="Height" Value="40"/>
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="Background" Value="#F5F5F5"/>
+    </Style>
+    <Style Selector="Image">
+      <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="Image.ImageOfButton">
+      <Setter Property="Height" Value="30"/>
+      <Setter Property="Width" Value="30"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+  </Window.Styles>
+
+  <Grid RowDefinitions="110, *, Auto">
+    <Grid RowDefinitions="*, Auto" ColumnDefinitions="*, *, *">
+      <Panel Background="Orange" Grid.ColumnSpan="3">
+        <Image Source="avares://postSys.gui/Assets/main_logo.png"
+               VerticalAlignment="Top"
+               Width="250"
+               Height="180"
+               Margin="10, 5"/>
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top">
+          <Button Margin="5, 5, 2.5, 5"
+                  Classes="ButtonOfMainWindow"
+                  Command="{Binding SettingsCommand}">
+            <Image Source="avares://postSys.gui/Assets/Buttons/settings.png"
+                   Classes="ImageOfButton"/>
+          </Button>
+          <Button Margin="2.5, 5, 5, 5"
+                  Classes="ButtonOfMainWindow"
+                  Command="{Binding InfoCommand}">
+            <Image Source="avares://postSys.gui/Assets/Buttons/info.png"
+                   Classes="ImageOfButton"/>
+          </Button>
+        </StackPanel>
+      </Panel>
+      <Border Grid.Row="1" Grid.ColumnSpan="3"
+              Classes="BorderOfWindow"/>
+    </Grid>
+    <ContentControl Content="{Binding CurrentView, Converter={StaticResource ViewModelToViewConverter}}" Grid.Row="1"
+                    IsEnabled="{Binding IsEnabledComponents}"/>
+    <Panel Grid.Row="2"
+           IsEnabled="{Binding IsEnabledComponents}">
+      <views:ButtonsView Grid.Row="2"
+                         DataContext="{Binding ButtonsViewModel}"/>
+    </Panel>
+  </Grid>
+
+</Window>

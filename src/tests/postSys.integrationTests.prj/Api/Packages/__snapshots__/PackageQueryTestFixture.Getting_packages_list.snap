@@ -1,0 +1,50 @@
+﻿{
+  "Kind": "SingleResult",
+  "RequestIndex": null,
+  "VariableIndex": null,
+  "Label": null,
+  "Path": null,
+  "Data": {
+    "packages": {
+      "items": [
+        {
+          "id": "667b4131-dfa4-419a-9574-ce44fdc234a5",
+          "dimensions": {
+            "length": 28.0,
+            "height": 28.0,
+            "weight": 32.0
+          },
+          "address": {
+            "longitude": 32,
+            "latitude": 22
+          },
+          "status": "OnWarehouse",
+          "packageClientId": "ee7b066d-0727-4060-875c-4118999b3d9f",
+          "packagePostmanId": "f51d9c7d-2c58-4f0a-aa1b-16b2c0a1d977"
+        },
+        {
+          "id": "f04b5a2a-b866-426f-84d7-c2839e68cfd5",
+          "dimensions": {
+            "length": 30.0,
+            "height": 22.0,
+            "weight": 42.0
+          },
+          "address": {
+            "longitude": 135,
+            "latitude": 148
+          },
+          "status": "OnWarehouse",
+          "packageClientId": "e68e196b-f64c-42c6-9071-ad5abca13a08",
+          "packagePostmanId": "2fa04346-bbba-4b54-af48-e30b7a54fc49"
+        }
+      ]
+    }
+  },
+  "Items": null,
+  "Errors": null,
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null,
+  "IsDataSet": true
+}

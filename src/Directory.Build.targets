@@ -1,7 +1,0 @@
-<Project>
-
-  <ItemGroup>
-    <None Remove="**\.gitignore" />
-  </ItemGroup>
-
-</Project>

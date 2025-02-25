@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:components="clr-namespace:PostSys.Gui.Views.Controls"
+             xmlns:vm="using:PostSys.Gui.ViewModels"
+             x:Class="PostSys.Gui.Views.Controls.ButtonsView"
+             x:DataType="vm:ButtonsViewModel">
+
+  <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Border Classes="BorderOfWindow"/>
+    <ItemsControl ItemsSource="{Binding ButtonOptions}" HorizontalAlignment="Stretch">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <UniformGrid Rows="1"/>
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Button Height="85" Margin="5" IsEnabled="{Binding IsEnabled}" HorizontalAlignment="Stretch">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch">
+              <Image Source="{Binding ImageSource, Converter={StaticResource ImagePathToBitmapConverter}}" Width="50" Height="50" />
+              <TextBlock Text="{Binding Title}" HorizontalAlignment="Center" Margin="5" />
+            </StackPanel>
+          </Button>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </StackPanel>
+
+</UserControl>

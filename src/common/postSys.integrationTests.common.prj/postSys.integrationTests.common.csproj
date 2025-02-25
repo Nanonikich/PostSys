@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Description>Общие настройки по интеграционным тестам для проектов DDD.</Description>
+    <RootNamespace>PostSys.IntegrationTests.Common</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HotChocolate.Abstractions"/>
+    <PackageReference Include="HotChocolate.Execution"/>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing"/>
+    <PackageReference Include="Microsoft.Build.CopyOnWrite">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+    <PackageReference Include="Respawn"/>
+    <PackageReference Include="Snapshooter.NUnit"/>
+    <PackageReference Include="Testcontainers.PostgreSql"/>
+  </ItemGroup>
+
+</Project>

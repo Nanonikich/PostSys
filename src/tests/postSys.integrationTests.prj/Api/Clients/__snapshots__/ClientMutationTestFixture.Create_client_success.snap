@@ -1,0 +1,24 @@
+﻿{
+  "Kind": "SingleResult",
+  "RequestIndex": null,
+  "VariableIndex": null,
+  "Label": null,
+  "Path": null,
+  "Data": {
+    "clientById": {
+      "fullname": {
+        "surname": "default_surname",
+        "name": "default_name",
+        "patronymic": "default_patronymic"
+      },
+      "phoneNumber": "8906-548-22-68"
+    }
+  },
+  "Items": null,
+  "Errors": null,
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null,
+  "IsDataSet": true
+}
