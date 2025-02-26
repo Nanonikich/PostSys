@@ -9,6 +9,7 @@ using PostSys.Domain.ValueObjects;
 using PostSys.ReadModels.Contracts;
 using PostSys.Service.Commands.Clients;
 using PostSys.Service.Common.Cqrs.Core;
+using PostSys.Service.Subscriptions;
 
 namespace PostSys.Service.CommandHandlers.Clients;
 
@@ -35,7 +36,7 @@ public class CreateClientCommandHandler(IClientRepository repository, ITopicEven
 			await repository.AddAsync(client);
 			
 			await topicEventSender.SendAsync(
-				"OnEntityCreated",
+				nameof(Subscription.OnEntityCreated),
 				new EntityCreationMessageModel(
 					"client",
 					client.Id),

@@ -10,6 +10,7 @@ using PostSys.Domain.ValueObjects;
 using PostSys.ReadModels.Contracts;
 using PostSys.Service.Commands.Postmen;
 using PostSys.Service.Common.Cqrs.Core;
+using PostSys.Service.Subscriptions;
 
 namespace PostSys.Service.CommandHandlers.Postmen;
 
@@ -50,7 +51,7 @@ public class CreatePostmanCommandHandler(
 			await repository.AddAsync(postman, cancellationToken);
 			
 			await topicEventSender.SendAsync(
-				"OnEntityCreated",
+				nameof(Subscription.OnEntityCreated),
 				new EntityCreationMessageModel(
 					"postman",
 					postman.Id),

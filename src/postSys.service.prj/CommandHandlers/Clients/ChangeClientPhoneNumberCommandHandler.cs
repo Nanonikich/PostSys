@@ -10,6 +10,7 @@ using PostSys.ReadModels.Contracts;
 using PostSys.Service.Commands.Clients;
 using PostSys.Service.Common.Cqrs.Core;
 using PostSys.Service.Common.Exceptions;
+using PostSys.Service.Subscriptions;
 
 using ArgumentException = System.ArgumentException;
 
@@ -36,7 +37,7 @@ public class ChangeClientPhoneNumberCommandHandler(IClientRepository repository,
 			client.ChangePhoneNumber(phoneNumberResult.Value);
 			
 			await topicEventSender.SendAsync(
-				"OnEntityParameterChanged",
+				nameof(Subscription.OnEntityParameterChanged),
 				new EntityParameterChangeMessageModel(
 					"client",
 					"changePhoneNumber",

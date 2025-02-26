@@ -1,4 +1,6 @@
-﻿namespace PostSys.Client.Data.Subscriptions;
+﻿using System.Threading.Tasks;
+
+namespace PostSys.Client.Data.Subscriptions;
 
 /// <summary>Клиент для подписок на события.</summary>
 public interface ISubscriptionClient
@@ -6,7 +8,7 @@ public interface ISubscriptionClient
 	#region Methods
 
 	/// <summary>Подписывается на события HotChocolate.</summary>
-	void StartConsuming();
+	Task StartConsuming();
 
 	/// <summary>Отписывается от событий HotChocolate.</summary>
 	void StopConsuming();

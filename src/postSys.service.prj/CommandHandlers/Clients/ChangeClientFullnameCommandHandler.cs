@@ -11,6 +11,7 @@ using PostSys.ReadModels.Contracts;
 using PostSys.Service.Commands.Clients;
 using PostSys.Service.Common.Cqrs.Core;
 using PostSys.Service.Common.Exceptions;
+using PostSys.Service.Subscriptions;
 
 namespace PostSys.Service.CommandHandlers.Clients;
 
@@ -38,7 +39,7 @@ public class ChangeClientFullnameCommandHandler(IClientRepository repository, IT
 			client.ChangeFullname(fullnameResult.Value);
 			
 			await topicEventSender.SendAsync(
-				"OnEntityParameterChanged",
+				nameof(Subscription.OnEntityParameterChanged),
 				new EntityParameterChangeMessageModel(
 					"client",
 					"changeFullname",

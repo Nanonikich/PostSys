@@ -3,10 +3,10 @@ using System.Reflection;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.SignalR;
 
 using NLog.Web;
 
@@ -50,6 +50,7 @@ lifetime.ApplicationStopping.Register(() => Task.Run(async() => await hubContext
 
 app.MapHealthChecks("/health");
 app.UseCors();
+app.UseWebSockets();
 app.MapGraphQL();
 app.MapHub<NotificationHub>("/notificationHub");
 app.UseRouting();

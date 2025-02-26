@@ -159,7 +159,7 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 		InfoCommand = ReactiveCommand.CreateFromTask(async () => 
 			await ShowWindowAboutProgramAsync(infoWindowViewModel));
 
-		this.WhenActivated(disposables =>
+		this.WhenActivated(async disposables =>
 		{
 			CurrentView = AuthorizationViewModel;
 			AuthorizationViewModel.SuccessfulAuthorizationEvent += OnSuccessfulAuthorization;
@@ -168,7 +168,7 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 			settingsWindowViewModel.ChangeConfigurationEvent += OnChangeConfigurationAsync;
 			postmenMessageHandler.DeletedPostmanEvent += OnDeletedPostman;
 
-			subscriptionClient.StartConsuming();
+			await subscriptionClient.StartConsuming();
 
 			Disposable
 				.Create(async () =>

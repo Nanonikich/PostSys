@@ -15,7 +15,7 @@ public record ApplicationConfiguration
 	/// <summary>Возвращает и задает адрес подключения к сервису.</summary>
 	/// <value>Адрес подключения к сервису.</value>
 	[JsonPropertyName("service_address")]
-	public string ServiceAddress { get; set; } = "http://localhost:5000/graphql";
+	public string ServiceAddress { get; set; } = "http://localhost:5000";
 	
 	/// <summary>Возвращает и задает ключ Яндекс.API.</summary>
 	/// <value>Ключ Яндекс.API.</value>

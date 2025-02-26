@@ -10,6 +10,7 @@ using PostSys.ReadModels.Contracts;
 using PostSys.Service.Commands.Packages;
 using PostSys.Service.Common.Cqrs.Core;
 using PostSys.Service.Common.Exceptions;
+using PostSys.Service.Subscriptions;
 
 namespace PostSys.Service.CommandHandlers.Packages;
 
@@ -36,7 +37,7 @@ public class ChangePackageCommandHandler(
 			await package.ChangeAsync(command.ClientId, command.PostmanId, checker);
 			
 			await topicEventSender.SendAsync(
-				"OnEntityChanged",
+				nameof(Subscription.OnEntityChanged),
 				new EntityChangeMessageModel(
 					"package",
 					command.Id),

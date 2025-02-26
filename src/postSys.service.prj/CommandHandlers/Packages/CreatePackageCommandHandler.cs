@@ -11,6 +11,7 @@ using PostSys.ReadModels.Contracts;
 using PostSys.Service.Commands.Packages;
 using PostSys.Service.Common.Converters;
 using PostSys.Service.Common.Cqrs.Core;
+using PostSys.Service.Subscriptions;
 
 namespace PostSys.Service.CommandHandlers.Packages;
 
@@ -53,7 +54,7 @@ public class CreatePackageCommandHandler(
 			await repository.AddAsync(package);
 
 			await topicEventSender.SendAsync(
-				"OnEntityCreated",
+				nameof(Subscription.OnEntityCreated),
 				new EntityCreationMessageModel(
 					"package",
 					package.Id),

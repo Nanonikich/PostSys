@@ -19,7 +19,7 @@
 - NUnit 4.3.2
 - Respawn 6.2.1
 - Snapshooter 1.0.1
-- Testcontainers 4.2.0
+- Testcontainers 4.3.0
 
 ### Архитектура и паттерны
 
@@ -33,7 +33,7 @@
 
 ### Дополнительные библиотеки
 
-- CSharpFunctionalExtensions 3.4.3
+- CSharpFunctionalExtensions 3.5.1
 
 ### Библиотеки приложения
 

@@ -10,6 +10,7 @@ using PostSys.ReadModels.Contracts;
 using PostSys.Service.Commands.Packages;
 using PostSys.Service.Common.Cqrs.Core;
 using PostSys.Service.Common.Exceptions;
+using PostSys.Service.Subscriptions;
 
 namespace PostSys.Service.CommandHandlers.Packages;
 
@@ -34,7 +35,7 @@ public class ChangePackageStatusCommandHandler(IPackageRepository repository, IT
 			package.ChangeStatus(statusResult.Value);
 			
 			await topicEventSender.SendAsync(
-				"OnEntityParameterChanged",
+				nameof(Subscription.OnEntityParameterChanged),
 				new EntityParameterChangeMessageModel(
 					"package",
 					"changeStatus",

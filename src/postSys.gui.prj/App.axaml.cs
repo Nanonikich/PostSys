@@ -77,6 +77,11 @@ public partial class App : Application
 						var serviceAddress = sp.GetRequiredService<ApplicationConfiguration>().ServiceAddress;
 						return new PackageGraphQlClient(serviceAddress);
 					})
+					.AddSingleton<IInfoGraphQlClient>(sp =>
+					{
+						var serviceAddress = sp.GetRequiredService<ApplicationConfiguration>().ServiceAddress;
+						return new InfoGraphQlClient(serviceAddress);
+					})
 					.AddSingleton<IAddressClient>(sp =>
 					{
 						var apiKey = sp.GetRequiredService<ApplicationConfiguration>().YandexApiKey;

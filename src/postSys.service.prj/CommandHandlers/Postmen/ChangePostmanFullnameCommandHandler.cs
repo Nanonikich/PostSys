@@ -11,6 +11,7 @@ using PostSys.ReadModels.Contracts;
 using PostSys.Service.Commands.Postmen;
 using PostSys.Service.Common.Cqrs.Core;
 using PostSys.Service.Common.Exceptions;
+using PostSys.Service.Subscriptions;
 
 namespace PostSys.Service.CommandHandlers.Postmen;
 
@@ -38,7 +39,7 @@ public class ChangePostmanFullnameCommandHandler(IPostmanRepository repository, 
 			postman.ChangeFullname(fullnameResult.Value);
 			
 			await topicEventSender.SendAsync(
-				"OnEntityParameterChanged",
+				nameof(Subscription.OnEntityParameterChanged),
 				new EntityParameterChangeMessageModel(
 					"postman",
 					"changeFullname",

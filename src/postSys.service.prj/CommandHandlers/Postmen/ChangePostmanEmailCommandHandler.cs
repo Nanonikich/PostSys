@@ -11,6 +11,7 @@ using PostSys.ReadModels.Contracts;
 using PostSys.Service.Commands.Postmen;
 using PostSys.Service.Common.Cqrs.Core;
 using PostSys.Service.Common.Exceptions;
+using PostSys.Service.Subscriptions;
 
 namespace PostSys.Service.CommandHandlers.Postmen;
 
@@ -39,7 +40,7 @@ public class ChangePostmanEmailCommandHandler(
 			await postman.ChangeEmailAsync(emailResult.Value, checker);
 			
 			await topicEventSender.SendAsync(
-				"OnEntityParameterChanged",
+				nameof(Subscription.OnEntityParameterChanged),
 				new EntityParameterChangeMessageModel(
 					"postman",
 					"changeEmail",

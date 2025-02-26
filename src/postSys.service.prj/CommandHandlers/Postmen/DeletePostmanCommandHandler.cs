@@ -8,6 +8,7 @@ using PostSys.ReadModels.Contracts;
 using PostSys.Service.Commands.Postmen;
 using PostSys.Service.Common.Cqrs.Core;
 using PostSys.Service.Common.Exceptions;
+using PostSys.Service.Subscriptions;
 
 namespace PostSys.Service.CommandHandlers.Postmen;
 
@@ -26,7 +27,7 @@ public class DeletePostmenCommandHandler(IPostmanRepository repository, ITopicEv
 			?? throw new EntityNotFoundException("Postman", command.Id.ToString());
 		
 		await topicEventSender.SendAsync(
-			"OnEntityDeleted",
+			nameof(Subscription.OnEntityDeleted),
 			new EntityDeletionMessageModel(
 				"postman",
 				postman.Id),

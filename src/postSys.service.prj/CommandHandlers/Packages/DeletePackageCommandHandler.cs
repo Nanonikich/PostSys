@@ -8,6 +8,7 @@ using PostSys.ReadModels.Contracts;
 using PostSys.Service.Commands.Packages;
 using PostSys.Service.Common.Cqrs.Core;
 using PostSys.Service.Common.Exceptions;
+using PostSys.Service.Subscriptions;
 
 namespace PostSys.Service.CommandHandlers.Packages;
 
@@ -26,7 +27,7 @@ public class DeletePackageCommandHandler(IPackageRepository repository, ITopicEv
 			?? throw new EntityNotFoundException("Package", command.Id.ToString());
 		
 		await topicEventSender.SendAsync(
-			"OnEntityDeleted",
+			nameof(Subscription.OnEntityDeleted),
 			new EntityDeletionMessageModel(
 				"package",
 				command.Id),
