@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using HotChocolate;
+using HotChocolate.Authorization;
 using HotChocolate.Types;
 
 using MediatR;
@@ -25,6 +26,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Идентификатор созданного клиента.</returns>
+	[Authorize(Roles = [ "admin" ])]
 	[UseCreateMutationConvention]
 	public static Task<Guid> CreateClientAsync(
 		Fullname fullname,
@@ -41,6 +43,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Успешность выполнения запроса.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseSuccessMutationConvention]
 	public static async Task<bool> ChangeClientFullnameAsync(
 		Guid id,
@@ -57,6 +60,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Успешность выполнения запроса.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseSuccessMutationConvention]
 	public static async Task<bool> ChangeClientPhoneNumberAsync(
 		Guid id,
@@ -72,6 +76,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Успешность выполнения запроса.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseSuccessMutationConvention]
 	public static async Task<bool> DeleteClientAsync(
 		Guid id,

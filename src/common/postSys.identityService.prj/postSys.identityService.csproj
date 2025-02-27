@@ -2,22 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Description>Общие настройки для сервисов в проектах DDD.</Description>
-    <RootNamespace>PostSys.Service.Common</RootNamespace>
+    <Description>Данные для авторизации по KeyCloak.</Description>
+    <RootNamespace>PostSys.IdentityService</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HotChocolate.AspNetCore" />
-    <PackageReference Include="HotChocolate.Data.EntityFramework" />
-    <PackageReference Include="MediatR" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" />
     <PackageReference Include="Microsoft.Build.CopyOnWrite">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="NLog" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Cqrs\" />
+    <ProjectReference Include="..\postSys.framework.common.prj\postSys.framework.common.csproj" />
   </ItemGroup>
 
 </Project>

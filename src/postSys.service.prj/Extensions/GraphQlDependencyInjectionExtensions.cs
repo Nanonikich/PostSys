@@ -23,11 +23,13 @@ public static class GraphQlDependencyInjectionExtensions
 	{
 		return collection
 			.AddGraphQLServer()
+			//.AddHttpRequestInterceptor<HttpRequestInterceptor>()
 			.RegisterDbContextFactory<TDbContext>()
 			.AddErrorFilter<GraphQlErrorFilter>()
 			.AddFiltering()
 			.AddSorting()
 			.AddProjections()
+			.AddAuthorization()
 			.AddMutationConventions()
 			.AddSubscriptionType<Subscription>()
 			.AddInMemorySubscriptions()

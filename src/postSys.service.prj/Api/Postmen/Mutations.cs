@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using HotChocolate;
+using HotChocolate.Authorization;
 using HotChocolate.Types;
 
 using MediatR;
@@ -27,6 +28,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Идентификатор созданного почтальона.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseCreateMutationConvention]
 	public static Task<Guid> CreatePostmanAsync(
 		Fullname fullname,
@@ -45,6 +47,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Успешность выполнения запроса.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseSuccessMutationConvention]
 	public static async Task<bool> ChangePostmanAsync(
 		Guid id,
@@ -61,6 +64,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Успешность выполнения запроса.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseSuccessMutationConvention]
 	public static async Task<bool> ChangePostmanFullnameAsync(
 		Guid id, 
@@ -77,6 +81,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Успешность выполнения запроса.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseSuccessMutationConvention]
 	public static async Task<bool> ChangePostmanEmailAsync(
 		Guid id,
@@ -93,6 +98,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Успешность выполнения запроса.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseSuccessMutationConvention]
 	public static async Task<bool> ChangePostmanPasswordAsync(
 		Guid id,
@@ -108,6 +114,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Успешность выполнения запроса.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseSuccessMutationConvention]
 	public static async Task<bool> DeletePostmanAsync(
 		Guid id,

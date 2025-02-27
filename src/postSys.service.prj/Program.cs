@@ -14,6 +14,9 @@ using PostSys.Dal.Extensions;
 using PostSys.Dal.ReadModel;
 using PostSys.Framework.Common;
 using PostSys.Framework.Common.Logging;
+using PostSys.IdentityService.Contracts;
+using PostSys.IdentityService;
+using PostSys.IdentityService.Data;
 using PostSys.Service.Common.Contracts;
 using PostSys.Service.Extensions;
 using PostSys.Service.SignalR;
@@ -37,7 +40,23 @@ services
 
 services.AddCqrs(assemblies: Assembly.GetExecutingAssembly());
 services.AddDatabase(databaseConnectionString);
+services.AddJwtAuthentication();
 services.AddGraphQl<ReadDbContext>();
+services.AddSingleton<ITokenProvider>(sp =>
+{
+	if(true) // TODO: параметр включения авторизации в конфигурации
+	{
+		return new KeyCloakTokenProvider(new KeyCloakAuthorizationData
+		{
+			KeyCloakUrl = "http://localhost:8080",
+			ClientId = "postSys-client",
+			ClientSecret = "XQjWncWcdzofztqms4LcqRWskSsB9CtI",
+			Realm = "postSys-realm"
+		});
+	}
+
+	return new EmptyTokenProvider();
+});
 
 ConfigureCors(services);
 
@@ -54,6 +73,9 @@ app.UseWebSockets();
 app.MapGraphQL();
 app.MapHub<NotificationHub>("/notificationHub");
 app.UseRouting();
+app.UseMiddleware<TokenMiddleware>();
+app.UseAuthentication();
+app.UseAuthorization();
 app.Run();
 
 

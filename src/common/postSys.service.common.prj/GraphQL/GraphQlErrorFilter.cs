@@ -31,11 +31,17 @@ public class GraphQlErrorFilter : IErrorFilter
 				.Build();
 		}
 
-		return ErrorBuilder
-			.New()
-			.SetMessage(error.Exception!.Message)
-			.SetCode("UNKNOWN_ERROR")
-			.Build();
+		return error.Exception == null
+			? ErrorBuilder
+				.New()
+				.SetMessage(error.Message)
+				.SetCode(error.Code)
+				.Build()
+			: ErrorBuilder
+				.New()
+				.SetMessage(error.Exception.Message)
+				.SetCode("UNKNOWN_ERROR")
+				.Build();
 	}
 
 	#endregion

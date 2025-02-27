@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "postSys.gui.common", "commo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "postSys.framework.common", "common\postSys.framework.common.prj\postSys.framework.common.csproj", "{F4B958C2-12E0-42BB-8EFC-675E8C00D194}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "postSys.identityService", "common\postSys.identityService.prj\postSys.identityService.csproj", "{AD08FB33-C6D2-4151-BCA7-E2BCBA2245C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{F4B958C2-12E0-42BB-8EFC-675E8C00D194}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4B958C2-12E0-42BB-8EFC-675E8C00D194}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4B958C2-12E0-42BB-8EFC-675E8C00D194}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD08FB33-C6D2-4151-BCA7-E2BCBA2245C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD08FB33-C6D2-4151-BCA7-E2BCBA2245C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD08FB33-C6D2-4151-BCA7-E2BCBA2245C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD08FB33-C6D2-4151-BCA7-E2BCBA2245C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,6 +124,7 @@ Global
 		{34441256-EFDC-4984-BD98-D553BB8AE1DF} = {47A91DF7-BC6B-4C9E-AE28-0A8613D52489}
 		{619E59D1-C66C-4D07-9AB1-28F47DE1ED9C} = {47A91DF7-BC6B-4C9E-AE28-0A8613D52489}
 		{F4B958C2-12E0-42BB-8EFC-675E8C00D194} = {47A91DF7-BC6B-4C9E-AE28-0A8613D52489}
+		{AD08FB33-C6D2-4151-BCA7-E2BCBA2245C9} = {47A91DF7-BC6B-4C9E-AE28-0A8613D52489}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3F35EB07-47AE-463B-A2FF-C6FA11409CEF}

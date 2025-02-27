@@ -3,9 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using HotChocolate;
+using HotChocolate.Authorization;
 using HotChocolate.Types;
 
 using MediatR;
+
 using PostSys.ReadModels.Contracts;
 using PostSys.ReadModels.Helpers;
 using PostSys.Service.Commands.Packages;
@@ -28,6 +30,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Идентификатор созданной посылки.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseCreateMutationConvention]
 	public static Task<Guid> CreatePackageAsync(
 		Dimensions dimensions,
@@ -48,6 +51,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Успешность выполнения запроса.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseSuccessMutationConvention]
 	public static async Task<bool> ChangePackageAsync(
 		Guid id,
@@ -65,6 +69,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Успешность выполнения запроса.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseSuccessMutationConvention]
 	public static async Task<bool> ChangePackageDimensionsAsync(
 		Guid id,
@@ -81,6 +86,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Успешность выполнения запроса.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseSuccessMutationConvention]
 	public static async Task<bool> ChangePackageAddressAsync(
 		Guid id,
@@ -97,6 +103,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Успешность выполнения запроса.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseSuccessMutationConvention]
 	public static async Task<bool> ChangePackageStatusAsync(
 		Guid id,
@@ -112,6 +119,7 @@ public static class Mutations
 	/// <param name="sender"><see cref="ISender"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Успешность выполнения запроса.</returns>
+	[Authorize(Roles = ["admin"])]
 	[UseSuccessMutationConvention]
 	public static async Task<bool> DeletePackageAsync(
 		Guid id,

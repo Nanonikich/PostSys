@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using HotChocolate;
+using HotChocolate.Authorization;
 using HotChocolate.Data;
 using HotChocolate.Types;
 
@@ -23,6 +24,7 @@ public static class Queries
 	/// <param name="dbContext"><see cref="ReadDbContext"/>.</param>
 	/// <param name="cancellationToken">Токен отмены.</param>
 	/// <returns>Почтальон, если он существует.</returns>
+	[Authorize]
 	public static ValueTask<Postman?> GetPostmanByIdAsync(
 		Guid id,
 		[Service] ReadDbContext dbContext,
@@ -36,6 +38,7 @@ public static class Queries
 	/// <summary>Возвращает всех почтальонов.</summary>
 	/// <param name="dbContext"><see cref="ReadDbContext"/>.</param>
 	/// <returns>Все почтальоны.</returns>
+	[Authorize]
 	[UseOffsetPaging]
 	[UseFiltering]
 	[UseSorting]
