@@ -18,10 +18,14 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
+    <PackageReference Include="HotChocolate" />
     <PackageReference Include="HotChocolate.AspNetCore" />
     <PackageReference Include="HotChocolate.Data" />
+    <PackageReference Include="HotChocolate.Data.EntityFramework" />
+    <PackageReference Include="HotChocolate.Execution.Abstractions" />
     <PackageReference Include="HotChocolate.Types.Analyzers" />
     <PackageReference Include="HotChocolate.Types.OffsetPagination" />
+    <PackageReference Include="MediatR" />
     <PackageReference Include="Microsoft.Build.CopyOnWrite">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -37,7 +41,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\common\postSys.framework.common.prj\postSys.framework.common.csproj" />
-    <ProjectReference Include="..\common\postSys.service.common.prj\postSys.service.common.csproj" />
     <ProjectReference Include="..\postSys.dal.prj\postSys.dal.csproj" />
   </ItemGroup>
 

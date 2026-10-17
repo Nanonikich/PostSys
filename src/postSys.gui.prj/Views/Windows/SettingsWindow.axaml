@@ -4,7 +4,7 @@
         Width="480" Height="150"
         x:Class="PostSys.Gui.Views.Windows.SettingsWindow"
         x:DataType="vm:SettingsWindowViewModel"
-        Icon="avares://PostSys.Gui.Common/Assets/logo.ico"
+        Icon="avares://postSys.gui/Assets/logo.ico"
         WindowStartupLocation="CenterOwner"
         CanResize="False"
         Title="Settings">

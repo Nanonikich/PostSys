@@ -10,7 +10,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <TieredPGO>true</TieredPGO>
     <RootNamespace>PostSys.Gui</RootNamespace>
-    <ApplicationIcon>..\common\postSys.gui.common.prj\Assets\logo.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\logo.ico</ApplicationIcon>
     <AvaloniaUseBindingsByDefault>true</AvaloniaUseBindingsByDefault>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
@@ -46,6 +46,8 @@
     <PackageReference Include="ReactiveUI.Disposables" />
     <PackageReference Include="AvaloniaUI.DiagnosticsSupport" />
     <PackageReference Include="FluentIcons.Avalonia" />
+    <PackageReference Include="MessageBox.Avalonia" />
+    <PackageReference Include="System.Reactive" />
     <PackageReference Include="Microsoft.Build.CopyOnWrite">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -58,11 +60,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\common\postSys.framework.common.prj\postSys.framework.common.csproj" />
-    <ProjectReference Include="..\common\postSys.gui.common.prj\postSys.gui.common.csproj" />
     <ProjectReference Include="..\postSys.client.prj\postSys.client.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaResource Include="Assets\logo.ico" />
     <AvaloniaResource Include="Assets\Buttons\info.png" />
     <AvaloniaResource Include="Assets\Buttons\map.png" />
     <AvaloniaResource Include="Assets\Buttons\package.png" />
@@ -73,6 +75,7 @@
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Packages\box.png" />
     <AvaloniaResource Include="Assets\Packages\envelope.png" />
+    <AvaloniaResource Include="Styles\ThemeUiStyle.axaml" />
   </ItemGroup>
 
   <ItemGroup>

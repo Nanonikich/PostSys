@@ -57,7 +57,7 @@ public partial class App : Application
 				services.UseMicrosoftDependencyResolver();
 				services
 					.AddSingleton(sp => ApplicationConfiguration.Load(ProfileLocationStorage.ConfigPath))
-					.AddSingleton<IApplicationIconProvider>(_ => new ApplicationIconProvider("avares://PostSys.Gui.Common/Assets/logo.ico"))
+					.AddSingleton<IApplicationIconProvider>(_ => new ApplicationIconProvider("avares://postSys.gui/Assets/logo.ico"))
 					.AddSingleton<PostmanHelper>()
 					.AddSingleton<IClientGraphQlClient>(sp =>
 					{

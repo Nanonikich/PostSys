@@ -6,7 +6,7 @@
         MinWidth="876" MinHeight="526"
         x:Class="PostSys.Gui.Views.Windows.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="avares://PostSys.Gui.Common/Assets/logo.ico"
+        Icon="avares://postSys.gui/Assets/logo.ico"
         WindowStartupLocation="CenterScreen"
         Title="PostSys">
 
