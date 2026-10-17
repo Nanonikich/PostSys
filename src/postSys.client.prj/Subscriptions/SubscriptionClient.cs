@@ -5,106 +5,143 @@ using System.Reactive;
 using System.Threading.Tasks;
 
 using GraphQL;
-using GraphQL.Client.Abstractions.Websocket;
 using GraphQL.Client.Http;
-using GraphQL.Client.Serializer.SystemTextJson;
 
 using NLog;
 
 using PostSys.Client.Data.Subscriptions;
+using PostSys.Client.GraphQl;
 using PostSys.ReadModels.Contracts;
 
 namespace PostSys.Client.Subscriptions;
 
-/// <summary>Клиент для подписок на события.</summary>
-public class SubscriptionClient : ISubscriptionClient
+/// <summary>?????? ??? ???????? ?? ??????? ????? ????? GraphQL WebSocket.</summary>
+public sealed class SubscriptionClient : ISubscriptionClient
 {
-	#region Statics
-
 	private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
-	#endregion
-
-	#region Data
-
-	private List<IDisposable> _subscriptions = [];
-	private readonly string _url;
-	private readonly SystemTextJsonSerializer _jsonSerializer = new();
+	private readonly GraphQlConnection _connection;
 	private readonly IClientsMessageHandler _clientsHandler;
 	private readonly IPostmenMessageHandler _postmenHandler;
 	private readonly IPackagesMessageHandler _packagesHandler;
+	private readonly object _sync = new();
+	private readonly List<IDisposable> _subscriptions = [];
+	private bool _running;
+	private bool _disposed;
 
-	#endregion
-
-	#region .ctor
-
-	/// <summary>Создаёт экземпляр класса <see cref="SubscriptionClient"/>.</summary>
-	/// <param name="endpoint">Адрес.</param>
-	/// <param name="clientsHandler">Обработчик сообщений топика clients.</param>
-	/// <param name="postmenHandler">Обработчик сообщений топика postmen.</param>
-	/// <param name="packagesHandler">Обработчик сообщений топика packages.</param>
+	/// <summary>??????? ????????? ?????? <see cref="SubscriptionClient"/>.</summary>
 	public SubscriptionClient(
-		string endpoint,
+		GraphQlConnection connection,
 		IClientsMessageHandler clientsHandler,
 		IPostmenMessageHandler postmenHandler,
 		IPackagesMessageHandler packagesHandler)
 	{
-		_url = endpoint + "/graphql";
+		_connection = connection ?? throw new ArgumentNullException(nameof(connection));
 		_clientsHandler = clientsHandler;
 		_postmenHandler = postmenHandler;
 		_packagesHandler = packagesHandler;
 	}
 
-	#endregion
-
-	#region Methods
-
 	/// <inheritdoc/>
 	public async Task StartConsuming()
 	{
-		//await Task.WhenAll(
-		//	RequestCreatedModel(),
-		//	RequestChangedModel(),
-		//	RequestChangedParameterModel(),
-		//	RequestDeletedModel()
-		//);
+		ObjectDisposedException.ThrowIf(_disposed, this);
+
+		lock(_sync)
+		{
+			if(_running)
+				return;
+			_running = true;
+		}
+
+		try
+		{
+			await Task.WhenAll(
+				SubscribeCreatedAsync(),
+				SubscribeChangedAsync(),
+				SubscribeParameterChangedAsync(),
+				SubscribeDeletedAsync());
+		}
+		catch(Exception ex)
+		{
+			// GUI ???????? ??????????????? ??? live-???????? (?????? / ?????? ??????).
+			Log.Error(ex, "Failed to start GraphQL subscriptions.");
+			StopConsuming();
+		}
 	}
 
 	/// <inheritdoc/>
 	public void StopConsuming()
 	{
-		lock(_subscriptions)
+		lock(_sync)
 		{
 			foreach(var subscription in _subscriptions)
 			{
-				subscription.Dispose();
+				try
+				{
+					subscription.Dispose();
+				}
+				catch(Exception ex)
+				{
+					Log.Debug(ex, "Subscription dispose failed.");
+				}
 			}
+
 			_subscriptions.Clear();
+			_running = false;
 		}
 	}
 
-	private async Task<IGraphQLWebSocketClient> GetGraphQlClient()
+	/// <inheritdoc/>
+	public async Task RestartAsync()
 	{
-		var graphQlHttpClient = new GraphQLHttpClient(_url, _jsonSerializer);
-		graphQlHttpClient.Options.WebSocketEndPoint = new Uri(_url.Replace("http", "ws"));
-		graphQlHttpClient.Options.UseWebSocketForQueriesAndMutations = true;
-
-		await graphQlHttpClient.InitializeWebsocketConnection();
-
-		_subscriptions.Add(graphQlHttpClient.WebSocketReceiveErrors.Subscribe(e =>
-		{
-			if(e is WebSocketException we)
-				Log.Error($"WebSocketException: {we.Message} (WebSocketError {we.WebSocketErrorCode}, ErrorCode {we.ErrorCode}, NativeErrorCode {we.NativeErrorCode}");
-			else
-				Log.Error($"Exception in webSocket receive stream: {e}");
-		}));
-
-		return graphQlHttpClient;
+		StopConsuming();
+		await StartConsuming();
 	}
 
-	private async Task RequestCreatedModel()
+	/// <inheritdoc/>
+	public ValueTask DisposeAsync()
 	{
-		var requestModel = new GraphQLRequest
+		if(_disposed)
+			return ValueTask.CompletedTask;
+
+		StopConsuming();
+		_disposed = true;
+		GC.SuppressFinalize(this);
+		return ValueTask.CompletedTask;
+	}
+
+	private GraphQLHttpClient Client => _connection.Client;
+
+	private void Track(IDisposable disposable)
+	{
+		lock(_sync)
+			_subscriptions.Add(disposable);
+	}
+
+	private void TrackReceiveErrors()
+	{
+		Track(Client.WebSocketReceiveErrors.Subscribe(e =>
+		{
+			if(e is WebSocketException we)
+			{
+				Log.Error(
+					"WebSocketException: {Message} (WebSocketError {WebSocketError}, ErrorCode {ErrorCode}, NativeErrorCode {NativeErrorCode})",
+					we.Message,
+					we.WebSocketErrorCode,
+					we.ErrorCode,
+					we.NativeErrorCode);
+			}
+			else
+			{
+				Log.Error(e, "Exception in webSocket receive stream.");
+			}
+		}));
+	}
+
+	private Task SubscribeCreatedAsync()
+	{
+		var request = new GraphQLRequest
 		{
 			Query = @"
 				subscription {
@@ -115,43 +152,33 @@ public class SubscriptionClient : ISubscriptionClient
 				}"
 		};
 
-		var graphQlClient = await GetGraphQlClient();
-		_subscriptions.Add(graphQlClient.WebSocketReceiveErrors.Subscribe(e =>
+		TrackReceiveErrors();
+		var stream = Client.CreateSubscriptionStream<EntityCreationMessageModel>(request);
+		Track(stream.Subscribe(Observer.Create<GraphQLResponse<EntityCreationMessageModel>>(async response =>
 		{
-			if(e is WebSocketException we)
-				Log.Error($"WebSocketException: {we.Message} (WebSocketError {we.WebSocketErrorCode}, ErrorCode {we.ErrorCode}, NativeErrorCode {we.NativeErrorCode}");
-			else
-				Log.Error($"Exception in webSocket receive stream: {e}");
-		}));
+			if(response.Data is null)
+				return;
 
-		var responseStream = graphQlClient.CreateSubscriptionStream<EntityCreationMessageModel>(requestModel);
-
-		var observer = Observer.Create<GraphQLResponse<EntityCreationMessageModel>>(async response =>
-		{
-			if(response.Data != null)
+			switch(response.Data.Entity)
 			{
-				var message = response.Data;
-				switch(message.Entity)
-				{
-					case "client":
-						await _clientsHandler.HandleMessageAboutCreationAsync(message);
-						break;
-					case "postman":
-						await _postmenHandler.HandleMessageAboutCreationAsync(message);
-						break;
-					case "package":
-						await _packagesHandler.HandleMessageAboutCreationAsync(message);
-						break;
-				}
+				case "client":
+					await _clientsHandler.HandleMessageAboutCreationAsync(response.Data);
+					break;
+				case "postman":
+					await _postmenHandler.HandleMessageAboutCreationAsync(response.Data);
+					break;
+				case "package":
+					await _packagesHandler.HandleMessageAboutCreationAsync(response.Data);
+					break;
 			}
-		});
+		})));
 
-		_subscriptions.Add(responseStream.Subscribe(observer));
+		return Task.CompletedTask;
 	}
 
-	private async Task RequestChangedModel()
+	private Task SubscribeChangedAsync()
 	{
-		var requestModel = new GraphQLRequest
+		var request = new GraphQLRequest
 		{
 			Query = @"
 				subscription {
@@ -162,32 +189,29 @@ public class SubscriptionClient : ISubscriptionClient
 				}"
 		};
 
-		var graphQlClient = await GetGraphQlClient();
-		var responseStream = graphQlClient.CreateSubscriptionStream<EntityChangeMessageModel>(requestModel);
-
-		var observer = Observer.Create<GraphQLResponse<EntityChangeMessageModel>>(async response =>
+		var stream = Client.CreateSubscriptionStream<EntityChangeMessageModel>(request);
+		Track(stream.Subscribe(Observer.Create<GraphQLResponse<EntityChangeMessageModel>>(async response =>
 		{
-			if(response.Data != null)
-			{
-				var message = response.Data;
-				switch(message.Entity)
-				{
-					case "postman":
-						await _postmenHandler.HandleMessageAboutChangeAsync(message);
-						break;
-					case "package":
-						await _packagesHandler.HandleMessageAboutChangeAsync(message);
-						break;
-				}
-			}
-		});
+			if(response.Data is null)
+				return;
 
-		_subscriptions.Add(responseStream.Subscribe(observer));
+			switch(response.Data.Entity)
+			{
+				case "postman":
+					await _postmenHandler.HandleMessageAboutChangeAsync(response.Data);
+					break;
+				case "package":
+					await _packagesHandler.HandleMessageAboutChangeAsync(response.Data);
+					break;
+			}
+		})));
+
+		return Task.CompletedTask;
 	}
 
-	private async Task RequestChangedParameterModel()
+	private Task SubscribeParameterChangedAsync()
 	{
-		var requestModel = new GraphQLRequest
+		var request = new GraphQLRequest
 		{
 			Query = @"
 				subscription {
@@ -200,35 +224,32 @@ public class SubscriptionClient : ISubscriptionClient
 				}"
 		};
 
-		var graphQlClient = await GetGraphQlClient();
-		var responseStream = graphQlClient.CreateSubscriptionStream<EntityParameterChangeMessageModel>(requestModel);
-
-		var observer = Observer.Create<GraphQLResponse<EntityParameterChangeMessageModel>>(response =>
+		var stream = Client.CreateSubscriptionStream<EntityParameterChangeMessageModel>(request);
+		Track(stream.Subscribe(Observer.Create<GraphQLResponse<EntityParameterChangeMessageModel>>(response =>
 		{
-			if(response.Data != null)
-			{
-				var message = response.Data;
-				switch(message.Entity)
-				{
-					case "client":
-						_clientsHandler.HandleMessageAboutChangingParameterAsync(message);
-						break;
-					case "postman":
-						_postmenHandler.HandleMessageAboutChangingParameterAsync(message);
-						break;
-					case "package":
-						_packagesHandler.HandleMessageAboutChangingParameterAsync(message);
-						break;
-				}
-			}
-		});
+			if(response.Data is null)
+				return;
 
-		_subscriptions.Add(responseStream.Subscribe(observer));
+			switch(response.Data.Entity)
+			{
+				case "client":
+					_clientsHandler.HandleMessageAboutChangingParameterAsync(response.Data);
+					break;
+				case "postman":
+					_postmenHandler.HandleMessageAboutChangingParameterAsync(response.Data);
+					break;
+				case "package":
+					_packagesHandler.HandleMessageAboutChangingParameterAsync(response.Data);
+					break;
+			}
+		})));
+
+		return Task.CompletedTask;
 	}
 
-	private async Task RequestDeletedModel()
+	private Task SubscribeDeletedAsync()
 	{
-		var requestModel = new GraphQLRequest
+		var request = new GraphQLRequest
 		{
 			Query = @"
 				subscription {
@@ -239,31 +260,26 @@ public class SubscriptionClient : ISubscriptionClient
 				}"
 		};
 
-		var graphQlClient = await GetGraphQlClient();
-		var responseStream = graphQlClient.CreateSubscriptionStream<EntityDeletionMessageModel>(requestModel);
-
-		var observer = Observer.Create<GraphQLResponse<EntityDeletionMessageModel>>(response =>
+		var stream = Client.CreateSubscriptionStream<EntityDeletionMessageModel>(request);
+		Track(stream.Subscribe(Observer.Create<GraphQLResponse<EntityDeletionMessageModel>>(response =>
 		{
-			if(response.Data != null)
+			if(response.Data is null)
+				return;
+
+			switch(response.Data.Entity)
 			{
-				var message = response.Data;
-				switch(message.Entity)
-				{
-					case "client":
-						_clientsHandler.HandleMessageAboutDeletionAsync(message);
-						break;
-					case "postman":
-						_postmenHandler.HandleMessageAboutDeletionAsync(message);
-						break;
-					case "package":
-						_packagesHandler.HandleMessageAboutDeletionAsync(message);
-						break;
-				}
+				case "client":
+					_clientsHandler.HandleMessageAboutDeletionAsync(response.Data);
+					break;
+				case "postman":
+					_postmenHandler.HandleMessageAboutDeletionAsync(response.Data);
+					break;
+				case "package":
+					_packagesHandler.HandleMessageAboutDeletionAsync(response.Data);
+					break;
 			}
-		});
+		})));
 
-		_subscriptions.Add(responseStream.Subscribe(observer));
+		return Task.CompletedTask;
 	}
-
-	#endregion
 }

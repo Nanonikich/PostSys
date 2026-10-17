@@ -1,8 +1,7 @@
 using System.Reactive.Disposables;
 
-using ReactiveUI.Avalonia;
-
 using ReactiveUI;
+using ReactiveUI.Avalonia;
 
 using PostSys.Gui.Common.Services.Dialogs;
 using PostSys.Gui.ViewModels;
@@ -17,10 +16,11 @@ public partial class SettingsWindow : ReactiveWindow<SettingsWindowViewModel>
 
 		this.WhenActivated(d =>
 		{
-			var iteractionImpl = new DialogServiceInteractionSource<SettingsWindow>(this);
-			iteractionImpl.Register(ViewModel!.DialogServiceInteractions);
+			var dialogHost = new DialogReactiveWindow(this);
+			var interactions = new DialogServiceInteractionSource(dialogHost);
+			interactions.Register(ViewModel!.DialogServiceInteractions);
 
-			d(Disposable.Create(() => iteractionImpl.Dispose()));
+			d(Disposable.Create(interactions.Dispose));
 		});
 	}
 }

@@ -1,77 +1,45 @@
 using System;
 using System.Collections.Generic;
 
-using Avalonia.Controls;
-
 using Splat;
 
 using PostSys.Gui.Common.Services.IconProvider;
-using System.Net.Http;
 
 namespace PostSys.Gui.Common.Services.Dialogs;
 
-/// <summary>Создаёт взаимодействия открытия для окон.</summary>
-/// <typeparam name="TViewModel">Модель представления окна для взаимодействий.</typeparam>
-public class DialogServiceInteractionSource<TViewModel> : IDisposable
-	where TViewModel : Window
+/// <summary>Регистрирует взаимодействия диалогов для текущего host UI.</summary>
+public sealed class DialogServiceInteractionSource : IDisposable
 {
-	#region Data
-
-	private List<IDisposable> _disposeInteractions;
+	private readonly List<IDisposable> _disposeInteractions = [];
 	private readonly DialogReactiveWindow _dialogReactiveWindow;
+	private bool _isDisposed;
 
-	#endregion
-
-	#region .ctor
-
-	/// <summary>Создаёт экземпляр класса <see cref="DialogServiceInteractionSource{TViewModel}"/>.</summary>
-	/// <param name="viewModel">Окно для построения взаимодействий.</param>
-	public DialogServiceInteractionSource(TViewModel viewModel)
+	/// <summary>Создаёт регистратор взаимодействий.</summary>
+	public DialogServiceInteractionSource(DialogReactiveWindow dialogReactiveWindow)
 	{
-		_dialogReactiveWindow = new(viewModel)
-		{
-			IconProvider = Locator.Current.GetService<IApplicationIconProvider>()!,
-		};
-		_disposeInteractions = [];
+		_dialogReactiveWindow = dialogReactiveWindow ?? throw new ArgumentNullException(nameof(dialogReactiveWindow));
+		_dialogReactiveWindow.IconProvider = Locator.Current.GetService<IApplicationIconProvider>()!;
 	}
-
-	#endregion
-
-	#region Methods
 
 	/// <summary>Регистрация обработчиков взаимодействий.</summary>
-	/// <param name="dialogServiceInteractions">Сервис взаимодействий.</param>
 	public void Register(DialogServiceInteractions dialogServiceInteractions)
 	{
-		_disposeInteractions =
-		[
-			dialogServiceInteractions.ShowQuestionMessage.RegisterHandler(_dialogReactiveWindow.ShowQuestionMessageAsync),
-			dialogServiceInteractions.ShowErrorMessage.RegisterHandler(_dialogReactiveWindow.ShowErrorMessageAsync),
-			dialogServiceInteractions.CloseWindow.RegisterHandler(_dialogReactiveWindow.CloseWindow)
-		];
+		_disposeInteractions.Add(dialogServiceInteractions.ShowQuestionMessage.RegisterHandler(_dialogReactiveWindow.ShowQuestionMessageAsync));
+		_disposeInteractions.Add(dialogServiceInteractions.ShowErrorMessage.RegisterHandler(_dialogReactiveWindow.ShowErrorMessageAsync));
+		_disposeInteractions.Add(dialogServiceInteractions.CloseWindow.RegisterHandler(_dialogReactiveWindow.CloseWindow));
 	}
-
-	#endregion
-
-	#region IDisposable
-
-	/// <summary>Возвращает или устанавливает флаг уничтожены ли зависимости.</summary>
-	/// <value>Флаг уничтожены ли зависимости.</value>
-	public bool IsDisposed { get; private set; }
 
 	/// <inheritdoc/>
 	public void Dispose()
 	{
-		if(!IsDisposed)
-		{
-			foreach(var interaction in _disposeInteractions)
-			{
-				interaction.Dispose();
-			}
-			_disposeInteractions.Clear();
-			IsDisposed = true;
-		}
-	}
+		if(_isDisposed)
+			return;
 
-	#endregion
+		foreach(var interaction in _disposeInteractions)
+			interaction.Dispose();
+
+		_disposeInteractions.Clear();
+		_isDisposed = true;
+		GC.SuppressFinalize(this);
+	}
 }

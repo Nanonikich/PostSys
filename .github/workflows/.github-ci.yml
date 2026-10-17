@@ -11,31 +11,27 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout code 🏃
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Cache NuGet packages 📦
-        uses: actions/cache@v3
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
         with:
           path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/Directory.Packages.props', '**/*.csproj') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Setup .NET 📥
-        uses: actions/setup-dotnet@v1
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
 
-      - name: Restore dependencies 🔧
-        run: |
-          dotnet restore ./src/postSys.service.prj/postSys.service.csproj
-          dotnet restore ./src/postSys.gui.prj/postSys.gui.csproj
+      - name: Restore solution
+        run: dotnet restore ./src/PostSys.sln
 
-      - name: Build all projects 🧱
-        run: |
-          dotnet build ./src/postSys.service.prj/postSys.service.csproj --configuration Release --no-restore
-          dotnet build ./src/postSys.gui.prj/postSys.gui.csproj --configuration Release --no-restore
+      - name: Build solution
+        run: dotnet build ./src/PostSys.sln --configuration Release --no-restore
 
-      - name: Run tests of Service 🧪
-        run: dotnet test ./src/tests/postSys.unitTests.prj/postSys.unitTests.csproj --configuration Release --no-build --no-restore -p:ParallelizeTestCollections=true
+      - name: Unit tests
+        run: dotnet test ./src/tests/postSys.unitTests.prj/postSys.unitTests.csproj --configuration Release --no-build --no-restore

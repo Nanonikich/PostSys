@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,6 +53,14 @@ public static class DataStoragesExtensions
 				.UseNpgsql(databaseConnectionString)
 				.UseSnakeCaseNamingConvention();
 		}
+	}
+
+	/// <summary>Применяет EF-миграции к БД (удобно для Docker / первого запуска).</summary>
+	public static async Task MigrateDatabaseAsync(this IServiceProvider services, CancellationToken cancellationToken = default)
+	{
+		await using var scope = services.CreateAsyncScope();
+		var db = scope.ServiceProvider.GetRequiredService<WriteDbContext>();
+		await db.Database.MigrateAsync(cancellationToken);
 	}
 
 	private static IServiceCollection AddRepositories(this IServiceCollection serviceCollection)

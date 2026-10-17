@@ -42,6 +42,8 @@ ConfigureCors(services);
 
 var app = builder.Build();
 
+await app.Services.MigrateDatabaseAsync();
+
 var hubContext = app.Services.GetRequiredService<IHubContext<NotificationHub>>();
 var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
 lifetime.ApplicationStarted.Register(() =>
@@ -58,7 +60,7 @@ app.UseCors();
 app.UseWebSockets();
 app.MapGraphQL();
 app.MapHub<NotificationHub>("/notificationHub");
-app.Run();
+await app.RunAsync();
 
 
 void ConfigureCors(IServiceCollection services)

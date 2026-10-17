@@ -1,136 +1,102 @@
 # Репозиторий проекта PostSys
 
-## Архитектурные паттерны и подходы
+Почтовая система: GraphQL-сервис + мобильный клиент почтальона (Avalonia Android / iOS).
 
-### Domain-Driven Design (DDD)
+## Документация
 
-<details>
-<summary>Используемые технологии и библиотеки</summary>
-
-### База данных
-
-- Entity Framework Core 10.0.13
-- Health Checks 9.0.0
-
-### Тестирование
-
-- Microsoft.AspNetCore.Mvc.Testing 10.0.13
-- Moq 4.21.0
-- NUnit 5.0.0
-- Respawn 7.0.0
-- Snapshooter 1.3.1
-- Testcontainers 4.16.0
-
-### Архитектура и паттерны
-
-- HotChocolate 16.6.8
-- MediatR 14.2.0
-
-### Инфраструктура
-
-- Microsoft.Extensions.* 10.0.13
-- NLog 6.2.2
-
-### Дополнительные библиотеки
-
-- CSharpFunctionalExtensions 3.7.0
-
-### Библиотеки приложения
-
-- Avalonia 12.1.4
-- ReactiveUI.Avalonia 12.1.6
-- Splat.Microsoft.Extensions.DependencyInjection 21.0.0
-
-### Клиент
-
-- GraphQL.Client 6.1.0
-- Microsoft.AspNetCore.SignalR.Client 10.0.13
-
-</details>
+- [Схема сущностей](docs/PostSys-Schema-Entities.docx)
+- [Архитектура DDD](docs/PostSys-Architecture-DDD.docx)
 
 <details>
-<summary>Конфигурации</summary>
+<summary>Используемые технологии</summary>
 
-### Конфигурации сервиса и приложения
-
-- Для сервиса: `./src/postSys.service.prj/appsettings.json`
-- Для приложения: `./src/postSys.gui.prj/appsettings.json`
+- .NET 10, EF Core, PostgreSQL, HotChocolate, MediatR, SignalR
+- Avalonia 12 + ReactiveUI (Android / iOS)
+- Docker Compose для backend + БД
+- NUnit, Testcontainers, Moq
 
 </details>
 
 <details>
 <summary>База данных</summary>
 
-### Настройка базы данных
-
-1. Скачать и установить PostgreSQL.
-2. Задать строку подключения:
-  - Для запуска сервиса:
-    - Файл: `./src/postSys.service.prj/appsettings.json`.
-  - Для интеграционных тестов:
-    - Файл: `./src/tests/postSys.integrationTests.prj/appsettings.json`.
-3. Установить .NET SDK, если он не установлен (можно проверить в cmd командой `dotnet --version`).
-4. Применить миграции, запустив скрипт "run_migrations.cmd".
+1. Установить PostgreSQL **или** поднять через Docker (см. ниже).
+2. Строка подключения: `./src/postSys.service.prj/appsettings.json` (локально) либо переменные `POSTGRES_*` в Docker.
+3. Миграции:
+   - при старте сервиса применяются автоматически;
+   - вручную: `run_migrations.cmd` (нужен `dotnet ef`).
 
 </details>
 
 <details>
 <summary>Сервис</summary>
 
-### Как запустить сервис
+### Локально
 
-Если нет MS Visual Studio 2022:
+```bat
+dotnet run --project src/postSys.service.prj
+```
 
-1. Убедиться, что установлен пакет SDK для .NET 10.0.
-2. Клонировать репозиторий PostSys.
-3. Запустить "build.cmd".
-4. Запустить exe-файл `postSys.service`, расположенный по пути `./src/postSys.service.prj/bin/Release/`.
-5. Перейти по адресу:
-   - При полноценном запуске: "http://localhost:5001/graphql/".
-   - При отладке: "http://localhost:5000/graphql/".
+GraphQL: `http://localhost:5000/graphql` (порт зависит от launchSettings/appsettings).
 
-Если установлен MSVS2022, также можно открыть файл решения PostSys.sln и собрать его.
+### Docker
 
-### Логи сервиса
+```bat
+cd src
+copy .env.example .env
+docker compose up --build -d
+```
 
-Логи сервиса располагаются по пути: `C:\\ProgramData\PostSys\postSys.service\Logs`.
+- GraphQL: `http://localhost:5000/graphql`
+- Health: `http://localhost:5000/health`
+- Миграции при старте backend — отдельный `run_migrations.cmd` после Docker **не обязателен**.
 
-### Скриншоты сервиса
-
-![alt text](screenshots/service/queries.png 'Запросы')
-![alt text](screenshots/service/mutations.png 'Мутации')
-![alt text](screenshots/service/schema.png 'Схема данных')
+Mobile GUI **не** входит в Compose: APK/IPA запускаются на эмуляторе/устройстве, а не в контейнере (это обычная практика и не избыточный «мобильный Docker»).
 
 </details>
 
 <details>
-<summary>Docker</summary>
+<summary>Мобильное приложение (проверка на Windows)</summary>
 
-### Как поднять базу данных и сервис в Docker
+Desktop GUI удалён. На Windows проверяется **Android**.
 
-1. Убедиться, что установлен Docker Desktop.
-2. Настроить переменные postgres для подключения к базе данных у сервиса "backend".
-3. Перейти через cmd в папку src и выполнить команду `docker-compose up --build`.
-4. После успешного запуска базы данных и сервиса через команду, выполнить миграции через запуск файла "run_migrations.cmd".
-5. Убедиться, что сервис запущен по его адресу, отображаемому в Docker Desktop (добавить в url `/graphql`).
+### Подготовка
+
+1. Установить [.NET 10 SDK](https://dotnet.microsoft.com/download) и workload:
+
+```bat
+dotnet workload install android
+```
+
+2. Установить [Android SDK](https://aka.ms/dotnet-android-install-sdk) (через Android Studio или cmdline-tools). Задать `ANDROID_HOME` / `AndroidSdkDirectory`, если SDK не в `%LOCALAPPDATA%\Android\Sdk`.
+
+3. Создать и запустить AVD (эмулятор) в Android Studio → Device Manager.
+
+4. Поднять backend (`docker compose up` или `dotnet run`), чтобы API был на хосте.
+
+### Сборка и запуск
+
+```bat
+dotnet build src/postSys.gui.Android.prj/postSys.gui.Android.csproj -t:Run -f net10.0-android
+```
+
+или открыть `PostSys.sln` в Visual Studio / Rider и Run на Android Emulator.
+
+### Адрес сервиса с эмулятора
+
+По умолчанию GUI на Android использует `http://10.0.2.2:5000` (это loopback хоста из эмулятора).  
+На физическом устройстве в Settings укажите IP ПК в локальной сети, например `http://192.168.x.x:5000`.
+
+### iOS
+
+Сборка и запуск только на **macOS** (Xcode + `dotnet workload install ios`). На Windows проект iOS в solution — stub, чтобы solution собирался.
 
 </details>
 
 <details>
-<summary>Приложение</summary>
+<summary>Логи</summary>
 
-### Как запустить приложение
-
-1. Запустить сервис по инструкции.
-2. Запустить exe-файл `postSys.gui`, расположенный по пути `./src/postSys.gui.prj/bin/Release/`.
-
-### Логи приложения
-
-Логи приложения располагаются по пути: `C:\\ProgramData\PostSys\postSys.gui\Logs`.
-
-### Скриншоты приложения
-
-![alt text](screenshots/gui/authorization.png 'Авторизация')
-![alt text](screenshots/gui/orders.png 'Заказы')
+- Сервис (Windows): `%ProgramData%\PostSys\...\Logs`
+- Mobile: LocalApplicationData / sandbox приложения
 
 </details>

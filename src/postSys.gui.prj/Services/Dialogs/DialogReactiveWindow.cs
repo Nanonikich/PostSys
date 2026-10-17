@@ -1,3 +1,4 @@
+using System;
 using System.Reactive;
 using System.Threading.Tasks;
 
@@ -13,44 +14,49 @@ using PostSys.Gui.Common.ViewModels;
 
 namespace PostSys.Gui.Common.Services.Dialogs;
 
-/// <summary>Обработчик показа сообщений.</summary>
-/// <param name="window">Окно-родитель.</param>
-public class DialogReactiveWindow(Window window)
+/// <summary>Обработчик показа сообщений и диалогов для desktop/mobile.</summary>
+public class DialogReactiveWindow
 {
-	#region Properties
+	private readonly TopLevel _topLevel;
+	private readonly Action<object>? _showOverlay;
+	private readonly Action? _clearOverlay;
 
-	/// <summary>Возвращает или задаёт провайдер иконки приложения.</summary>
-	/// <value>Провайдер иконки приложения.</value>
-	public IApplicationIconProvider IconProvider { get; set; }
+	/// <summary>Создаёт обработчик диалогов.</summary>
+	public DialogReactiveWindow(
+		TopLevel topLevel,
+		Action<object>? showOverlay = null,
+		Action? clearOverlay = null)
+	{
+		_topLevel = topLevel ?? throw new ArgumentNullException(nameof(topLevel));
+		_showOverlay = showOverlay;
+		_clearOverlay = clearOverlay;
+	}
 
-	#endregion
+	/// <summary>Провайдер иконки приложения.</summary>
+	public IApplicationIconProvider IconProvider { get; set; } = null!;
 
-	#region Methods
-
-	/// <summary>Показывает диалоговое окно.</summary>
-	/// <typeparam name="TViewModel">Модель представления вызываемого окна.</typeparam>
-	/// <typeparam name="TDialogWindow">Окно модели представления.</typeparam>
-	/// <param name="interaction">Связь для вызова.</param>
-	/// <returns>Асинхронная операция.</returns>
-	public async Task ShowDialogWindowAsync<TViewModel, TDialogWindow>(IInteractionContext<TViewModel, Unit?> interaction)
+	/// <summary>Показывает диалоговое окно или overlay на mobile.</summary>
+	public async Task ShowDialogOrOverlayAsync<TViewModel, TDialogWindow>(
+		IInteractionContext<TViewModel, Unit?> interaction)
 		where TViewModel : ViewModelBase
 		where TDialogWindow : Window, new()
 	{
-		var dialog = new TDialogWindow
+		if(_topLevel is Window owner)
 		{
-			DataContext = interaction.Input
-		};
+			var dialog = new TDialogWindow { DataContext = interaction.Input };
+			var result = await dialog.ShowDialog<Unit?>(owner);
+			interaction.SetOutput(result);
+			return;
+		}
 
-		var result = await dialog.ShowDialog<Unit?>(window);
-		interaction.SetOutput(result);
+		_showOverlay?.Invoke(interaction.Input!);
+		interaction.SetOutput(Unit.Default);
 	}
 
 	/// <summary>Показывает сообщение с описанием ошибки.</summary>
-	/// <param name="interaction">Связь для вызова.</param>
-	/// <returns>Асинхронная операция.</returns>
 	public async Task ShowErrorMessageAsync(IInteractionContext<MessageContent, bool> interaction)
 	{
-		var msBoxStandardWindow = MsBox.Avalonia.MessageBoxManager.GetMessageBoxStandard(
+		var box = MsBox.Avalonia.MessageBoxManager.GetMessageBoxStandard(
 			new MsBox.Avalonia.Dto.MessageBoxStandardParams
 			{
 				ButtonDefinitions = ButtonEnum.Ok,
@@ -61,15 +67,17 @@ public class DialogReactiveWindow(Window window)
 				WindowIcon = IconProvider.Icon,
 			});
 
-		interaction.SetOutput(await msBoxStandardWindow.ShowWindowDialogAsync(window) == ButtonResult.Ok);
+		var result = _topLevel is Window window
+			? await box.ShowWindowDialogAsync(window)
+			: await box.ShowAsPopupAsync(_topLevel);
+
+		interaction.SetOutput(result == ButtonResult.Ok);
 	}
 
 	/// <summary>Показывает сообщение с вопросом.</summary>
-	/// <param name="interaction">Связь для вызова.</param>
-	/// <returns>Асинхронная операция.</returns>
 	public async Task ShowQuestionMessageAsync(IInteractionContext<MessageContent, bool> interaction)
 	{
-		var msBoxStandardWindow = MsBox.Avalonia.MessageBoxManager.GetMessageBoxStandard(
+		var box = MsBox.Avalonia.MessageBoxManager.GetMessageBoxStandard(
 			new MsBox.Avalonia.Dto.MessageBoxStandardParams
 			{
 				ButtonDefinitions = ButtonEnum.YesNo,
@@ -80,16 +88,21 @@ public class DialogReactiveWindow(Window window)
 				WindowIcon = IconProvider.Icon,
 			});
 
-		interaction.SetOutput(await msBoxStandardWindow.ShowWindowDialogAsync(window) == ButtonResult.Yes);
+		var result = _topLevel is Window window
+			? await box.ShowWindowDialogAsync(window)
+			: await box.ShowAsPopupAsync(_topLevel);
+
+		interaction.SetOutput(result == ButtonResult.Yes);
 	}
 
-	/// <summary>Закрытие окна.</summary>
-	/// <param name="interaction">Установка вывода.</param>
+	/// <summary>Закрытие окна-владельца или overlay.</summary>
 	public void CloseWindow(IInteractionContext<bool, bool> interaction)
 	{
-		window?.Close();
+		if(_topLevel is Window window)
+			window.Close();
+		else
+			_clearOverlay?.Invoke();
+
 		interaction.SetOutput(true);
 	}
-
-	#endregion
 }

@@ -10,50 +10,67 @@ namespace PostSys.Gui.Configuration;
 [DataContract]
 public record ApplicationConfiguration
 {
-	#region Properties
-
-	/// <summary>Возвращает и задает адрес подключения к сервису.</summary>
-	/// <value>Адрес подключения к сервису.</value>
+	/// <summary>Адрес подключения к сервису.</summary>
 	[JsonPropertyName("service_address")]
-	public string ServiceAddress { get; set; } = "http://localhost:5000";
-	
-	/// <summary>Возвращает и задает ключ Яндекс.API.</summary>
-	/// <value>Ключ Яндекс.API.</value>
+	public string ServiceAddress { get; set; } = DefaultServiceAddress();
+
+	/// <summary>Ключ Яндекс.API.</summary>
 	[JsonPropertyName("yandex_api_key")]
 	public Guid YandexApiKey { get; set; } = Guid.Parse("abdd66b3-331d-4c4b-910d-4e6830274ddc");
 
-	#endregion
-
-	#region Methods
-
 	/// <summary>Загружает конфигурацию приложения.</summary>
-	/// <param name="path">Путь к файлу конфигурации.</param>
-	/// <returns>Конфигурация приложения.</returns>
 	public static ApplicationConfiguration Load(string path)
 	{
 		try
 		{
-			using var json = new FileStream(path, FileMode.OpenOrCreate);
+			var directory = Path.GetDirectoryName(path);
+			if(!string.IsNullOrWhiteSpace(directory))
+				Directory.CreateDirectory(directory);
 
+			if(!File.Exists(path) || new FileInfo(path).Length == 0)
+			{
+				var defaults = new ApplicationConfiguration();
+				defaults.Save(path);
+				return defaults;
+			}
+
+			using var json = File.OpenRead(path);
 			return JsonSerializer.Deserialize<ApplicationConfiguration>(json)
-				?? throw new InvalidOperationException($"Failed to deserialize configuration from '{path}'.");
+				?? new ApplicationConfiguration();
 		}
-		catch(Exception)
+		catch
 		{
-			throw;
+			return new ApplicationConfiguration();
 		}
 	}
 
 	/// <summary>Сохраняет конфигурацию по пути.</summary>
-	/// <param name="path">Путь, куда сохранится конфигурация.</param>
 	public void Save(string path)
 	{
-		var json = JsonSerializer.Serialize(this, new JsonSerializerOptions
+		try
 		{
-			WriteIndented = true
-		});
-		File.WriteAllText(path, json);
+			var directory = Path.GetDirectoryName(path);
+			if(!string.IsNullOrWhiteSpace(directory))
+				Directory.CreateDirectory(directory);
+
+			var json = JsonSerializer.Serialize(this, new JsonSerializerOptions
+			{
+				WriteIndented = true
+			});
+			File.WriteAllText(path, json);
+		}
+		catch
+		{
+			// Mobile sandbox / read-only FS — не роняем приложение.
+		}
 	}
 
-	#endregion
+	private static string DefaultServiceAddress()
+	{
+		// Android emulator: host loopback.
+		if(OperatingSystem.IsAndroid())
+			return "http://10.0.2.2:5000";
+
+		return "http://localhost:5000";
+	}
 }

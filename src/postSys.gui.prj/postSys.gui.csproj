@@ -1,50 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Nullable>enable</Nullable>
-          <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
     <TrimMode>copyused</TrimMode>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <TieredPGO>true</TieredPGO>
     <RootNamespace>PostSys.Gui</RootNamespace>
-    <ApplicationIcon>Assets\logo.ico</ApplicationIcon>
     <AvaloniaUseBindingsByDefault>true</AvaloniaUseBindingsByDefault>
-    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\Buttons\info.png" />
-    <None Remove="Assets\Buttons\map.png" />
-    <None Remove="Assets\Buttons\package.png" />
-    <None Remove="Assets\Buttons\profile.png" />
-    <None Remove="Assets\Buttons\settings.png" />
-    <None Remove="Assets\main_logo.png" />
-    <None Remove="Assets\map.png" />
-    <None Remove="Assets\package.png" />
-    <None Remove="Assets\Packages\box.png" />
-    <None Remove="Assets\Packages\envelope.png" />
-    <None Remove="Assets\profile.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!--This helps with theme dll-s trimming.
-    If you will publish your application in self-contained mode with p:PublishTrimmed=true and it will use Fluent theme Default theme will be trimmed from the output and vice versa.
-    https://github.com/AvaloniaUI/Avalonia/issues/5593 -->
     <TrimmableAssembly Include="Avalonia.Themes.Fluent" />
     <TrimmableAssembly Include="Avalonia.Themes.Default" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" />
-    <PackageReference Include="Avalonia.Desktop" />
     <PackageReference Include="Avalonia.Fonts.Inter" />
     <PackageReference Include="Avalonia.Themes.Fluent" />
     <PackageReference Include="ReactiveUI.Avalonia" />
     <PackageReference Include="ReactiveUI.Disposables" />
-    <PackageReference Include="AvaloniaUI.DiagnosticsSupport" />
+    <PackageReference Include="AvaloniaUI.DiagnosticsSupport">
+      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="FluentIcons.Avalonia" />
     <PackageReference Include="MessageBox.Avalonia" />
     <PackageReference Include="System.Reactive" />
@@ -54,6 +33,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
     <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Splat.NLog" />
   </ItemGroup>
@@ -64,29 +45,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="Assets\logo.ico" />
-    <AvaloniaResource Include="Assets\Buttons\info.png" />
-    <AvaloniaResource Include="Assets\Buttons\map.png" />
-    <AvaloniaResource Include="Assets\Buttons\package.png" />
-    <AvaloniaResource Include="Assets\Buttons\profile.png" />
-    <AvaloniaResource Include="Assets\Buttons\settings.png" />
-    <AvaloniaResource Include="Assets\main_logo.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Packages\box.png" />
-    <AvaloniaResource Include="Assets\Packages\envelope.png" />
-    <AvaloniaResource Include="Styles\ThemeUiStyle.axaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Views\Controls\ButtonsView.axaml.cs">
-      <DependentUpon>ButtonsView.axaml</DependentUpon>
-    </Compile>
+    <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Include="Styles\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

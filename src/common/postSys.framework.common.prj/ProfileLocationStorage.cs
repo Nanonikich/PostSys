@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace PostSys.Framework.Common;
@@ -16,13 +17,15 @@ public static class ProfileLocationStorage
 	{
 		get
 		{
+			// Mobile / контейнер: только writable profile root.
+			if(OperatingSystem.IsAndroid() || OperatingSystem.IsIOS())
+				return ProfileRootDir;
+
 			var appCurrentDirectoryPath = PathConstants.AppCurrentDirectoryPath;
 			var binIndex = appCurrentDirectoryPath.IndexOf(Path.DirectorySeparatorChar + "bin");
 
 			if(binIndex < 0)
-			{
 				return appCurrentDirectoryPath;
-			}
 
 			return appCurrentDirectoryPath[..binIndex];
 		}

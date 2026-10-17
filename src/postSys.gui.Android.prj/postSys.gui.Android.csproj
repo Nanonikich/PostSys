@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Full Android build needs Android SDK + workload. Without SDK the project is a no-op stub so the solution still builds. -->
+  <PropertyGroup>
+    <HasAndroidSdk Condition="'$(AndroidSdkDirectory)' != '' And Exists('$(AndroidSdkDirectory)')">true</HasAndroidSdk>
+    <HasAndroidSdk Condition="'$(HasAndroidSdk)' != 'true' And '$(ANDROID_SDK_ROOT)' != '' And Exists('$(ANDROID_SDK_ROOT)')">true</HasAndroidSdk>
+    <HasAndroidSdk Condition="'$(HasAndroidSdk)' != 'true' And '$(ANDROID_HOME)' != '' And Exists('$(ANDROID_HOME)')">true</HasAndroidSdk>
+    <HasAndroidSdk Condition="'$(HasAndroidSdk)' != 'true' And Exists('$(LOCALAPPDATA)\Android\Sdk')">true</HasAndroidSdk>
+    <HasAndroidSdk Condition="'$(HasAndroidSdk)' != 'true' And Exists('$(HOME)/Library/Android/sdk')">true</HasAndroidSdk>
+    <HasAndroidSdk Condition="'$(HasAndroidSdk)' != 'true' And Exists('$(HOME)/Android/Sdk')">true</HasAndroidSdk>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(HasAndroidSdk)' == 'true'">
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-android</TargetFramework>
+    <SupportedOSPlatformVersion>23</SupportedOSPlatformVersion>
+    <Nullable>enable</Nullable>
+    <RootNamespace>PostSys.Gui.Android</RootNamespace>
+    <ApplicationId>com.postsys.gui</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(HasAndroidSdk)' != 'true'">
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>PostSys.Gui.Android</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(HasAndroidSdk)' == 'true'">
+    <AndroidResource Include="Icon.png">
+      <Link>Resources\drawable\Icon.png</Link>
+    </AndroidResource>
+    <PackageReference Include="Avalonia.Android" />
+    <PackageReference Include="ReactiveUI.Avalonia" />
+    <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" />
+    <ProjectReference Include="..\postSys.gui.prj\postSys.gui.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(HasAndroidSdk)' != 'true'">
+    <Compile Include="Stub.cs" />
+  </ItemGroup>
+
+</Project>

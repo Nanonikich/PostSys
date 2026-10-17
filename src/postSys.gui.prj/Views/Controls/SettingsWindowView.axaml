@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:PostSys.Gui.ViewModels"
+             x:Class="PostSys.Gui.Views.Controls.SettingsWindowView"
+             x:DataType="vm:SettingsWindowViewModel">
+  <Border Background="#F5F5F5" Padding="16">
+    <Grid RowDefinitions="Auto, Auto, Auto, Auto" ColumnDefinitions="0.4*, *" Margin="10">
+      <TextBlock Text="Service address:" VerticalAlignment="Center"/>
+      <TextBox Grid.Column="1"
+               Height="40"
+               MaxLength="80"
+               Text="{Binding ServiceAddress, Mode=TwoWay}"/>
+      <TextBlock Grid.Row="1"
+                 Text="Yandex.API key:"
+                 VerticalAlignment="Center"
+                 Margin="0,8,0,0"/>
+      <TextBox Grid.Row="1" Grid.Column="1"
+               Height="40"
+               Margin="0,8,0,0"
+               MaxLength="36"
+               Text="{Binding YandexApiKey, Mode=TwoWay}"/>
+      <Button Grid.Row="2" Grid.Column="1"
+              Content="OK"
+              Margin="0,16,0,0"
+              Command="{Binding ApplySettingsCommand}"
+              HorizontalAlignment="Right"/>
+    </Grid>
+  </Border>
+</UserControl>

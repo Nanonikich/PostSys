@@ -18,7 +18,6 @@ using PostSys.Client.Data;
 using PostSys.Client.Data.Subscriptions;
 using PostSys.Gui.Common.ViewModels;
 using PostSys.Gui.Common.Services.Dialogs;
-using PostSys.Gui.Configuration;
 using PostSys.Gui.Helpers;
 using PostSys.ReadModels;
 using PostSys.ReadModels.Contracts;
@@ -42,7 +41,6 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 	private readonly IClientGraphQlClient _clientGraphQlClient;
 	private readonly IPackageGraphQlClient _packageGraphQlClient;
 	private readonly PostmanHelper _postmanHelper;
-	private readonly ApplicationConfiguration _appConfiguration;
 	private readonly IServiceProvider _serviceProvider;
 
 	#endregion
@@ -82,7 +80,6 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 	/// <param name="packageGraphQlClient">Клиент GraphQL для сущности "Посылка".</param>
 	/// <param name="clientsMessageHandler"><see cref="IClientsMessageHandler"/>.</param>
 	/// <param name="packagesMessageHandler"><see cref="IPackagesMessageHandler"/>.</param>
-	/// <param name="appConfiguration">Конфигурация приложения.</param>
 	/// <param name="serviceProvider">Провайдер зарегистрированных сервисов.</param>
 	public OrdersViewModel(
 		PostmanHelper postmanHelper,
@@ -91,7 +88,6 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 		IPackageGraphQlClient packageGraphQlClient,
 		IClientsMessageHandler clientsMessageHandler,
 		IPackagesMessageHandler packagesMessageHandler,
-		ApplicationConfiguration appConfiguration,
 		IServiceProvider serviceProvider)
 	{
 		Activator = new();
@@ -100,7 +96,6 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 		_addressClient = addressClient;
 		_clientGraphQlClient = clientGraphQlClient;
 		_packageGraphQlClient = packageGraphQlClient;
-		_appConfiguration = appConfiguration;
 		_serviceProvider = serviceProvider;
 
 		this.WhenActivated(d =>
@@ -149,8 +144,6 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 	{
 		try
 		{
-			var serviceAddress = _appConfiguration.ServiceAddress;
-
 			var packages = await _packageGraphQlClient.GetPackagesByPostmanIdAsync(_postmanHelper.PostmanId);
 
 			var clientIds = packages

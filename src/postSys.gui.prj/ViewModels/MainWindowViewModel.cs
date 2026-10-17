@@ -16,6 +16,7 @@ using PostSys.Client.Data.SignalR;
 using PostSys.Client.Data.Subscriptions;
 using PostSys.Gui.Common.Services.Dialogs;
 using PostSys.Gui.Common.ViewModels;
+using PostSys.Gui.Configuration;
 using PostSys.Gui.Helpers;
 
 namespace PostSys.Gui.ViewModels;
@@ -34,13 +35,16 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 	private bool _firstSignalRState = true;
 	private bool _isEnabledComponents;
 	private object _currentView = null!;
-	private AuthorizationViewModel _authorizationViewModel;
-	private OrdersViewModel _ordersViewModel;
-	private CurrentOrderViewModel _currentOrderViewModel;
-	private ButtonsViewModel _buttonsViewModel;
+	private object? _overlayView;
+	private AuthorizationViewModel _authorizationViewModel = null!;
+	private OrdersViewModel _ordersViewModel = null!;
+	private CurrentOrderViewModel _currentOrderViewModel = null!;
+	private ButtonsViewModel _buttonsViewModel = null!;
 	private readonly ISignalRClient _signalRClient;
 	private readonly PostmanHelper _postmanHelper;
-	private readonly CancellationTokenSource _cancellationTokenSource = new();
+	private readonly SettingsWindowViewModel _settingsWindowViewModel;
+	private readonly CancellationTokenSource _lifetimeCts = new();
+	private bool _isCleanedUp;
 
 	#endregion
 
@@ -84,6 +88,16 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 			}
 		}
 	}
+
+	/// <summary>Возвращает или задаёт overlay (settings/info на mobile).</summary>
+	public object? OverlayView
+	{
+		get => _overlayView;
+		set => this.RaiseAndSetIfChanged(ref _overlayView, value);
+	}
+
+	/// <summary>Модель окна настроек.</summary>
+	public SettingsWindowViewModel SettingsWindowViewModel => _settingsWindowViewModel;
 
 	/// <summary>Возвращает или задаёт модель представления авторизации.</summary>
 	/// <value>Модель представления авторизации.</value>
@@ -137,7 +151,7 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 	/// <param name="signalRClient"><see cref="ISignalRClient"/>.</param>
 	/// <param name="subscriptionClient"><see cref="ISubscriptionClient"/>.</param>
 	/// <param name="postmenMessageHandler"><see cref="IPostmenMessageHandler"/>.</param>
-	/// <param name="serviceAddress">Адрес сервиса.</param>
+	/// <param name="appConfiguration">Конфигурация приложения.</param>
 	/// <param name="postmanHelper">Данные об авторизованном почтальоне.</param>
 	/// <param name="settingsWindowViewModel">Модель представления окна настроек.</param>
 	/// <param name="infoWindowViewModel">Модель представления окна "О программе".</param>
@@ -145,7 +159,7 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 		ISignalRClient signalRClient,
 		ISubscriptionClient subscriptionClient,
 		IPostmenMessageHandler postmenMessageHandler,
-		string serviceAddress,
+		ApplicationConfiguration appConfiguration,
 		PostmanHelper postmanHelper,
 		SettingsWindowViewModel settingsWindowViewModel,
 		InfoWindowViewModel infoWindowViewModel)
@@ -153,14 +167,15 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 		Activator = new();
 
 		_postmanHelper = postmanHelper;
+		_settingsWindowViewModel = settingsWindowViewModel;
 		_signalRClient = signalRClient;
 		_signalRClient.ChangeServiceStatusEvent += OnChangeServiceStatusAsync;
 
-		Task.Run(async () => await _signalRClient.StartAsync(serviceAddress, _cancellationTokenSource.Token));
-		
+		_ = _signalRClient.StartAsync(appConfiguration.ServiceAddress, _lifetimeCts.Token);
+
 		SettingsCommand = ReactiveCommand.CreateFromTask(async () =>
 			await ShowGeneralSettingsWindowAsync(settingsWindowViewModel));
-		InfoCommand = ReactiveCommand.CreateFromTask(async () => 
+		InfoCommand = ReactiveCommand.CreateFromTask(async () =>
 			await ShowWindowAboutProgramAsync(infoWindowViewModel));
 
 		this.WhenActivated(d =>
@@ -172,6 +187,12 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 				settingsWindowViewModel);
 		});
 	}
+
+	/// <summary>Показывает overlay-представление (mobile).</summary>
+	public void ShowOverlay(object viewModel) => OverlayView = viewModel;
+
+	/// <summary>Скрывает overlay.</summary>
+	public void ClearOverlay() => OverlayView = null;
 
 	private async Task ActivateAsync(
 		Action<IDisposable> d,
@@ -197,17 +218,27 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 			postmenMessageHandler.DeletedPostmanEvent -= OnDeletedPostman;
 
 			subscriptionClient.StopConsuming();
-
-			_signalRClient.ChangeServiceStatusEvent -= OnChangeServiceStatusAsync;
-			_ = CleanupAsync();
+			CleanupLifetimeBindings();
 		}));
 	}
 
-	private async Task CleanupAsync()
+	private void CleanupLifetimeBindings()
 	{
-		await _cancellationTokenSource.CancelAsync();
-		_cancellationTokenSource.Dispose();
-		await _signalRClient.DisposeAsync();
+		if(_isCleanedUp)
+			return;
+
+		_isCleanedUp = true;
+		_signalRClient.ChangeServiceStatusEvent -= OnChangeServiceStatusAsync;
+
+		try
+		{
+			_lifetimeCts.Cancel();
+			_lifetimeCts.Dispose();
+		}
+		catch(ObjectDisposedException)
+		{
+			// already disposed
+		}
 	}
 
 	#endregion
@@ -271,15 +302,20 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 
 	private async void OnChangeConfigurationAsync(object? sender, bool isChanged)
 	{
-		await DialogServiceInteractions.ShowQuestionMessage.Handle(new()
+		ClearOverlay();
+		await DialogServiceInteractions.ShowErrorMessage.Handle(new()
 		{
 			Title = "Warning",
-			Message = "Restart the application!"
+			Message = "Service address changed. Please sign in again."
 		});
 
-		await Task.Delay(3000);
-
-		Environment.Exit(0);
+		CurrentView = AuthorizationViewModel;
+		ButtonsViewModel.SetButtonEnabled(new()
+		{
+			{ "Profile", false },
+			{ "Orders", false },
+			{ "Current order", false }
+		});
 	}
 
 	private async void OnChangeServiceStatusAsync(object? sender, bool isAvailableService)
@@ -308,15 +344,21 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 	{
 		if(deletedPostmanId == _postmanHelper.PostmanId)
 		{
-			await DialogServiceInteractions.ShowQuestionMessage.Handle(new()
+			ClearOverlay();
+			await DialogServiceInteractions.ShowErrorMessage.Handle(new()
 			{
 				Title = "Error",
 				Message = "Account has been deleted"
 			});
 
-			await Task.Delay(3000);
-
-			Environment.Exit(0);
+			_postmanHelper.PostmanId = Guid.Empty;
+			CurrentView = AuthorizationViewModel;
+			ButtonsViewModel.SetButtonEnabled(new()
+			{
+				{ "Profile", false },
+				{ "Orders", false },
+				{ "Current order", false }
+			});
 		}
 	}
 

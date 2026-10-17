@@ -1,11 +1,12 @@
 using System;
+using System.Net.Http;
 
 using Avalonia;
-using Avalonia.Markup.Xaml;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Markup.Xaml;
 
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,7 @@ using PostSys.Client;
 using PostSys.Client.Data;
 using PostSys.Client.Data.SignalR;
 using PostSys.Client.Data.Subscriptions;
+using PostSys.Client.GraphQl;
 using PostSys.Client.SignalR;
 using PostSys.Client.Subscriptions;
 using PostSys.Framework.Common;
@@ -23,14 +25,18 @@ using PostSys.Gui.Common.Services.IconProvider;
 using PostSys.Gui.Configuration;
 using PostSys.Gui.Helpers;
 using PostSys.Gui.ViewModels;
-using PostSys.Gui.Views.Windows;
+using PostSys.Gui.Views.Controls;
 
 namespace PostSys.Gui;
 
-/// <summary>Настройки приложения.</summary>
+/// <summary>Настройки мобильного приложения (Android / iOS).</summary>
 public partial class App : Application
 {
-	public IServiceProvider Container { get; private set; }
+	private IHost? _host;
+	private bool _isShuttingDown;
+
+	/// <summary>DI-контейнер приложения.</summary>
+	public IServiceProvider Container { get; private set; } = null!;
 
 	/// <inheritdoc/>
 	public override void Initialize()
@@ -45,113 +51,169 @@ public partial class App : Application
 	/// <summary>Создаёт экземпляр класса <see cref="App"/>.</summary>
 	public App()
 	{
-		Container = ConfigureServices();
+		_host = CreateHost();
+		Container = _host.Services;
+		_host.Start();
 	}
 
-	private IServiceProvider ConfigureServices()
+	private static IHost CreateHost()
 	{
-		var host = Host
+		return Host
 			.CreateDefaultBuilder()
-			.ConfigureServices((context, services) =>
+			.ConfigureServices((_, services) =>
 			{
 				services.UseMicrosoftDependencyResolver();
+
 				services
 					.AddSingleton(sp => ApplicationConfiguration.Load(ProfileLocationStorage.ConfigPath))
 					.AddSingleton<IApplicationIconProvider>(_ => new ApplicationIconProvider("avares://postSys.gui/Assets/logo.ico"))
-					.AddSingleton<PostmanHelper>()
-					.AddSingleton<IClientGraphQlClient>(sp =>
+					.AddSingleton<PostmanHelper>();
+
+				services
+					.AddHttpClient("postsys", (sp, client) =>
 					{
-						var serviceAddress = sp.GetRequiredService<ApplicationConfiguration>().ServiceAddress;
-						return new ClientGraphQlClient(serviceAddress);
+						var address = sp.GetRequiredService<ApplicationConfiguration>().ServiceAddress.TrimEnd('/');
+						client.BaseAddress = new Uri(address);
+						client.Timeout = TimeSpan.FromSeconds(30);
+						client.DefaultRequestVersion = System.Net.HttpVersion.Version20;
+						client.DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrLower;
 					})
-					.AddSingleton<IPostmanGraphQlClient>(sp =>
+					.ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
 					{
-						var serviceAddress = sp.GetRequiredService<ApplicationConfiguration>().ServiceAddress;
-						return new PostmanGraphQlClient(serviceAddress);
+						PooledConnectionLifetime = TimeSpan.FromMinutes(5),
+						PooledConnectionIdleTimeout = TimeSpan.FromMinutes(2),
+						EnableMultipleHttp2Connections = true
 					})
-					.AddSingleton<IPackageGraphQlClient>(sp =>
+					.AddStandardResilienceHandler();
+
+				services
+					.AddHttpClient("yandex-geocode", client =>
 					{
-						var serviceAddress = sp.GetRequiredService<ApplicationConfiguration>().ServiceAddress;
-						return new PackageGraphQlClient(serviceAddress);
+						client.BaseAddress = new Uri("https://geocode-maps.yandex.ru/");
+						client.Timeout = TimeSpan.FromSeconds(15);
 					})
-					.AddSingleton<IInfoGraphQlClient>(sp =>
+					.ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
 					{
-						var serviceAddress = sp.GetRequiredService<ApplicationConfiguration>().ServiceAddress;
-						return new InfoGraphQlClient(serviceAddress);
+						PooledConnectionLifetime = TimeSpan.FromMinutes(5),
+						PooledConnectionIdleTimeout = TimeSpan.FromMinutes(2)
 					})
+					.AddStandardResilienceHandler();
+
+				services.AddSingleton(sp =>
+				{
+					var config = sp.GetRequiredService<ApplicationConfiguration>();
+					var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("postsys");
+					return new GraphQlConnection(config.ServiceAddress, httpClient);
+				});
+
+				services
+					.AddSingleton<IClientGraphQlClient, ClientGraphQlClient>()
+					.AddSingleton<IPostmanGraphQlClient, PostmanGraphQlClient>()
+					.AddSingleton<IPackageGraphQlClient, PackageGraphQlClient>()
+					.AddSingleton<IInfoGraphQlClient, InfoGraphQlClient>()
 					.AddSingleton<IAddressClient>(sp =>
 					{
 						var apiKey = sp.GetRequiredService<ApplicationConfiguration>().YandexApiKey;
-						return new AddressClient(apiKey);
+						var http = sp.GetRequiredService<IHttpClientFactory>().CreateClient("yandex-geocode");
+						return new AddressClient(http, apiKey);
 					})
 					.AddSingleton<ISignalRClient, SignalRClient>()
 					.AddSingleton<IClientsMessageHandler, ClientsMessageHandler>()
 					.AddSingleton<IPackagesMessageHandler, PackagesMessageHandler>()
 					.AddSingleton<IPostmenMessageHandler, PostmenMessageHandler>()
-					.AddSingleton<ISubscriptionClient>(sp =>
-					{
-						return new SubscriptionClient(
-							sp.GetRequiredService<ApplicationConfiguration>().ServiceAddress,
-							sp.GetRequiredService<IClientsMessageHandler>(),
-							sp.GetRequiredService<IPostmenMessageHandler>(),
-							sp.GetRequiredService<IPackagesMessageHandler>());
-					})
+					.AddSingleton<ISubscriptionClient, SubscriptionClient>()
 					.AddTransient<AuthorizationViewModel>()
 					.AddTransient<OrdersViewModel>()
 					.AddTransient<CurrentOrderViewModel>()
 					.AddTransient<ButtonsViewModel>()
 					.AddTransient<OrderDescriptionViewModel>()
 					.AddTransient<SettingsWindowViewModel>()
-					.AddSingleton<InfoWindowViewModel>();
-
+					.AddSingleton<InfoWindowViewModel>()
+					.AddTransient<MainWindowViewModel>();
 			})
 			.Build();
-
-		host.Start();
-		return host.Services;
 	}
 
-	/// <summary>Инициализирует фреймворк.</summary>
+	private MainWindowViewModel CreateMainViewModel()
+	{
+		var vm = Container.GetRequiredService<MainWindowViewModel>();
+		vm.AuthorizationViewModel = Container.GetRequiredService<AuthorizationViewModel>();
+		vm.OrdersViewModel = Container.GetRequiredService<OrdersViewModel>();
+		vm.CurrentOrderViewModel = Container.GetRequiredService<CurrentOrderViewModel>();
+		vm.ButtonsViewModel = Container.GetRequiredService<ButtonsViewModel>();
+		return vm;
+	}
+
+	/// <inheritdoc/>
 	public override void OnFrameworkInitializationCompleted()
 	{
-		if(ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-		{
-			desktop.Exit += OnApplicationStopping;
+		if(ApplicationLifetime is IControlledApplicationLifetime controlled)
+			controlled.Exit += OnLifetimeExit;
 
-			desktop.MainWindow = new MainWindow
+		if(ApplicationLifetime is IActivityApplicationLifetime activityLifetime)
+		{
+			activityLifetime.MainViewFactory = () => new MainView { DataContext = CreateMainViewModel() };
+		}
+		else if(ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
+		{
+			singleViewPlatform.MainView = new MainView
 			{
-				DataContext = new MainWindowViewModel(
-					Container.GetRequiredService<ISignalRClient>(),
-					Container.GetRequiredService<ISubscriptionClient>(),
-					Container.GetRequiredService<IPostmenMessageHandler>(),
-					Container.GetRequiredService<ApplicationConfiguration>().ServiceAddress,
-					Container.GetRequiredService<PostmanHelper>(),
-					Container.GetRequiredService<SettingsWindowViewModel>(),
-					Container.GetRequiredService<InfoWindowViewModel>())
-				{
-					AuthorizationViewModel = Container.GetRequiredService<AuthorizationViewModel>(),
-					OrdersViewModel = Container.GetRequiredService<OrdersViewModel>(),
-					CurrentOrderViewModel = Container.GetRequiredService<CurrentOrderViewModel>(),
-					ButtonsViewModel = Container.GetRequiredService<ButtonsViewModel>(),
-				}
+				DataContext = CreateMainViewModel()
 			};
 		}
 
 		base.OnFrameworkInitializationCompleted();
 	}
 
-	private void OnApplicationStopping(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+	private void OnLifetimeExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
 	{
-		UnhandledExceptionsLogging.Unsubscribe();
+		_ = ShutdownAsync();
+	}
+
+	private async System.Threading.Tasks.Task ShutdownAsync()
+	{
+		if(_isShuttingDown)
+			return;
+
+		_isShuttingDown = true;
+
+		try
+		{
+			if(Container.GetService<ISubscriptionClient>() is { } subscriptions)
+				await subscriptions.DisposeAsync();
+
+			if(Container.GetService<ISignalRClient>() is { } signalR)
+				await signalR.DisposeAsync();
+
+			if(Container.GetService<GraphQlConnection>() is { } connection)
+				await connection.DisposeAsync();
+		}
+		finally
+		{
+			UnhandledExceptionsLogging.Unsubscribe();
+			if(_host is not null)
+			{
+				await _host.StopAsync(TimeSpan.FromSeconds(2));
+				_host.Dispose();
+				_host = null;
+			}
+		}
 	}
 }
 
-/// <summary>?????????? ?????????????? ?????? ReactiveUI.</summary>
-internal sealed class ExceptionHandler : IObserver<Exception>
+/// <summary>Глобальный обработчик ошибок ReactiveUI.</summary>
+public sealed class ExceptionHandler : IObserver<Exception>
 {
-	public void OnCompleted() { }
+	/// <inheritdoc/>
+	public void OnCompleted()
+	{
+	}
 
-	public void OnError(Exception error) { }
+	/// <inheritdoc/>
+	public void OnError(Exception error)
+	{
+	}
 
+	/// <inheritdoc/>
 	public void OnNext(Exception value) => OnError(value);
 }

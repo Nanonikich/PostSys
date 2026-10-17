@@ -1,105 +1,51 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using GraphQL;
-using GraphQL.Client.Http;
-using GraphQL.Client.Serializer.SystemTextJson;
 
 using PostSys.Client.Data;
+using PostSys.Client.GraphQl;
 
 namespace PostSys.Client;
 
 /// <summary>Клиент GraphQL для сущности "Почтальон".</summary>
-public class PostmanGraphQlClient : IPostmanGraphQlClient
+public sealed class PostmanGraphQlClient(GraphQlConnection connection)
+	: GraphQlClientBase(connection), IPostmanGraphQlClient
 {
-	#region Data
-
-	private readonly string _url;
-	private readonly SystemTextJsonSerializer _jsonSerializer = new();
-
-	#endregion
-
-	#region .ctor
-
-	/// <summary>Создаёт экземпляр класса <see cref="PostmanGraphQlClient"/>.</summary>
-	/// <param name="endpoint">Адрес.</param>
-	public PostmanGraphQlClient(string endpoint = "http://localhost:5000")
-	{
-		_url = endpoint + "/graphql";
-	}
-
-	#endregion
-
-	#region GetPostmenByIdsAsync
-
 	/// <inheritdoc/>
-	public async Task<IReadOnlyList<ReadModels.Postman>> GetPostmenByIdsAsync(Guid[] postmanIds, CancellationToken cancellationToken = default)
+	public async Task<IReadOnlyList<ReadModels.Postman>> GetPostmenByIdsAsync(
+		Guid[] postmanIds,
+		CancellationToken cancellationToken = default)
 	{
-		var query = @"
+		var request = new GraphQLRequest
+		{
+			Query = @"
 				query GetPostmen($ids: [UUID!]!) {
 					postmen(where: { id: { in: $ids } }, take: 30) {
 						items {
 							id
-							fullname {
-								surname
-								name
-								patronymic
-							}
+							fullname { surname name patronymic }
 							postmanPackageId
 							email
-							password
 						}
 					}
-				}";
-
-		var request = new GraphQLRequest
-		{
-			Query = query,
+				}",
 			Variables = new { ids = postmanIds }
 		};
 
-		using var graphQlHttpClient = new GraphQLHttpClient(_url, _jsonSerializer);
-		var response = await graphQlHttpClient.SendQueryAsync<PostmenByIdsResponseModel>(request, cancellationToken);
-
-		if(response.Errors != null && response.Errors.Length != 0)
-		{
-			var errorMessages = response.Errors.Select(error => error.Message).ToList();
-			throw new GraphQlClientException("GraphQL errors occurred: " + string.Join(", ", errorMessages));
-		}
-
-		return response.Data.Postmen.Items;
+		var response = await SendQueryAsync<PostmenByIdsResponseModel>(request, cancellationToken);
+		return response.Postmen.Items;
 	}
-
-	#region Models
-
-	private class PostmenByIdsResponseModel
-	{
-		/// <summary>Возвращает или задаёт данные, полученные запросом о почтальонах.</summary>
-		/// <value>Данные, полученные запросом о почтальонах.</value>
-		public PostmenByIdsData Postmen { get; set; }
-	}
-
-	private class PostmenByIdsData
-	{
-		/// <summary>Возвращает или задаёт список почтальонов, полученных запросом.</summary>
-		/// <value>Список почтальонов, полученных запросом.</value>
-		public List<ReadModels.Postman> Items { get; set; }
-	}
-
-	#endregion
-
-	#endregion
-
-	#region GetAuthorizationPostmanIdAsync
 
 	/// <inheritdoc/>
-	public async Task<Guid> GetAuthorizationPostmanIdAsync(string email, string password, CancellationToken cancellationToken = default)
+	public async Task<Guid> GetAuthorizationPostmanIdAsync(
+		string email,
+		string password,
+		CancellationToken cancellationToken = default)
 	{
-		var query = new GraphQLRequest
+		var request = new GraphQLRequest
 		{
 			Query = @"
 				query AuthorizePostman($email: String!, $password: String!) {
@@ -108,44 +54,20 @@ public class PostmanGraphQlClient : IPostmanGraphQlClient
 			Variables = new { email, password }
 		};
 
-		try
-		{
-			using var graphQlHttpClient = new GraphQLHttpClient(_url, _jsonSerializer);
-			var response = await graphQlHttpClient.SendQueryAsync<AuthorizationPostmanResponseModel>(query, cancellationToken);
-			return ParseGetAuthorizationPostmanResult(response);
-		}
-		catch(Exception ex)
-		{
-			throw new GraphQlClientException("Error during GraphQL request.", ex);
-		}
-	}
-
-	private Guid ParseGetAuthorizationPostmanResult(GraphQLResponse<AuthorizationPostmanResponseModel> response)
-	{
-		if(response.Data?.AuthorizePostman is { } id && id != Guid.Empty)
+		var response = await SendQueryAsync<AuthorizationPostmanResponseModel>(request, cancellationToken);
+		if(response.AuthorizePostman is { } id && id != Guid.Empty)
 			return id;
 
 		throw new GraphQlClientException("Postman not found or no valid ID returned.");
 	}
 
-	#region Models
-
-	private class AuthorizationPostmanResponseModel
-	{
-		/// <summary>Идентификатор авторизованного почтальона.</summary>
-		public Guid? AuthorizePostman { get; set; }
-	}
-
-	#endregion
-
-	#endregion
-
-	#region ChangePostmanPackageAsync
-
 	/// <inheritdoc/>
-	public async Task<bool> ChangePostmanPackageAsync(Guid postmanId, Guid packageId, CancellationToken cancellationToken = default)
+	public async Task<bool> ChangePostmanPackageAsync(
+		Guid postmanId,
+		Guid packageId,
+		CancellationToken cancellationToken = default)
 	{
-		var mutation = new GraphQLRequest
+		var request = new GraphQLRequest
 		{
 			Query = @"
 				mutation ChangePostman($postmanId: UUID!, $postmanPackageId: UUID!) {
@@ -153,38 +75,35 @@ public class PostmanGraphQlClient : IPostmanGraphQlClient
 						isSuccess
 					}
 				}",
-			Variables = new { postmanId = postmanId, postmanPackageId = packageId }
+			Variables = new { postmanId, postmanPackageId = packageId }
 		};
 
-		try
-		{
-			using var graphQlHttpClient = new GraphQLHttpClient(_url, _jsonSerializer);
-			var response = await graphQlHttpClient.SendMutationAsync<ChangePostmanResponse>(mutation, cancellationToken);
-			return response.Data.ChangePostman.IsSuccess;
-		}
-		catch(Exception ex)
-		{
-			throw new GraphQlClientException("Error during GraphQL request.", ex);
-		}
+		var response = await SendMutationAsync<ChangePostmanResponse>(request, cancellationToken);
+		return response.ChangePostman.IsSuccess;
 	}
 
-	#region Models
-
-	private class ChangePostmanResponse
+	private sealed class PostmenByIdsResponseModel
 	{
-		/// <summary>Возвращает или задаёт данные, полученные запросом замены посылки у почтальона.</summary>
-		/// <value>Данные, полученные запросом замены посылки у почтальона.</value>
-		public ChangePostmanData ChangePostman { get; set; }
+		public PostmenByIdsData Postmen { get; set; } = null!;
 	}
 
-	private class ChangePostmanData
+	private sealed class PostmenByIdsData
 	{
-		/// <summary>Возвращает или задаёт удалось ли заменить в системе посылку у почтальона.</summary>
-		/// <value>Удалось ли заменить в системе посылку у почтальона.</value>
+		public List<ReadModels.Postman> Items { get; set; } = null!;
+	}
+
+	private sealed class AuthorizationPostmanResponseModel
+	{
+		public Guid? AuthorizePostman { get; set; }
+	}
+
+	private sealed class ChangePostmanResponse
+	{
+		public ChangePostmanData ChangePostman { get; set; } = null!;
+	}
+
+	private sealed class ChangePostmanData
+	{
 		public bool IsSuccess { get; set; }
 	}
-
-	#endregion
-
-	#endregion
 }

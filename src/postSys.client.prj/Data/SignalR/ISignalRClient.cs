@@ -22,6 +22,9 @@ public interface ISignalRClient : IAsyncDisposable
 	/// <returns>Асинхронная операция.</returns>
 	Task StartAsync(string url, CancellationToken cancellationToken = default);
 
+	/// <summary>Перезапускает подключение (например после смены адреса сервиса).</summary>
+	Task RestartAsync(string url, CancellationToken cancellationToken = default);
+
 	#endregion
 }
 

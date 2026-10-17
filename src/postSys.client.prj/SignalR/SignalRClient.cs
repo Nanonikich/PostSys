@@ -11,56 +11,59 @@ using PostSys.Client.Data.SignalR;
 namespace PostSys.Client.SignalR;
 
 /// <summary>Клиент SignalR.</summary>
-public class SignalRClient : ISignalRClient
+public sealed class SignalRClient : ISignalRClient
 {
-	#region Static
-
 	private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
-	#endregion
-
-	#region Data
-
+	private readonly SemaphoreSlim _gate = new(1, 1);
 	private HubConnection? _hubConnection;
 	private IDisposable? _subscription;
-
-	#endregion
-
-	#region Events
+	private CancellationTokenSource? _connectCts;
+	private bool _disposed;
 
 	/// <inheritdoc/>
 	public event EventHandler<bool>? ChangeServiceStatusEvent;
 
-	#endregion
-
-	#region Methods
-
 	/// <inheritdoc/>
-	public Task StartAsync(string url, CancellationToken cancellationToken = default)
+	public async Task StartAsync(string url, CancellationToken cancellationToken = default)
 	{
-		var builder = new HubConnectionBuilder()
-			.WithAutomaticReconnect(new RetryPolicyLoop())
-			.WithUrl(url + "/notificationHub");
+		ArgumentException.ThrowIfNullOrWhiteSpace(url);
+		ObjectDisposedException.ThrowIf(_disposed, this);
 
-		_hubConnection = builder.Build();
-		_subscription = _hubConnection.On<bool>("ReceiveServiceStatus", isAvailable => ChangeServiceStatusEvent?.Invoke(this, isAvailable));
-		_hubConnection.Closed += OnConnectionClosedAsync;
-		_hubConnection.Reconnecting += OnReconnectingAsync;
-		_hubConnection.Reconnected += OnReconnectedAsync;
+		await _gate.WaitAsync(cancellationToken);
+		try
+		{
+			await StopCoreAsync();
 
-		IsDisposed = false;
+			_connectCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+			var connectToken = _connectCts.Token;
 
-		_ = ConnectWithRetryAsync(_hubConnection, cancellationToken);
-		return Task.CompletedTask;
+			var builder = new HubConnectionBuilder()
+				.WithAutomaticReconnect(new RetryPolicyLoop())
+				.WithUrl(url.TrimEnd('/') + "/notificationHub");
+
+			_hubConnection = builder.Build();
+			_subscription = _hubConnection.On<bool>("ReceiveServiceStatus", isAvailable =>
+				ChangeServiceStatusEvent?.Invoke(this, isAvailable));
+			_hubConnection.Closed += OnConnectionClosedAsync;
+			_hubConnection.Reconnecting += OnReconnectingAsync;
+			_hubConnection.Reconnected += OnReconnectedAsync;
+
+			_ = ConnectWithRetryAsync(_hubConnection, connectToken);
+		}
+		finally
+		{
+			_gate.Release();
+		}
 	}
 
-	/// <summary>Подключается к хабу SignalR с переподключением в случае неудачи.</summary>
-	/// <param name="connection">Подключение к хабу.</param>
-	/// <param name="cancellationToken">Токен отмены.</param>
-	/// <returns>Задача по подключению.</returns>
+	/// <inheritdoc/>
+	public Task RestartAsync(string url, CancellationToken cancellationToken = default)
+		=> StartAsync(url, cancellationToken);
+
 	private async Task<bool> ConnectWithRetryAsync(HubConnection connection, CancellationToken cancellationToken)
 	{
-		while(true)
+		while(!cancellationToken.IsCancellationRequested)
 		{
 			try
 			{
@@ -68,22 +71,27 @@ public class SignalRClient : ISignalRClient
 				ChangeServiceStatusEvent?.Invoke(this, true);
 				return true;
 			}
-			catch when(cancellationToken.IsCancellationRequested)
+			catch(OperationCanceledException) when(cancellationToken.IsCancellationRequested)
 			{
 				return false;
 			}
 			catch(Exception ex)
 			{
-				Log.Error(ex, $"Failed to connect to SignalR Hub. Retrying in 10 seconds...");
+				Log.Error(ex, "Failed to connect to SignalR Hub. Retrying in 10 seconds...");
 				ChangeServiceStatusEvent?.Invoke(this, false);
-				await Task.Delay(10000, cancellationToken);
+				try
+				{
+					await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken);
+				}
+				catch(OperationCanceledException)
+				{
+					return false;
+				}
 			}
 		}
+
+		return false;
 	}
-
-	#endregion
-
-	#region Handlers
 
 	private Task OnConnectionClosedAsync(Exception? exception)
 	{
@@ -103,31 +111,66 @@ public class SignalRClient : ISignalRClient
 		return Task.CompletedTask;
 	}
 
-	#endregion
-
-	#region IDisposable
-
-	/// <summary>Возвращает или задаёт флаг уничтожены ли зависимости.</summary>
-	/// <value>Флаг уничтожены ли зависимости.</value>
-	public bool IsDisposed { get; private set; }
-
-	/// <inheritdoc/>
-	public async ValueTask DisposeAsync()
+	private async Task StopCoreAsync()
 	{
-		if(IsDisposed || _hubConnection is null) return;
+		if(_connectCts is not null)
+		{
+			try
+			{
+				await _connectCts.CancelAsync();
+			}
+			catch
+			{
+				// ignore
+			}
 
-		await _hubConnection.StopAsync();
+			_connectCts.Dispose();
+			_connectCts = null;
+		}
+
+		if(_hubConnection is null)
+			return;
+
 		_hubConnection.Closed -= OnConnectionClosedAsync;
 		_hubConnection.Reconnecting -= OnReconnectingAsync;
 		_hubConnection.Reconnected -= OnReconnectedAsync;
 		_subscription?.Dispose();
 		_subscription = null;
+
+		try
+		{
+			await _hubConnection.StopAsync();
+		}
+		catch(Exception ex)
+		{
+			Log.Debug(ex, "SignalR stop failed.");
+		}
+
 		await _hubConnection.DisposeAsync();
 		_hubConnection = null;
-
-		IsDisposed = true;
-		GC.SuppressFinalize(this);
 	}
 
-	#endregion
+	/// <inheritdoc/>
+	public async ValueTask DisposeAsync()
+	{
+		if(_disposed)
+			return;
+
+		await _gate.WaitAsync();
+		try
+		{
+			if(_disposed)
+				return;
+
+			await StopCoreAsync();
+			_disposed = true;
+		}
+		finally
+		{
+			_gate.Release();
+		}
+
+		_gate.Dispose();
+		GC.SuppressFinalize(this);
+	}
 }
