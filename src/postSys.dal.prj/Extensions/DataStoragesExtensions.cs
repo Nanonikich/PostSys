@@ -38,7 +38,6 @@ public static class DataStoragesExtensions
 		ArgumentException.ThrowIfNullOrWhiteSpace(databaseConnectionString);
 		serviceCollection
 			.AddDbContextPool<WriteDbContext>(SetupOptions)
-			.AddPooledDbContextFactory<ReadDbContext>(SetupOptions)
 			.AddDbContextPool<ReadDbContext>(SetupOptions)
 			.AddUnitOfWork<WriteDbContext>()
 			.AddRepositories()

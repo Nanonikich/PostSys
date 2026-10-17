@@ -1,7 +1,8 @@
 using System;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace PostSys.Framework.Common;
 
@@ -17,10 +18,6 @@ public static class PathConstants
 	private static readonly FileVersionInfo VersionInfo = FileVersionInfo.GetVersionInfo(
 		CallingAssembly.Location);
 
-	/// <summary>ѕуть к общей дл€ всех пользователей в системе папке, где хран€тс€ данные приложени€.</summary>
-	private static readonly string ProgramDataPath = Environment.GetFolderPath(
-		Environment.SpecialFolder.CommonApplicationData);
-
 	/// <summary>ѕуть к текущей директории приложени€.</summary>
 	private static readonly string CurrentDirectoryPath = Environment.CurrentDirectory;
 
@@ -30,10 +27,36 @@ public static class PathConstants
 
 	/// <summary>¬озвращает путь, по которому будут сохран€тьс€ данные приложени€.</summary>
 	/// <value>ѕуть, по которому будут сохран€тьс€ данные приложени€.</value>
-	public static string AppProgramDataPath => Path.Combine(
-		ProgramDataPath,
-		"PostSys",
-		Path.GetFileNameWithoutExtension(VersionInfo?.InternalName) ?? "Untitled");
+	/// <remarks>
+	/// ѕриоритет: <c>POSTSYS_DATA_DIR</c> ? writable app data ? <see cref="AppContext.BaseDirectory"/>/data.
+	/// Ќа Linux в контейнере задавайте <c>POSTSYS_DATA_DIR</c> (например <c>/app/data</c>).
+	/// </remarks>
+	public static string AppProgramDataPath
+	{
+		get
+		{
+			var fromEnv = Environment.GetEnvironmentVariable("POSTSYS_DATA_DIR");
+			if(!string.IsNullOrWhiteSpace(fromEnv))
+				return fromEnv;
+
+			var appName = Path.GetFileNameWithoutExtension(VersionInfo?.InternalName) ?? "Untitled";
+
+			if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			{
+				return Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+					"PostSys",
+					appName);
+			}
+
+			// Linux/macOS: CommonApplicationData часто /usr/share (не writable) Ч предпочитаем ~/.local/share.
+			var userData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+			if(!string.IsNullOrWhiteSpace(userData))
+				return Path.Combine(userData, "PostSys", appName);
+
+			return Path.Combine(AppContext.BaseDirectory, "data");
+		}
+	}
 
 	/// <summary>¬озвращает путь к текущей директории приложени€.</summary>
 	/// <value>ѕуть к текущей директории приложени€.</value>

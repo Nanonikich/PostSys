@@ -18,11 +18,9 @@
     <PackageVersion Include="FluentIcons.Avalonia" Version="2.1.344" />
     <PackageVersion Include="GraphQL.Client" Version="6.1.0" />
     <PackageVersion Include="GraphQL.Client.Serializer.SystemTextJson" Version="6.1.0" />
-    <PackageVersion Include="HotChocolate" Version="16.6.8" />
     <PackageVersion Include="HotChocolate.Abstractions" Version="16.6.8" />
     <PackageVersion Include="HotChocolate.AspNetCore" Version="16.6.8" />
     <PackageVersion Include="HotChocolate.Data" Version="16.6.8" />
-    <PackageVersion Include="HotChocolate.Data.EntityFramework" Version="16.6.8" />
     <PackageVersion Include="HotChocolate.Execution.Abstractions" Version="16.6.8" />
     <PackageVersion Include="HotChocolate.Types.Analyzers" Version="16.6.8" />
     <PackageVersion Include="HotChocolate.Types.OffsetPagination" Version="16.6.8" />

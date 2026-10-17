@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 using NLog;
 
@@ -14,37 +15,40 @@ public static class UnhandledExceptionsLogging
 
 	#endregion
 
-	#region .ctor
-
-	static UnhandledExceptionsLogging()
-	{
-		AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
-		{
-			var ex = (Exception)args.ExceptionObject;
-			Logger.Fatal(ex, "A fatal error has occurred. Details: {Message}.", ex.Message);
-		};
-	}
-
-	#endregion
-
 	#region Methods
 
-	/// <summary>Подключает логирование необработанных исключений.</summary>
+	/// <summary>Подключает логирование необработанных исключений (идемпотентно).</summary>
 	public static void Subscribe()
 	{
-		if(!_isSubscribed)
-		{
-			_isSubscribed = true;
-		}
+		if(_isSubscribed)
+			return;
+
+		AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+		TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+		_isSubscribed = true;
 	}
 
 	/// <summary>Отключает логирование необработанных исключений.</summary>
 	public static void Unsubscribe()
 	{
-		if(_isSubscribed)
-		{
-			_isSubscribed = false;
-		}
+		if(!_isSubscribed)
+			return;
+
+		AppDomain.CurrentDomain.UnhandledException -= OnUnhandledException;
+		TaskScheduler.UnobservedTaskException -= OnUnobservedTaskException;
+		_isSubscribed = false;
+	}
+
+	private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+	{
+		var ex = (Exception)args.ExceptionObject;
+		Logger.Fatal(ex, "A fatal error has occurred. Details: {Message}.", ex.Message);
+	}
+
+	private static void OnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs args)
+	{
+		Logger.Error(args.Exception, "Unobserved task exception. Details: {Message}.", args.Exception.Message);
+		args.SetObserved();
 	}
 
 	#endregion

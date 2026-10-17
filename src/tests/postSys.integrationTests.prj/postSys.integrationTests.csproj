@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HotChocolate" />
     <PackageReference Include="HotChocolate.Abstractions" />
+    <PackageReference Include="HotChocolate.AspNetCore" />
     <PackageReference Include="HotChocolate.Execution.Abstractions" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.Build.CopyOnWrite">

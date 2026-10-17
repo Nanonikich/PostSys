@@ -16,9 +16,9 @@ type Query {
     order: [ClientSortInput!] @cost(weight: "10")
   ): ClientsCollectionSegment
     @listSize(
-      assumedSize: 1073741823
+      assumedSize: 500
       slicingArguments: ["take"]
-      slicingArgumentDefaultValue: 1073741823
+      slicingArgumentDefaultValue: 50
       sizedFields: ["items"]
       requireOneSlicingArgument: false
     )
@@ -40,9 +40,9 @@ type Query {
     order: [PackageSortInput!] @cost(weight: "10")
   ): PackagesCollectionSegment
     @listSize(
-      assumedSize: 1073741823
+      assumedSize: 500
       slicingArguments: ["take"]
-      slicingArgumentDefaultValue: 1073741823
+      slicingArgumentDefaultValue: 50
       sizedFields: ["items"]
       requireOneSlicingArgument: false
     )
@@ -57,9 +57,9 @@ type Query {
     order: [PostmanSortInput!] @cost(weight: "10")
   ): PostmenCollectionSegment
     @listSize(
-      assumedSize: 1073741823
+      assumedSize: 500
       slicingArguments: ["take"]
-      slicingArgumentDefaultValue: 1073741823
+      slicingArgumentDefaultValue: 50
       sizedFields: ["items"]
       requireOneSlicingArgument: false
     )

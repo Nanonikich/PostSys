@@ -44,15 +44,20 @@ var app = builder.Build();
 
 var hubContext = app.Services.GetRequiredService<IHubContext<NotificationHub>>();
 var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
-lifetime.ApplicationStarted.Register(() => Task.Run(async () => await hubContext.Clients.All.SendAsync("ReceiveServiceStatus", true)));
-lifetime.ApplicationStopping.Register(() => Task.Run(async() => await hubContext.Clients.All.SendAsync("ReceiveServiceStatus", false)));
+lifetime.ApplicationStarted.Register(() =>
+{
+	_ = hubContext.Clients.All.SendAsync("ReceiveServiceStatus", true);
+});
+lifetime.ApplicationStopping.Register(() =>
+{
+	_ = hubContext.Clients.All.SendAsync("ReceiveServiceStatus", false);
+});
 
 app.MapHealthChecks("/health");
 app.UseCors();
 app.UseWebSockets();
 app.MapGraphQL();
 app.MapHub<NotificationHub>("/notificationHub");
-app.UseRouting();
 app.Run();
 
 
@@ -60,9 +65,9 @@ void ConfigureCors(IServiceCollection services)
 {
 	services.AddCors(options =>
 	{
-		options.AddDefaultPolicy(builder =>
+		options.AddDefaultPolicy(policy =>
 		{
-			builder
+			policy
 				.AllowAnyMethod()
 				.AllowAnyHeader()
 				.SetIsOriginAllowed(_ => true)
@@ -85,6 +90,6 @@ string GetDatabaseConnectionString()
 		return configuration.GetConnectionString("PostgresConnection") ??
 			throw new InvalidOperationException("Database connection string is not specified in the configuration.");
 	}
-	
+
 	return $"Server={server};Port={port};Database={database};Username={user};Password={password}";
 }

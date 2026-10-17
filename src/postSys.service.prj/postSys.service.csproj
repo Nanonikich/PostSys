@@ -18,11 +18,8 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
-    <PackageReference Include="HotChocolate" />
     <PackageReference Include="HotChocolate.AspNetCore" />
     <PackageReference Include="HotChocolate.Data" />
-    <PackageReference Include="HotChocolate.Data.EntityFramework" />
-    <PackageReference Include="HotChocolate.Execution.Abstractions" />
     <PackageReference Include="HotChocolate.Types.Analyzers" />
     <PackageReference Include="HotChocolate.Types.OffsetPagination" />
     <PackageReference Include="MediatR" />
@@ -36,7 +33,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
     <PackageReference Include="NLog.Web.AspNetCore" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
   </ItemGroup>
 
   <ItemGroup>

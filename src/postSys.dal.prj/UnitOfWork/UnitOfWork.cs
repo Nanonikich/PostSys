@@ -20,6 +20,8 @@ public class UnitOfWork<TContext> : IUnitOfWork, IDbContextTestImpurity where TC
 	private readonly TContext _dbContext;
 	private readonly IDbContextTransaction _transaction;
 	private readonly IDomainEventDispatcher _domainEventDispatcher;
+	private bool _disposed;
+	private bool _completed;
 
 	#endregion
 
@@ -58,6 +60,8 @@ public class UnitOfWork<TContext> : IUnitOfWork, IDbContextTestImpurity where TC
 	/// <inheritdoc/>
 	public async Task CommitAsync(CancellationToken cancellationToken = default)
 	{
+		ObjectDisposedException.ThrowIf(_disposed, this);
+
 		await _dbContext.SaveChangesAsync(cancellationToken);
 
 		var aggregates = _dbContext.ChangeTracker
@@ -74,20 +78,59 @@ public class UnitOfWork<TContext> : IUnitOfWork, IDbContextTestImpurity where TC
 			aggregate.ClearDomainEvents();
 
 		await _transaction.CommitAsync(cancellationToken);
+		_completed = true;
 
 		if(domainEvents.Count > 0)
 			await _domainEventDispatcher.DispatchAsync(domainEvents, cancellationToken);
 	}
 
 	/// <summary>Отменяет изменения.</summary>
-	public void Rollback() => _transaction.Rollback();
+	public void Rollback() =>
+		RollbackAsync()
+			.GetAwaiter()
+			.GetResult();
 
 	/// <inheritdoc/>
-	public Task RollbackAsync(CancellationToken cancellationToken = default) =>
-		_transaction.RollbackAsync(cancellationToken);
+	public async Task RollbackAsync(CancellationToken cancellationToken = default)
+	{
+		if(_disposed || _completed)
+			return;
+
+		await _transaction.RollbackAsync(cancellationToken);
+		_completed = true;
+	}
 
 	/// <inheritdoc />
-	public void Dispose() => _transaction.Dispose();
+	public void Dispose()
+	{
+		DisposeAsync()
+			.AsTask()
+			.GetAwaiter()
+			.GetResult();
+	}
+
+	/// <inheritdoc />
+	public async ValueTask DisposeAsync()
+	{
+		if(_disposed)
+			return;
+
+		if(!_completed)
+		{
+			try
+			{
+				await _transaction.RollbackAsync();
+			}
+			catch
+			{
+				// Транзакция могла быть уже завершена провайдером.
+			}
+		}
+
+		await _transaction.DisposeAsync();
+		_disposed = true;
+		GC.SuppressFinalize(this);
+	}
 
 	#endregion
 }

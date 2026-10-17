@@ -85,11 +85,23 @@ public class SignalRClient : ISignalRClient
 
 	#region Handlers
 
-	private async Task OnConnectionClosedAsync(Exception? exception) => ChangeServiceStatusEvent?.Invoke(this, false);
+	private Task OnConnectionClosedAsync(Exception? exception)
+	{
+		ChangeServiceStatusEvent?.Invoke(this, false);
+		return Task.CompletedTask;
+	}
 
-	private async Task OnReconnectingAsync(Exception? exception) => ChangeServiceStatusEvent?.Invoke(this, false);
+	private Task OnReconnectingAsync(Exception? exception)
+	{
+		ChangeServiceStatusEvent?.Invoke(this, false);
+		return Task.CompletedTask;
+	}
 
-	private async Task OnReconnectedAsync(string? connectionId) => ChangeServiceStatusEvent?.Invoke(this, true);
+	private Task OnReconnectedAsync(string? connectionId)
+	{
+		ChangeServiceStatusEvent?.Invoke(this, true);
+		return Task.CompletedTask;
+	}
 
 	#endregion
 
@@ -109,9 +121,12 @@ public class SignalRClient : ISignalRClient
 		_hubConnection.Reconnecting -= OnReconnectingAsync;
 		_hubConnection.Reconnected -= OnReconnectedAsync;
 		_subscription?.Dispose();
+		_subscription = null;
 		await _hubConnection.DisposeAsync();
+		_hubConnection = null;
 
 		IsDisposed = true;
+		GC.SuppressFinalize(this);
 	}
 
 	#endregion

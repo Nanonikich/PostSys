@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace PostSys.Dal.Common.UnitOfWork;
 
 /// <summary>Представляет интерфейс единицы работы с БД.</summary>
-public interface IUnitOfWork : IDisposable
+public interface IUnitOfWork : IAsyncDisposable, IDisposable
 {
 	#region Methods
 

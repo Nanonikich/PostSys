@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,7 +24,7 @@ public class UnitOfWorkBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
 	/// <exception cref="ArgumentNullException">Значение <paramref name="unitOfWork"/> не определено.</exception>
 	public UnitOfWorkBehavior(IUnitOfWork unitOfWork)
 	{
-		ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
+		ArgumentNullException.ThrowIfNull(unitOfWork);
 		_unitOfWork = unitOfWork;
 	}
 
@@ -35,21 +34,19 @@ public class UnitOfWorkBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
 
 	/// <inheritdoc/>
 	public async Task<TResponse> Handle(
-		TRequest request, 
+		TRequest request,
 		RequestHandlerDelegate<TResponse> next,
 		CancellationToken cancellationToken)
 	{
 		try
 		{
-			var response = await next();
+			var response = await next(cancellationToken);
 			await _unitOfWork.CommitAsync(cancellationToken);
 			return response;
 		}
-		catch(Exception ex)
+		catch
 		{
-			ExceptionDispatchInfo
-				.Capture(ex)
-				.Throw();
+			await _unitOfWork.RollbackAsync(cancellationToken);
 			throw;
 		}
 	}

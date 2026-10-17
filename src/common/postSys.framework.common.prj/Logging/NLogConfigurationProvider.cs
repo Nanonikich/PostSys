@@ -16,19 +16,21 @@ public static class NLogConfigurationProvider
 	/// <param name="logDirPath">Базовый путь для сохранения логов.</param>
 	public static void ConfigureNLog(string logDirPath)
 	{
+		Directory.CreateDirectory(logDirPath);
+
 		var config = new LoggingConfiguration();
 
 		var consoleTarget = new ConsoleTarget("console");
 		var debugFileTarget = new FileTarget("debugFile")
 		{
-			FileName = Path.Combine(logDirPath, $"{DateTime.Now:yyyy-MM-dd}.dbg_.log"),
+			FileName = Path.Combine(logDirPath, $"{DateTime.UtcNow:yyyy-MM-dd}.dbg_.log"),
 			ArchiveEvery = FileArchivePeriod.Day,
 			MaxArchiveFiles = 30,
 			Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}"
 		};
 		var errorFileTarget = new FileTarget("errorFile")
 		{
-			FileName = Path.Combine(logDirPath, $"{DateTime.Now:yyyy-MM-dd}.err_.log"),
+			FileName = Path.Combine(logDirPath, $"{DateTime.UtcNow:yyyy-MM-dd}.err_.log"),
 			ArchiveEvery = FileArchivePeriod.Day,
 			MaxArchiveFiles = 30,
 			Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}"
@@ -36,7 +38,7 @@ public static class NLogConfigurationProvider
 
 		config.AddRule(LogLevel.Debug, LogLevel.Fatal, debugFileTarget);
 		config.AddRule(LogLevel.Error, LogLevel.Fatal, errorFileTarget);
-		config.AddRule(LogLevel.Debug, LogLevel.Fatal, consoleTarget);
+		config.AddRule(LogLevel.Info, LogLevel.Fatal, consoleTarget);
 
 		LogManager.Configuration = config;
 	}

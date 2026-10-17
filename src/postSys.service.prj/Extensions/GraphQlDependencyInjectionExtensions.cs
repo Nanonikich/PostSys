@@ -1,3 +1,5 @@
+using System;
+
 using HotChocolate.Execution.Configuration;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -29,12 +31,16 @@ public static class GraphQlDependencyInjectionExtensions
 			.AddserviceTypes()
 			.ModifyPagingOptions(pagingOptions =>
 			{
-				pagingOptions.DefaultPageSize = 1073741823;
-				pagingOptions.MaxPageSize = 1073741823;
+				pagingOptions.DefaultPageSize = 50;
+				pagingOptions.MaxPageSize = 500;
 				pagingOptions.IncludeTotalCount = true;
 			})
 			.ConfigureSchema(sb => sb.ModifyOptions(opts => opts.StrictValidation = false))
-			.ModifyRequestOptions(options => options.IncludeExceptionDetails = true);
+			.ModifyRequestOptions(options =>
+			{
+				options.IncludeExceptionDetails = true;
+				options.ExecutionTimeout = TimeSpan.FromSeconds(30);
+			});
 	}
 
 	#endregion
