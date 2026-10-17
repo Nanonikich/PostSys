@@ -28,8 +28,9 @@ public class Postman : ISoftDelete
 	/// <value>Email почтальона для доступа в систему.</value>
 	public string Email { get; init; } = null!;
 
-	/// <summary>Возвращает пароль почтальона для доступа в систему.</summary>
-	/// <value>Пароль почтальона для доступа в систему.</value>
+	/// <summary>Возвращает хеш пароля почтальона (не экспонируется в GraphQL).</summary>
+	/// <value>Хеш пароля почтальона.</value>
+	[GraphQLIgnore]
 	public string Password { get; init; } = null!;
 
 	/// <inheritdoc/>

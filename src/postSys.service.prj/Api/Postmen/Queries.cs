@@ -7,7 +7,7 @@ using HotChocolate;
 using HotChocolate.Data;
 using HotChocolate.Types;
 
-using PostSys.Dal.ReadModel;
+using PostSys.Application.Abstractions.Queries;
 using PostSys.ReadModels;
 
 namespace PostSys.Service.Api.Postmen;
@@ -19,29 +19,31 @@ public static class Queries
 	#region Methods
 
 	/// <summary>Возвращает почтальона по идентификатору.</summary>
-	/// <param name="id">Идентификатор.</param>
-	/// <param name="dbContext"><see cref="ReadDbContext"/>.</param>
-	/// <param name="cancellationToken">Токен отмены.</param>
-	/// <returns>Почтальон, если он существует.</returns>
-	public static ValueTask<Postman?> GetPostmanByIdAsync(
+	public static Task<Postman?> GetPostmanByIdAsync(
 		Guid id,
-		[Service] ReadDbContext dbContext,
+		[Service] IPostmanQueries queries,
 		CancellationToken cancellationToken)
 	{
-		return dbContext
-			.Set<Postman>()
-			.FindAsync([id], cancellationToken);
+		return queries.GetByIdAsync(id, cancellationToken);
 	}
 
 	/// <summary>Возвращает всех почтальонов.</summary>
-	/// <param name="dbContext"><see cref="ReadDbContext"/>.</param>
-	/// <returns>Все почтальоны.</returns>
 	[UseOffsetPaging]
 	[UseFiltering]
 	[UseSorting]
-	public static IQueryable<Postman> GetPostmen([Service] ReadDbContext dbContext)
+	public static IQueryable<Postman> GetPostmen([Service] IPostmanQueries queries)
 	{
-		return dbContext.Set<Postman>();
+		return queries.Query();
+	}
+
+	/// <summary>Авторизует почтальона по email и паролю.</summary>
+	public static Task<Guid?> AuthorizePostmanAsync(
+		string email,
+		string password,
+		[Service] IPostmanQueries queries,
+		CancellationToken cancellationToken)
+	{
+		return queries.AuthenticateAsync(email, password, cancellationToken);
 	}
 
 	#endregion

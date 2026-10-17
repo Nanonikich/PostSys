@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "postSys.readModels", "postS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "postSys.dal", "postSys.dal.prj\postSys.dal.csproj", "{621AF92F-BD0A-4B6B-A6AE-540A8E84AA05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "postSys.application", "postSys.application.prj\postSys.application.csproj", "{8E2F1A4B-3C5D-4E6F-9012-3456789ABCDE}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "postSys.common", "common\postSys.common.prj\postSys.common.csproj", "{4FA640FB-B5F7-4BC6-AC09-9BDBF65ABF5E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A22CF997-79E5-40E1-AD93-D9B2A64B9484}"
@@ -53,6 +55,10 @@ Global
 		{621AF92F-BD0A-4B6B-A6AE-540A8E84AA05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{621AF92F-BD0A-4B6B-A6AE-540A8E84AA05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{621AF92F-BD0A-4B6B-A6AE-540A8E84AA05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E2F1A4B-3C5D-4E6F-9012-3456789ABCDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E2F1A4B-3C5D-4E6F-9012-3456789ABCDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E2F1A4B-3C5D-4E6F-9012-3456789ABCDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E2F1A4B-3C5D-4E6F-9012-3456789ABCDE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4FA640FB-B5F7-4BC6-AC09-9BDBF65ABF5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4FA640FB-B5F7-4BC6-AC09-9BDBF65ABF5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FA640FB-B5F7-4BC6-AC09-9BDBF65ABF5E}.Release|Any CPU.ActiveCfg = Release|Any CPU

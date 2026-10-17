@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ using Moq;
 
 using NUnit.Framework;
 
+using PostSys.Domain.Events;
 using PostSys.Domain.Postmen;
 using PostSys.Domain.ValueObjects;
 
@@ -23,7 +25,7 @@ public class PostmanMutationsTestFixture
 	{
 		// Arrange
 		var email = Email.Create("ivanov@gmail.com");
-		var password = Password.Create("12321Hope");
+		var password = PasswordHash.Create("hashed-password-value");
 		var mockPostmanParametersChecker = PostmanTestHelper.GetPostmanParametersCheckerMock().Object;
 
 		// Act & Assert
@@ -36,6 +38,16 @@ public class PostmanMutationsTestFixture
 	}
 
 	[Test]
+	[Description("Проверяет, что при создании почтальона поднимается доменное событие.")]
+	public async Task Create_postman_raises_domain_event()
+	{
+		var postman = await PostmanTestHelper.CreatePostmanAsync();
+
+		Assert.That(postman.DomainEvents.OfType<PostmanCreated>().Any(), Is.True);
+		Assert.That(postman.Id, Is.Not.EqualTo(Guid.Empty));
+	}
+
+	[Test]
 	[Description("Проверяет изменение данных об имени почтальона.")]
 	public async Task Change_postman_fullname_success()
 	{
@@ -45,6 +57,7 @@ public class PostmanMutationsTestFixture
 
 		// Act & Assert
 		Assert.DoesNotThrow(() => postman.ChangeFullname(newFullname.Value));
+		Assert.That(postman.DomainEvents.OfType<PostmanFullnameChanged>().Any(), Is.True);
 	}
 
 	[Test]
@@ -92,25 +105,23 @@ public class PostmanMutationsTestFixture
 	}
 
 	[Test]
-	[Description("Проверяет изменение пароля почтальона.")]
+	[Description("Проверяет изменение пароля почтальона (принимает только хеш).")]
 	public async Task Change_postman_password_success()
 	{
 		// Arrange
 		var postman = await PostmanTestHelper.CreatePostmanAsync();
-		var newPassword = Password.Create("111TTTr");
+		var newPassword = PasswordHash.Create("new-hashed-password");
 
 		// Act & Assert
 		Assert.DoesNotThrow(() => postman.ChangePassword(newPassword.Value));
+		Assert.That(postman.DomainEvents.OfType<PostmanPasswordChanged>().Any(), Is.True);
 	}
 
 	[Test]
-	[Description("Проверяет изменение пароля почтальона на пароль малой длины.")]
-	public async Task Change_postman_password_to_short_password_impossible()
+	[Description("Проверяет, что пустой хеш пароля недопустим.")]
+	public void Password_hash_requires_value()
 	{
-		// Arrange
-		var postman = await PostmanTestHelper.CreatePostmanAsync();
-
-		// Act & Assert
-		Assert.Throws<ResultFailureException>(() => postman.ChangePassword(Password.Create("1").Value));
+		Assert.That(PasswordHash.Create(string.Empty).IsFailure, Is.True);
+		Assert.That(PasswordHash.Create("   ").IsFailure, Is.True);
 	}
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Reflection;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Builder;
@@ -10,8 +9,8 @@ using Microsoft.Extensions.Hosting;
 
 using NLog.Web;
 
+using PostSys.Application.Extensions;
 using PostSys.Dal.Extensions;
-using PostSys.Dal.ReadModel;
 using PostSys.Framework.Common;
 using PostSys.Framework.Common.Logging;
 using PostSys.Service.Common.Contracts;
@@ -35,9 +34,9 @@ services
 	.AddHealthChecks()
 	.AddNpgSql(databaseConnectionString, tags: [ HealthChecksConstants.ReadinessTag ]);
 
-services.AddCqrs(assemblies: Assembly.GetExecutingAssembly());
+services.AddCqrs(typeof(ApplicationServiceCollectionExtensions).Assembly);
 services.AddDatabase(databaseConnectionString);
-services.AddGraphQl<ReadDbContext>();
+services.AddGraphQl();
 
 ConfigureCors(services);
 

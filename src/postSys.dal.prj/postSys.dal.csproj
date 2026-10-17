@@ -27,10 +27,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Identity.Core"/>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\postSys.application.prj\postSys.application.csproj"/>
     <ProjectReference Include="..\postSys.domain.prj\postSys.domain.csproj"/>
     <ProjectReference Include="..\postSys.readModels.prj\postSys.readModels.csproj"/>
   </ItemGroup>

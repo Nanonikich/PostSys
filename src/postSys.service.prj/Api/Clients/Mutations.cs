@@ -7,8 +7,9 @@ using HotChocolate.Types;
 
 using MediatR;
 
+using PostSys.Application.Commands.Clients;
+using PostSys.Application.Contracts;
 using PostSys.ReadModels.Helpers;
-using PostSys.Service.Commands.Clients;
 using PostSys.Service.Common.GraphQL.Attributes;
 
 namespace PostSys.Service.Api.Clients;
@@ -20,11 +21,6 @@ public static class Mutations
 	#region Methods
 
 	/// <summary>Создает клиента.</summary>
-	/// <param name="fullname">Данные об имени клиента.</param>
-	/// <param name="phoneNumber">Номер телефона клиента.</param>
-	/// <param name="sender"><see cref="ISender"/>.</param>
-	/// <param name="cancellationToken">Токен отмены.</param>
-	/// <returns>Идентификатор созданного клиента.</returns>
 	[UseCreateMutationConvention]
 	public static Task<Guid> CreateClientAsync(
 		Fullname fullname,
@@ -32,54 +28,45 @@ public static class Mutations
 		[Service] ISender sender,
 		CancellationToken cancellationToken)
 	{
-		return sender.Send(new CreateClientCommand(fullname, phoneNumber), cancellationToken);
+		return sender.Send(
+			new CreateClientCommand(ToDto(fullname), phoneNumber),
+			cancellationToken);
 	}
 
 	/// <summary>Обновляет данные об имени клиента.</summary>
-	/// <param name="id">Идентификатор клиента.</param>
-	/// <param name="fullname">Данные об имени клиента для обновления.</param>
-	/// <param name="sender"><see cref="ISender"/>.</param>
-	/// <param name="cancellationToken">Токен отмены.</param>
-	/// <returns>Успешность выполнения запроса.</returns>
 	[UseSuccessMutationConvention]
-	public static async Task<bool> ChangeClientFullnameAsync(
+	public static Task<bool> ChangeClientFullnameAsync(
 		Guid id,
 		Fullname fullname,
 		[Service] ISender sender,
 		CancellationToken cancellationToken)
 	{
-		return await sender.Send(new ChangeClientFullnameCommand(id, fullname), cancellationToken);
+		return sender.Send(new ChangeClientFullnameCommand(id, ToDto(fullname)), cancellationToken);
 	}
 
 	/// <summary>Обновляет номер телефона клиента.</summary>
-	/// <param name="id">Идентификатор клиента.</param>
-	/// <param name="phoneNumber">Номер телефона клиента для обновления.</param>
-	/// <param name="sender"><see cref="ISender"/>.</param>
-	/// <param name="cancellationToken">Токен отмены.</param>
-	/// <returns>Успешность выполнения запроса.</returns>
 	[UseSuccessMutationConvention]
-	public static async Task<bool> ChangeClientPhoneNumberAsync(
+	public static Task<bool> ChangeClientPhoneNumberAsync(
 		Guid id,
 		string phoneNumber,
 		[Service] ISender sender,
 		CancellationToken cancellationToken)
 	{
-		return await sender.Send(new ChangeClientPhoneNumberCommand(id, phoneNumber), cancellationToken);
+		return sender.Send(new ChangeClientPhoneNumberCommand(id, phoneNumber), cancellationToken);
 	}
 
 	/// <summary>Удаляет клиента.</summary>
-	/// <param name="id">Идентификатор клиента.</param>
-	/// <param name="sender"><see cref="ISender"/>.</param>
-	/// <param name="cancellationToken">Токен отмены.</param>
-	/// <returns>Успешность выполнения запроса.</returns>
 	[UseSuccessMutationConvention]
-	public static async Task<bool> DeleteClientAsync(
+	public static Task<bool> DeleteClientAsync(
 		Guid id,
 		[Service] ISender sender,
 		CancellationToken cancellationToken)
 	{
-		return await sender.Send(new DeleteClientCommand(id), cancellationToken);
+		return sender.Send(new DeleteClientCommand(id), cancellationToken);
 	}
+
+	private static FullnameDto ToDto(Fullname fullname) =>
+		new(fullname.Surname, fullname.Name, fullname.Patronymic);
 
 	#endregion
 }

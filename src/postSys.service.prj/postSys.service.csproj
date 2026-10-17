@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\common\postSys.framework.common.prj\postSys.framework.common.csproj" />
+    <ProjectReference Include="..\postSys.application.prj\postSys.application.csproj" />
     <ProjectReference Include="..\postSys.dal.prj\postSys.dal.csproj" />
   </ItemGroup>
 

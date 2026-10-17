@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Snapshooter;
 using Snapshooter.NUnit;
 
-using PostSys.Dal.ReadModel;
 using PostSys.Service.Extensions;
 
 namespace PostSys.IntegrationTests.Api;
@@ -24,7 +23,7 @@ public class SchemaTestFixture
 	{
 		var schema = await new ServiceCollection()
 			.AddLogging()
-			.AddGraphQl<ReadDbContext>()
+			.AddGraphQl()
 			.BuildSchemaAsync();
 		var fullName = new NUnitSnapshotFullNameReader().ReadSnapshotFullName();
 		var schemaString = schema.ToString();

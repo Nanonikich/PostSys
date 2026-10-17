@@ -102,15 +102,8 @@ public class PostmanGraphQlClient : IPostmanGraphQlClient
 		var query = new GraphQLRequest
 		{
 			Query = @"
-				query GetPostman($email: String!, $password: String!) {
-					postmen(
-						where: { email: { eq: $email }, password: { eq: $password } }
-						take: 1
-					) {
-						items {
-							id
-						}
-					}
+				query AuthorizePostman($email: String!, $password: String!) {
+					authorizePostman(email: $email, password: $password)
 				}",
 			Variables = new { email, password }
 		};
@@ -129,11 +122,9 @@ public class PostmanGraphQlClient : IPostmanGraphQlClient
 
 	private Guid ParseGetAuthorizationPostmanResult(GraphQLResponse<AuthorizationPostmanResponseModel> response)
 	{
-		var items = response.Data.Postmen.Items;
-		if(items.Count > 0)
-		{
-			return items[0].Id;
-		}
+		if(response.Data?.AuthorizePostman is { } id && id != Guid.Empty)
+			return id;
+
 		throw new GraphQlClientException("Postman not found or no valid ID returned.");
 	}
 
@@ -141,23 +132,8 @@ public class PostmanGraphQlClient : IPostmanGraphQlClient
 
 	private class AuthorizationPostmanResponseModel
 	{
-		/// <summary>Возвращает или задаёт данные, полученные запросом о почтальонах.</summary>
-		/// <value>Данные, полученные запросом о почтальонах.</value>
-		public AuthorizationPostmanData Postmen { get; set; }
-	}
-
-	private class AuthorizationPostmanData
-	{
-		/// <summary>Возвращает или задаёт список почтальонов, полученных запросом.</summary>
-		/// <value>Список почтальоном, полученных запросом.</value>
-		public List<AuthorizationPostman> Items { get; set; }
-	}
-
-	private class AuthorizationPostman
-	{
-		/// <summary>Возвращает или задаёт идентификатор почтальона.</summary>
-		/// <value>Идентификатор почтальона.</value>
-		public Guid Id { get; set; }
+		/// <summary>Идентификатор авторизованного почтальона.</summary>
+		public Guid? AuthorizePostman { get; set; }
 	}
 
 	#endregion

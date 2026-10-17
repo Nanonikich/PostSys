@@ -4,8 +4,8 @@ using MediatR;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using PostSys.Application.Extensions;
 using PostSys.Dal.Common.UnitOfWork;
-using PostSys.Service.Common.Behaviors;
 
 namespace PostSys.Service.Extensions;
 
@@ -14,35 +14,16 @@ public static class CqrsExtensions
 {
 	#region Methods
 
-	/// <summary>Регистрирует зависимости для добавления CQRS.</summary>
+	/// <summary>Регистрирует application-слой и pipeline UnitOfWork.</summary>
 	/// <param name="services"><see cref="IServiceCollection"/>.</param>
-	/// <param name="serviceLifetime"><see cref="ServiceLifetime"/> управления обработчиков команд/запросов.</param>
-	/// <param name="assemblies">Сборки для сканирования.</param>
+	/// <param name="assemblies">Сборки с обработчиками команд (по умолчанию — application).</param>
 	/// <returns><see cref="IServiceCollection"/>.</returns>
-	public static IServiceCollection AddCqrs(
-		this IServiceCollection services,
-		ServiceLifetime serviceLifetime = ServiceLifetime.Scoped,
-		params Assembly[] assemblies)
+	public static IServiceCollection AddCqrs(this IServiceCollection services, params Assembly[] assemblies)
 	{
-		Assembly[] assemblyArray;
-		if(assemblies.Length == 0)
-			assemblyArray =
-			[
-				Assembly.GetCallingAssembly(),
-				Assembly.GetExecutingAssembly()
-			];
-		else
-			assemblyArray = [.. assemblies, Assembly.GetExecutingAssembly()];
-
-		var assembliesToScan = assemblyArray;
-		return services
-			.AddMediatR(configuration =>
-			{
-				configuration.RegisterServicesFromAssemblies(assembliesToScan);
-				configuration.Lifetime = serviceLifetime;
-			})
-			.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
-			.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehavior<,>));
+		services.AddApplication(assemblies);
+		services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehavior<,>));
+		services.AddDomainEventHandlers(typeof(CqrsExtensions).Assembly);
+		return services;
 	}
 
 	#endregion

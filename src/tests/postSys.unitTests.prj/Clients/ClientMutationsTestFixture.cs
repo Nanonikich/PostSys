@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 
 using CSharpFunctionalExtensions;
 
 using NUnit.Framework;
 
 using PostSys.Domain.Clients;
+using PostSys.Domain.Events;
 using PostSys.Domain.ValueObjects;
 
 namespace PostSys.UnitTests.Clients;
@@ -24,6 +26,16 @@ public class ClientMutationsTestFixture
 		Assert.Throws<ArgumentNullException>(() => Client.Create(
 			null!,
 			phoneNumber.Value));
+	}
+
+	[Test]
+	[Description("Проверяет, что при создании клиента поднимается доменное событие.")]
+	public void Create_client_raises_domain_event()
+	{
+		var client = ClientTestHelper.CreateClient();
+
+		Assert.That(client.DomainEvents.OfType<ClientCreated>().Any(), Is.True);
+		Assert.That(client.Id, Is.Not.EqualTo(Guid.Empty));
 	}
 
 	[Test]

@@ -3,14 +3,19 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
+using PostSys.Application.Abstractions;
+using PostSys.Application.Abstractions.Queries;
 using PostSys.Dal.Common.Extensions;
+using PostSys.Dal.Events;
 using PostSys.Dal.Persistence;
 using PostSys.Dal.Persistence.Clients;
 using PostSys.Dal.Persistence.Packages;
 using PostSys.Dal.Persistence.Postmen;
 using PostSys.Dal.ReadModel;
+using PostSys.Dal.ReadModel.Queries;
 using PostSys.Dal.Services;
 
+using PostSys.Domain.Abstractions;
 using PostSys.Domain.Clients;
 using PostSys.Domain.Packages;
 using PostSys.Domain.Packages.Checkers;
@@ -61,7 +66,12 @@ public static class DataStoragesExtensions
 	{
 		return serviceCollection
 			.AddScoped<IPostmanParametersChecker, PostmanParametersChecker>()
-			.AddScoped<IPackageParametersChecker, PackageParametersChecker>();
+			.AddScoped<IPackageParametersChecker, PackageParametersChecker>()
+			.AddSingleton<IPasswordHasher, PasswordHasher>()
+			.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>()
+			.AddScoped<IClientQueries, ClientQueries>()
+			.AddScoped<IPackageQueries, PackageQueries>()
+			.AddScoped<IPostmanQueries, PostmanQueries>();
 	}
 
 	#endregion

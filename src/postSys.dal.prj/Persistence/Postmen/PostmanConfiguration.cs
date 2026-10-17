@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using PostSys.Domain.Abstractions;
 using PostSys.Domain.Postmen;
 
 namespace PostSys.Dal.Persistence.Postmen;
@@ -15,6 +16,7 @@ public class PostmanConfiguration : IEntityTypeConfiguration<Postman>
 	{
 		builder.ToTable("postmen").HasKey(p => p.Id);
 		builder.Property(p => p.Id).HasColumnName("postman_id");
+		builder.Ignore(nameof(AggregateRoot.DomainEvents));
 		builder.OwnsOne(p => p.Fullname, nameBuilder =>
 		{
 			nameBuilder.Property(n => n.Surname).HasColumnName("postman_surname").IsRequired();

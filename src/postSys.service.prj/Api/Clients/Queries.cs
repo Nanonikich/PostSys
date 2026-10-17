@@ -7,7 +7,7 @@ using HotChocolate;
 using HotChocolate.Data;
 using HotChocolate.Types;
 
-using PostSys.Dal.ReadModel;
+using PostSys.Application.Abstractions.Queries;
 using PostSys.ReadModels;
 
 namespace PostSys.Service.Api.Clients;
@@ -19,29 +19,21 @@ public static class Queries
 	#region Methods
 
 	/// <summary>Возвращает клиента по идентификатору.</summary>
-	/// <param name="id">Идентификатор.</param>
-	/// <param name="dbContext"><see cref="ReadDbContext"/>.</param>
-	/// <param name="cancellationToken">Токен отмены.</param>
-	/// <returns>Клиент, если он существует.</returns>
-	public static ValueTask<Client?> GetClientByIdAsync(
+	public static Task<Client?> GetClientByIdAsync(
 		Guid id,
-		[Service] ReadDbContext dbContext,
+		[Service] IClientQueries queries,
 		CancellationToken cancellationToken)
 	{
-		return dbContext
-			.Set<Client>()
-			.FindAsync([id], cancellationToken);
+		return queries.GetByIdAsync(id, cancellationToken);
 	}
 
 	/// <summary>Возвращает всех клиентов.</summary>
-	/// <param name="dbContext"><see cref="ReadDbContext"/>.</param>
-	/// <returns>Все клиенты.</returns>
 	[UseOffsetPaging]
 	[UseFiltering]
 	[UseSorting]
-	public static IQueryable<Client> GetClients([Service] ReadDbContext dbContext)
+	public static IQueryable<Client> GetClients([Service] IClientQueries queries)
 	{
-		return dbContext.Set<Client>();
+		return queries.Query();
 	}
 
 	#endregion

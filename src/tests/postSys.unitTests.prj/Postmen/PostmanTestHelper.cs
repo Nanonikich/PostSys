@@ -39,7 +39,7 @@ internal static class PostmanTestHelper
 	{
 		var fullname = Fullname.Create("Иванов", "Иван", "Иванович");
 		var email = Email.Create("ivanov@gmail.com");
-		var password = Password.Create("12321Hope");
+		var password = PasswordHash.Create("hashed-password-value");
 		var mockPostmanParametersChecker = GetPostmanParametersCheckerMock().Object;
 		return await Postman.CreateAsync(
 			fullname.Value,

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using PostSys.Domain.Abstractions;
 using PostSys.Domain.Clients;
 
 namespace PostSys.Dal.Persistence.Clients;
@@ -15,6 +16,7 @@ public class ClientConfiguration : IEntityTypeConfiguration<Client>
 	{
 		builder.ToTable("clients").HasKey(c => c.Id);
 		builder.Property(c => c.Id).HasColumnName("client_id");
+		builder.Ignore(nameof(AggregateRoot.DomainEvents));
 		builder.OwnsOne(c => c.Fullname, nameBuilder =>
 		{
 			nameBuilder.Property(n => n.Surname).HasColumnName("client_surname").IsRequired();
@@ -26,12 +28,6 @@ public class ClientConfiguration : IEntityTypeConfiguration<Client>
 						{
 							phoneBuilder.Property(p => p.Value).HasColumnName("client_phone_number").IsRequired();
 						});
-
-		builder
-			.HasMany(c => c.Packages)
-			.WithOne(p => p.Client)
-			.HasForeignKey(p => p.PackageClientId)
-			.OnDelete(DeleteBehavior.NoAction);
 	}
 
 	#endregion

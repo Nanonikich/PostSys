@@ -6,10 +6,16 @@ using HotChocolate;
 using HotChocolate.Types;
 
 using MediatR;
-using PostSys.ReadModels.Contracts;
-using PostSys.ReadModels.Helpers;
-using PostSys.Service.Commands.Packages;
+
+using PostSys.Application.Commands.Packages;
+using PostSys.Application.Contracts;
+using PostSys.Service.Common.Converters;
 using PostSys.Service.Common.GraphQL.Attributes;
+
+using DomainPackageStatus = PostSys.Domain.Contracts.PackageStatus;
+using ReadPackageStatus = PostSys.ReadModels.Contracts.PackageStatus;
+using ReadAddress = PostSys.ReadModels.Helpers.Address;
+using ReadDimensions = PostSys.ReadModels.Helpers.Dimensions;
 
 namespace PostSys.Service.Api.Packages;
 
@@ -20,106 +26,90 @@ public static class Mutations
 	#region Methods
 
 	/// <summary>Создает посылку.</summary>
-	/// <param name="dimensions">Параметры посылки.</param>
-	/// <param name="address">Адрес.</param>
-	/// <param name="status">Статус.</param>
-	/// <param name="clientId">Идентификатор клиента.</param>
-	/// <param name="postmanId">Идентификатор почтальона.</param>
-	/// <param name="sender"><see cref="ISender"/>.</param>
-	/// <param name="cancellationToken">Токен отмены.</param>
-	/// <returns>Идентификатор созданной посылки.</returns>
 	[UseCreateMutationConvention]
 	public static Task<Guid> CreatePackageAsync(
-		Dimensions dimensions,
-		Address address,
-		PackageStatus status,
+		ReadDimensions dimensions,
+		ReadAddress address,
+		ReadPackageStatus status,
 		Guid clientId,
 		Guid postmanId,
 		[Service] ISender sender,
 		CancellationToken cancellationToken)
 	{
-		return sender.Send(new CreatePackageCommand(dimensions, address, status, clientId, postmanId), cancellationToken);
+		return sender.Send(
+			new CreatePackageCommand(
+				ToDto(dimensions),
+				ToDto(address),
+				EnumConverter<ReadPackageStatus, DomainPackageStatus>.Convert(status),
+				clientId,
+				postmanId),
+			cancellationToken);
 	}
 
 	/// <summary>Обновляет данные о посылке.</summary>
-	/// <param name="id">Идентификатор посылки.</param>
-	/// <param name="clientId">Идентификатор клиента для обновления.</param>
-	/// <param name="postmanId">Идентификатор почтальона для обновления.</param>
-	/// <param name="sender"><see cref="ISender"/>.</param>
-	/// <param name="cancellationToken">Токен отмены.</param>
-	/// <returns>Успешность выполнения запроса.</returns>
 	[UseSuccessMutationConvention]
-	public static async Task<bool> ChangePackageAsync(
+	public static Task<bool> ChangePackageAsync(
 		Guid id,
 		Guid clientId,
 		Guid postmanId,
 		[Service] ISender sender,
 		CancellationToken cancellationToken)
 	{
-		return await sender.Send(new ChangePackageCommand(id, clientId, postmanId), cancellationToken);
+		return sender.Send(new ChangePackageCommand(id, clientId, postmanId), cancellationToken);
 	}
 
 	/// <summary>Обновляет параметры посылки.</summary>
-	/// <param name="id">Идентификатор посылки.</param>
-	/// <param name="dimensions">Параметры посылки для обновления.</param>
-	/// <param name="sender"><see cref="ISender"/>.</param>
-	/// <param name="cancellationToken">Токен отмены.</param>
-	/// <returns>Успешность выполнения запроса.</returns>
 	[UseSuccessMutationConvention]
-	public static async Task<bool> ChangePackageDimensionsAsync(
+	public static Task<bool> ChangePackageDimensionsAsync(
 		Guid id,
-		Dimensions dimensions,
+		ReadDimensions dimensions,
 		[Service] ISender sender,
 		CancellationToken cancellationToken)
 	{
-		return await sender.Send(new ChangePackageDimensionsCommand(id, dimensions), cancellationToken);
+		return sender.Send(new ChangePackageDimensionsCommand(id, ToDto(dimensions)), cancellationToken);
 	}
 
 	/// <summary>Обновляет местоположение посылки.</summary>
-	/// <param name="id">Идентификатор посылки.</param>
-	/// <param name="address">Местоположение посылки для обновления.</param>
-	/// <param name="sender"><see cref="ISender"/>.</param>
-	/// <param name="cancellationToken">Токен отмены.</param>
-	/// <returns>Успешность выполнения запроса.</returns>
 	[UseSuccessMutationConvention]
-	public static async Task<bool> ChangePackageAddressAsync(
+	public static Task<bool> ChangePackageAddressAsync(
 		Guid id,
-		Address address,
+		ReadAddress address,
 		[Service] ISender sender,
 		CancellationToken cancellationToken)
 	{
-		return await sender.Send(new ChangePackageAddressCommand(id, address), cancellationToken);
+		return sender.Send(new ChangePackageAddressCommand(id, ToDto(address)), cancellationToken);
 	}
 
 	/// <summary>Обновляет статус посылки.</summary>
-	/// <param name="id">Идентификатор посылки.</param>
-	/// <param name="status">Статус посылки для обновления.</param>
-	/// <param name="sender"><see cref="ISender"/>.</param>
-	/// <param name="cancellationToken">Токен отмены.</param>
-	/// <returns>Успешность выполнения запроса.</returns>
 	[UseSuccessMutationConvention]
-	public static async Task<bool> ChangePackageStatusAsync(
+	public static Task<bool> ChangePackageStatusAsync(
 		Guid id,
-		PackageStatus status,
+		ReadPackageStatus status,
 		[Service] ISender sender,
 		CancellationToken cancellationToken)
 	{
-		return await sender.Send(new ChangePackageStatusCommand(id, status), cancellationToken);
+		return sender.Send(
+			new ChangePackageStatusCommand(
+				id,
+				EnumConverter<ReadPackageStatus, DomainPackageStatus>.Convert(status)),
+			cancellationToken);
 	}
 
 	/// <summary>Удаляет посылку.</summary>
-	/// <param name="id">Идентификатор посылки.</param>
-	/// <param name="sender"><see cref="ISender"/>.</param>
-	/// <param name="cancellationToken">Токен отмены.</param>
-	/// <returns>Успешность выполнения запроса.</returns>
 	[UseSuccessMutationConvention]
-	public static async Task<bool> DeletePackageAsync(
+	public static Task<bool> DeletePackageAsync(
 		Guid id,
 		[Service] ISender sender,
 		CancellationToken cancellationToken)
 	{
-		return await sender.Send(new DeletePackageCommand(id), cancellationToken);
+		return sender.Send(new DeletePackageCommand(id), cancellationToken);
 	}
+
+	private static DimensionsDto ToDto(ReadDimensions dimensions) =>
+		new(dimensions.Length, dimensions.Height, dimensions.Weight);
+
+	private static AddressDto ToDto(ReadAddress address) =>
+		new(address.Longitude, address.Latitude);
 
 	#endregion
 }

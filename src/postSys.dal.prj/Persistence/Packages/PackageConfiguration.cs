@@ -3,8 +3,11 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using PostSys.Domain.Abstractions;
+using PostSys.Domain.Clients;
 using PostSys.Domain.Contracts;
 using PostSys.Domain.Packages;
+using PostSys.Domain.Postmen;
 
 namespace PostSys.Dal.Persistence.Packages;
 
@@ -18,6 +21,7 @@ public class PackageConfiguration : IEntityTypeConfiguration<Package>
 	{
 		builder.ToTable("packages").HasKey(p => p.Id);
 		builder.Property(p => p.Id).HasColumnName("package_id");
+		builder.Ignore(nameof(AggregateRoot.DomainEvents));
 		builder.OwnsOne(p => p.Dimensions, dimensionBuilder =>
 		{
 			dimensionBuilder.Property(a => a.Length).HasColumnName("package_length");
@@ -43,8 +47,14 @@ public class PackageConfiguration : IEntityTypeConfiguration<Package>
 		builder.Property(p => p.PackagePostmanId).HasColumnName("package_postman_id").IsRequired();
 
 		builder
-			.HasOne(p => p.Postman)
-			.WithMany(pm => pm.Packages)
+			.HasOne<Client>()
+			.WithMany()
+			.HasForeignKey(p => p.PackageClientId)
+			.OnDelete(DeleteBehavior.NoAction);
+
+		builder
+			.HasOne<Postman>()
+			.WithMany()
 			.HasForeignKey(p => p.PackagePostmanId)
 			.OnDelete(DeleteBehavior.NoAction);
 	}

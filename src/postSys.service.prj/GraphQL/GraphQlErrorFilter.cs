@@ -3,7 +3,7 @@ using System;
 using HotChocolate;
 using HotChocolate.Execution;
 
-using PostSys.Service.Common.Exceptions;
+using PostSys.Application.Exceptions;
 
 namespace PostSys.Service.Common.GraphQL;
 
@@ -23,7 +23,8 @@ public class GraphQlErrorFilter : IErrorFilter
 				.SetCode("INVALID_ARGUMENT")
 				.Build();
 		}
-		else if(error.Exception is EntityNotFoundException)
+
+		if(error.Exception is EntityNotFoundException)
 		{
 			return ErrorBuilder
 				.New()

@@ -1,9 +1,13 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+
+using PostSys.Application.Abstractions;
+using PostSys.Domain.Abstractions;
 
 namespace PostSys.Dal.Common.UnitOfWork;
 
@@ -15,6 +19,7 @@ public class UnitOfWork<TContext> : IUnitOfWork, IDbContextTestImpurity where TC
 
 	private readonly TContext _dbContext;
 	private readonly IDbContextTransaction _transaction;
+	private readonly IDomainEventDispatcher _domainEventDispatcher;
 
 	#endregion
 
@@ -22,10 +27,12 @@ public class UnitOfWork<TContext> : IUnitOfWork, IDbContextTestImpurity where TC
 
 	/// <summary>Создаёт экземпляр класса <see cref="UnitOfWork{TContext}"/>.</summary>
 	/// <param name="dbContext">Контекст базы данных.</param>
-	/// <exception cref="ArgumentNullException">Значение <paramref name="dbContext"/> не определено.</exception>
-	public UnitOfWork(TContext dbContext)
+	/// <param name="domainEventDispatcher">Диспетчер доменных событий.</param>
+	/// <exception cref="ArgumentNullException">Значение аргумента не определено.</exception>
+	public UnitOfWork(TContext dbContext, IDomainEventDispatcher domainEventDispatcher)
 	{
 		_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+		_domainEventDispatcher = domainEventDispatcher ?? throw new ArgumentNullException(nameof(domainEventDispatcher));
 		_transaction = dbContext.Database.BeginTransaction();
 	}
 
@@ -52,7 +59,24 @@ public class UnitOfWork<TContext> : IUnitOfWork, IDbContextTestImpurity where TC
 	public async Task CommitAsync(CancellationToken cancellationToken = default)
 	{
 		await _dbContext.SaveChangesAsync(cancellationToken);
+
+		var aggregates = _dbContext.ChangeTracker
+			.Entries<AggregateRoot>()
+			.Select(entry => entry.Entity)
+			.Where(aggregate => aggregate.DomainEvents.Count > 0)
+			.ToList();
+
+		var domainEvents = aggregates
+			.SelectMany(aggregate => aggregate.DomainEvents)
+			.ToList();
+
+		foreach(var aggregate in aggregates)
+			aggregate.ClearDomainEvents();
+
 		await _transaction.CommitAsync(cancellationToken);
+
+		if(domainEvents.Count > 0)
+			await _domainEventDispatcher.DispatchAsync(domainEvents, cancellationToken);
 	}
 
 	/// <summary>Отменяет изменения.</summary>

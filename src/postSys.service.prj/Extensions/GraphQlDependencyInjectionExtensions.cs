@@ -1,6 +1,5 @@
 using HotChocolate.Execution.Configuration;
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using PostSys.Service.Common.GraphQL;
@@ -15,15 +14,11 @@ public static class GraphQlDependencyInjectionExtensions
 
 	/// <summary>Настраивает и регистрирует зависимости для использования GraphQL.</summary>
 	/// <param name="collection">Объект <see cref="IServiceCollection"/>.</param>
-	/// <typeparam name="TDbContext">Тип контекста БД.</typeparam>
 	/// <returns>Объект <see cref="IRequestExecutorBuilder"/>.</returns>
-	/// <remarks>При подключении к проекту, добавить .AddServiceTypes().</remarks>
-	public static IRequestExecutorBuilder AddGraphQl<TDbContext>(this IServiceCollection collection)
-		where TDbContext : DbContext
+	public static IRequestExecutorBuilder AddGraphQl(this IServiceCollection collection)
 	{
 		return collection
 			.AddGraphQLServer()
-			.RegisterDbContextFactory<TDbContext>()
 			.AddErrorFilter<GraphQlErrorFilter>()
 			.AddFiltering()
 			.AddSorting()

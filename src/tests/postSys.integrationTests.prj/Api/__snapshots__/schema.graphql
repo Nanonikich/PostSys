@@ -4,6 +4,154 @@ schema {
   subscription: Subscription
 }
 
+"Определяет запросы GraphQL для клиентов."
+type Query {
+  "Возвращает клиента по идентификатору."
+  clientById(id: UUID!): Client @cost(weight: "10")
+  "Возвращает всех клиентов."
+  clients(
+    skip: Int
+    take: Int
+    where: ClientFilterInput @cost(weight: "10")
+    order: [ClientSortInput!] @cost(weight: "10")
+  ): ClientsCollectionSegment
+    @listSize(
+      assumedSize: 1073741823
+      slicingArguments: ["take"]
+      slicingArgumentDefaultValue: 1073741823
+      sizedFields: ["items"]
+      requireOneSlicingArgument: false
+    )
+    @cost(weight: "10")
+  """
+  Возвращает клиента по идентификатору.
+  
+  **Returns:**
+  Клиент, если он существует.
+  """
+  version: String! @cost(weight: "10")
+  "Возвращает посылку по идентификатору."
+  packageById(id: UUID!): Package @cost(weight: "10")
+  "Возвращает все посылки."
+  packages(
+    skip: Int
+    take: Int
+    where: PackageFilterInput @cost(weight: "10")
+    order: [PackageSortInput!] @cost(weight: "10")
+  ): PackagesCollectionSegment
+    @listSize(
+      assumedSize: 1073741823
+      slicingArguments: ["take"]
+      slicingArgumentDefaultValue: 1073741823
+      sizedFields: ["items"]
+      requireOneSlicingArgument: false
+    )
+    @cost(weight: "10")
+  "Возвращает почтальона по идентификатору."
+  postmanById(id: UUID!): Postman @cost(weight: "10")
+  "Возвращает всех почтальонов."
+  postmen(
+    skip: Int
+    take: Int
+    where: PostmanFilterInput @cost(weight: "10")
+    order: [PostmanSortInput!] @cost(weight: "10")
+  ): PostmenCollectionSegment
+    @listSize(
+      assumedSize: 1073741823
+      slicingArguments: ["take"]
+      slicingArgumentDefaultValue: 1073741823
+      sizedFields: ["items"]
+      requireOneSlicingArgument: false
+    )
+    @cost(weight: "10")
+  "Авторизует почтальона по email и паролю."
+  authorizePostman(email: String!, password: String!): UUID @cost(weight: "10")
+}
+
+"Определяет мутации для клиентов."
+type Mutation {
+  "Создает клиента."
+  createClient(input: CreateClientInput!): CreateClientPayload!
+    @cost(weight: "10")
+  "Обновляет данные об имени клиента."
+  changeClientFullname(input: ChangeClientFullnameInput!): ChangeClientFullnamePayload!
+    @cost(weight: "10")
+  "Обновляет номер телефона клиента."
+  changeClientPhoneNumber(input: ChangeClientPhoneNumberInput!): ChangeClientPhoneNumberPayload!
+    @cost(weight: "10")
+  "Удаляет клиента."
+  deleteClient(input: DeleteClientInput!): DeleteClientPayload!
+    @cost(weight: "10")
+  "Создает посылку."
+  createPackage(input: CreatePackageInput!): CreatePackagePayload!
+    @cost(weight: "10")
+  "Обновляет данные о посылке."
+  changePackage(input: ChangePackageInput!): ChangePackagePayload!
+    @cost(weight: "10")
+  "Обновляет параметры посылки."
+  changePackageDimensions(input: ChangePackageDimensionsInput!): ChangePackageDimensionsPayload!
+    @cost(weight: "10")
+  "Обновляет местоположение посылки."
+  changePackageAddress(input: ChangePackageAddressInput!): ChangePackageAddressPayload!
+    @cost(weight: "10")
+  "Обновляет статус посылки."
+  changePackageStatus(input: ChangePackageStatusInput!): ChangePackageStatusPayload!
+    @cost(weight: "10")
+  "Удаляет посылку."
+  deletePackage(input: DeletePackageInput!): DeletePackagePayload!
+    @cost(weight: "10")
+  "Создает почтальона."
+  createPostman(input: CreatePostmanInput!): CreatePostmanPayload!
+    @cost(weight: "10")
+  "Обновляет данные почтальона."
+  changePostman(input: ChangePostmanInput!): ChangePostmanPayload!
+    @cost(weight: "10")
+  "Обновляет данные об имени почтальона."
+  changePostmanFullname(input: ChangePostmanFullnameInput!): ChangePostmanFullnamePayload!
+    @cost(weight: "10")
+  "Обновляет Email почтальона."
+  changePostmanEmail(input: ChangePostmanEmailInput!): ChangePostmanEmailPayload!
+    @cost(weight: "10")
+  "Обновляет пароль почтальона."
+  changePostmanPassword(input: ChangePostmanPasswordInput!): ChangePostmanPasswordPayload!
+    @cost(weight: "10")
+  "Удаляет почтальона."
+  deletePostman(input: DeletePostmanInput!): DeletePostmanPayload!
+    @cost(weight: "10")
+}
+
+"Менеджер подписок HotChocolate."
+type Subscription {
+  """
+  Обработчик создания сущности.
+  
+  **Returns:**
+  Модель сообщения, отправляемого подписчикам.
+  """
+  onEntityCreated: EntityCreationMessageModel!
+  """
+  Обработчик изменения сущности.
+  
+  **Returns:**
+  Модель сообщения, отправляемого подписчикам.
+  """
+  onEntityChanged: EntityChangeMessageModel!
+  """
+  Обработчик изменения параметра сущности.
+  
+  **Returns:**
+  Модель сообщения, отправляемого подписчикам.
+  """
+  onEntityParameterChanged: EntityParameterChangeMessageModel!
+  """
+  Обработчик создания сущности.
+  
+  **Returns:**
+  Модель сообщения, отправляемого подписчикам.
+  """
+  onEntityDeleted: EntityDeletionMessageModel!
+}
+
 "Объект значения, описывающий адрес."
 type Address {
   "Возвращает адрес - долготу."
@@ -159,122 +307,6 @@ type Fullname {
   patronymic: String
 }
 
-"Определяет мутации для клиентов."
-type Mutation {
-  """
-  Создает клиента.
-  
-  **Returns:**
-  Идентификатор созданного клиента.
-  """
-  createClient(input: CreateClientInput!): CreateClientPayload! @cost(weight: "10")
-  """
-  Обновляет данные об имени клиента.
-  
-  **Returns:**
-  Успешность выполнения запроса.
-  """
-  changeClientFullname(input: ChangeClientFullnameInput!): ChangeClientFullnamePayload! @cost(weight: "10")
-  """
-  Обновляет номер телефона клиента.
-  
-  **Returns:**
-  Успешность выполнения запроса.
-  """
-  changeClientPhoneNumber(input: ChangeClientPhoneNumberInput!): ChangeClientPhoneNumberPayload! @cost(weight: "10")
-  """
-  Удаляет клиента.
-  
-  **Returns:**
-  Успешность выполнения запроса.
-  """
-  deleteClient(input: DeleteClientInput!): DeleteClientPayload! @cost(weight: "10")
-  """
-  Создает посылку.
-  
-  **Returns:**
-  Идентификатор созданной посылки.
-  """
-  createPackage(input: CreatePackageInput!): CreatePackagePayload! @cost(weight: "10")
-  """
-  Обновляет данные о посылке.
-  
-  **Returns:**
-  Успешность выполнения запроса.
-  """
-  changePackage(input: ChangePackageInput!): ChangePackagePayload! @cost(weight: "10")
-  """
-  Обновляет параметры посылки.
-  
-  **Returns:**
-  Успешность выполнения запроса.
-  """
-  changePackageDimensions(input: ChangePackageDimensionsInput!): ChangePackageDimensionsPayload! @cost(weight: "10")
-  """
-  Обновляет местоположение посылки.
-  
-  **Returns:**
-  Успешность выполнения запроса.
-  """
-  changePackageAddress(input: ChangePackageAddressInput!): ChangePackageAddressPayload! @cost(weight: "10")
-  """
-  Обновляет статус посылки.
-  
-  **Returns:**
-  Успешность выполнения запроса.
-  """
-  changePackageStatus(input: ChangePackageStatusInput!): ChangePackageStatusPayload! @cost(weight: "10")
-  """
-  Удаляет посылку.
-  
-  **Returns:**
-  Успешность выполнения запроса.
-  """
-  deletePackage(input: DeletePackageInput!): DeletePackagePayload! @cost(weight: "10")
-  """
-  Создает почтальона.
-  
-  **Returns:**
-  Идентификатор созданного почтальона.
-  """
-  createPostman(input: CreatePostmanInput!): CreatePostmanPayload! @cost(weight: "10")
-  """
-  Обновляет данные почтальона.
-  
-  **Returns:**
-  Успешность выполнения запроса.
-  """
-  changePostman(input: ChangePostmanInput!): ChangePostmanPayload! @cost(weight: "10")
-  """
-  Обновляет данные об имени почтальона.
-  
-  **Returns:**
-  Успешность выполнения запроса.
-  """
-  changePostmanFullname(input: ChangePostmanFullnameInput!): ChangePostmanFullnamePayload! @cost(weight: "10")
-  """
-  Обновляет Email почтальона.
-  
-  **Returns:**
-  Успешность выполнения запроса.
-  """
-  changePostmanEmail(input: ChangePostmanEmailInput!): ChangePostmanEmailPayload! @cost(weight: "10")
-  """
-  Обновляет пароль почтальона.
-  
-  **Returns:**
-  Успешность выполнения запроса.
-  """
-  changePostmanPassword(input: ChangePostmanPasswordInput!): ChangePostmanPasswordPayload! @cost(weight: "10")
-  """
-  Удаляет почтальона.
-  
-  **Returns:**
-  Успешность выполнения запроса.
-  """
-  deletePostman(input: DeletePostmanInput!): DeletePostmanPayload! @cost(weight: "10")
-}
-
 "Модель, описывающая посылку."
 type Package {
   "Возвращает идентификатор посылки."
@@ -310,8 +342,6 @@ type Postman {
   postmanPackageId: UUID!
   "Возвращает email почтальона для доступа в систему."
   email: String!
-  "Возвращает пароль почтальона для доступа в систему."
-  password: String!
 }
 
 "A segment of a collection."
@@ -321,84 +351,6 @@ type PostmenCollectionSegment {
   "A flattened list of the items."
   items: [Postman!]
   totalCount: Int! @cost(weight: "10")
-}
-
-"Определяет запросы GraphQL для клиентов."
-type Query {
-  """
-  Возвращает клиента по идентификатору.
-  
-  **Returns:**
-  Клиент, если он существует.
-  """
-  clientById("Идентификатор." id: UUID!): Client @cost(weight: "10")
-  """
-  Возвращает всех клиентов.
-  
-  **Returns:**
-  Все клиенты.
-  """
-  clients(skip: Int take: Int where: ClientFilterInput @cost(weight: "10") order: [ClientSortInput!] @cost(weight: "10")): ClientsCollectionSegment @listSize(assumedSize: 1073741823, slicingArguments: [ "take" ], slicingArgumentDefaultValue: 1073741823, sizedFields: [ "items" ], requireOneSlicingArgument: false) @cost(weight: "10")
-  """
-  Возвращает посылку по идентификатору.
-  
-  **Returns:**
-  Посылка, если она существует.
-  """
-  packageById("Идентификатор." id: UUID!): Package @cost(weight: "10")
-  """
-  Возвращает все посылки.
-  
-  **Returns:**
-  Все посылки.
-  """
-  packages(skip: Int take: Int where: PackageFilterInput @cost(weight: "10") order: [PackageSortInput!] @cost(weight: "10")): PackagesCollectionSegment @listSize(assumedSize: 1073741823, slicingArguments: [ "take" ], slicingArgumentDefaultValue: 1073741823, sizedFields: [ "items" ], requireOneSlicingArgument: false) @cost(weight: "10")
-  """
-  Возвращает почтальона по идентификатору.
-  
-  **Returns:**
-  Почтальон, если он существует.
-  """
-  postmanById("Идентификатор." id: UUID!): Postman @cost(weight: "10")
-  """
-  Возвращает всех почтальонов.
-  
-  **Returns:**
-  Все почтальоны.
-  """
-  postmen(skip: Int take: Int where: PostmanFilterInput @cost(weight: "10") order: [PostmanSortInput!] @cost(weight: "10")): PostmenCollectionSegment @listSize(assumedSize: 1073741823, slicingArguments: [ "take" ], slicingArgumentDefaultValue: 1073741823, sizedFields: [ "items" ], requireOneSlicingArgument: false) @cost(weight: "10")
-}
-
-"Менеджер подписок HotChocolate."
-type Subscription {
-  """
-  Обработчик создания сущности.
-  
-  **Returns:**
-  Модель сообщения, отправляемого подписчикам.
-  """
-  onEntityCreated: EntityCreationMessageModel!
-  """
-  Обработчик изменения сущности.
-  
-  **Returns:**
-  Модель сообщения, отправляемого подписчикам.
-  """
-  onEntityChanged: EntityChangeMessageModel!
-  """
-  Обработчик изменения параметра сущности.
-  
-  **Returns:**
-  Модель сообщения, отправляемого подписчикам.
-  """
-  onEntityParameterChanged: EntityParameterChangeMessageModel!
-  """
-  Обработчик создания сущности.
-  
-  **Returns:**
-  Модель сообщения, отправляемого подписчикам.
-  """
-  onEntityDeleted: EntityDeletionMessageModel!
 }
 
 "Объект значения, описывающий адрес."
@@ -428,74 +380,53 @@ input AddressSortInput {
 }
 
 input ChangeClientFullnameInput {
-  "Идентификатор клиента."
   id: UUID!
-  "Данные об имени клиента для обновления."
   fullname: FullnameInput!
 }
 
 input ChangeClientPhoneNumberInput {
-  "Идентификатор клиента."
   id: UUID!
-  "Номер телефона клиента для обновления."
   phoneNumber: String!
 }
 
 input ChangePackageAddressInput {
-  "Идентификатор посылки."
   id: UUID!
-  "Местоположение посылки для обновления."
   address: AddressInput!
 }
 
 input ChangePackageDimensionsInput {
-  "Идентификатор посылки."
   id: UUID!
-  "Параметры посылки для обновления."
   dimensions: DimensionsInput!
 }
 
 input ChangePackageInput {
-  "Идентификатор посылки."
   id: UUID!
-  "Идентификатор клиента для обновления."
   clientId: UUID!
-  "Идентификатор почтальона для обновления."
   postmanId: UUID!
 }
 
 input ChangePackageStatusInput {
-  "Идентификатор посылки."
   id: UUID!
-  "Статус посылки для обновления."
   status: PackageStatus!
 }
 
 input ChangePostmanEmailInput {
-  "Идентификатор почтальона."
   id: UUID!
-  "Email почтальона для обновления."
   email: String!
 }
 
 input ChangePostmanFullnameInput {
-  "Идентификатор почтальона."
   id: UUID!
-  "Данные об имени почтальона для обновления."
   fullname: FullnameInput!
 }
 
 input ChangePostmanInput {
-  "Идентификатор почтальона."
   id: UUID!
-  "Идентификатор посылки для обновления."
   postmanPackageId: UUID!
 }
 
 input ChangePostmanPasswordInput {
-  "Идентификатор почтальона."
   id: UUID!
-  "Пароль почтальона для обновления."
   password: String!
 }
 
@@ -522,48 +453,34 @@ input ClientSortInput {
 }
 
 input CreateClientInput {
-  "Данные об имени клиента."
   fullname: FullnameInput!
-  "Номер телефона клиента."
   phoneNumber: String!
 }
 
 input CreatePackageInput {
-  "Параметры посылки."
   dimensions: DimensionsInput!
-  "Адрес."
   address: AddressInput!
-  "Статус."
   status: PackageStatus!
-  "Идентификатор клиента."
   clientId: UUID!
-  "Идентификатор почтальона."
   postmanId: UUID!
 }
 
 input CreatePostmanInput {
-  "Данные об имени почтальона."
   fullname: FullnameInput!
-  "Идентификатор посылки, которая принята почтальоном для доставки."
   packageId: UUID!
-  "Email почтальона для доступа в систему."
   email: String!
-  "Пароль почтальона для доступа в систему."
   password: String!
 }
 
 input DeleteClientInput {
-  "Идентификатор клиента."
   id: UUID!
 }
 
 input DeletePackageInput {
-  "Идентификатор посылки."
   id: UUID!
 }
 
 input DeletePostmanInput {
-  "Идентификатор почтальона."
   id: UUID!
 }
 
@@ -714,8 +631,6 @@ input PostmanFilterInput {
   postmanPackageId: UuidOperationFilterInput
   "Возвращает email почтальона для доступа в систему."
   email: StringOperationFilterInput
-  "Возвращает пароль почтальона для доступа в систему."
-  password: StringOperationFilterInput
 }
 
 "Модель, описывающая почтальона."
@@ -728,8 +643,6 @@ input PostmanSortInput {
   postmanPackageId: SortEnumType @cost(weight: "10")
   "Возвращает email почтальона для доступа в систему."
   email: SortEnumType @cost(weight: "10")
-  "Возвращает пароль почтальона для доступа в систему."
-  password: SortEnumType @cost(weight: "10")
 }
 
 input StringOperationFilterInput {
@@ -777,13 +690,32 @@ enum SortEnumType {
   DESC
 }
 
+"The `UUID` scalar type represents a Universally Unique Identifier (UUID) as defined by RFC 9562."
+scalar UUID
+  @specifiedBy(url: "https://scalars.graphql.org/chillicream/uuid.html")
+
 "The purpose of the `cost` directive is to define a `weight` for GraphQL types, fields, and arguments. Static analysis can use these weights when calculating the overall cost of a query or response."
-directive @cost("The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc." weight: String!) on SCALAR | OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM | INPUT_FIELD_DEFINITION
+directive @cost(
+  "The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc."
+  weight: String!
+) on
+  | SCALAR
+  | OBJECT
+  | FIELD_DEFINITION
+  | ARGUMENT_DEFINITION
+  | ENUM
+  | INPUT_FIELD_DEFINITION
 
 "The purpose of the `@listSize` directive is to either inform the static analysis about the size of returned lists (if that information is statically available), or to point the analysis to where to find that information."
-directive @listSize("The `assumedSize` argument can be used to statically define the maximum length of a list returned by a field." assumedSize: Int "The `slicingArguments` argument can be used to define which of the field's arguments with numeric type are slicing arguments, so that their value determines the size of the list returned by that field. It may specify a list of multiple slicing arguments." slicingArguments: [String!] "The `slicingArgumentDefaultValue` argument can be used to define a default value for a slicing argument, which is used if the argument is not present in a query." slicingArgumentDefaultValue: Int "The `sizedFields` argument can be used to define that the value of the `assumedSize` argument or of a slicing argument does not affect the size of a list returned by a field itself, but that of a list returned by one of its sub-fields." sizedFields: [String!] "The `requireOneSlicingArgument` argument can be used to inform the static analysis that it should expect that exactly one of the defined slicing arguments is present in a query. If that is not the case (i.e., if none or multiple slicing arguments are present), the static analysis may throw an error." requireOneSlicingArgument: Boolean! = true) on FIELD_DEFINITION
-
-"The `@specifiedBy` directive is used within the type system definition language to provide a URL for specifying the behavior of custom scalar definitions."
-directive @specifiedBy("The specifiedBy URL points to a human-readable specification. This field will only read a result for scalar types." url: String!) on SCALAR
-
-scalar UUID @specifiedBy(url: "https:\/\/tools.ietf.org\/html\/rfc4122")
+directive @listSize(
+  "The `assumedSize` argument can be used to statically define the maximum length of a list returned by a field."
+  assumedSize: Int
+  "The `slicingArguments` argument can be used to define which of the field's arguments with numeric type are slicing arguments, so that their value determines the size of the list returned by that field. It may specify a list of multiple slicing arguments."
+  slicingArguments: [String!]
+  "The `slicingArgumentDefaultValue` argument can be used to define a default value for a slicing argument, which is used if the argument is not present in a query."
+  slicingArgumentDefaultValue: Int
+  "The `sizedFields` argument can be used to define that the value of the `assumedSize` argument or of a slicing argument does not affect the size of a list returned by a field itself, but that of a list returned by one of its sub-fields."
+  sizedFields: [String!]
+  "The `requireOneSlicingArgument` argument can be used to inform the static analysis that it should expect that exactly one of the defined slicing arguments is present in a query. If that is not the case (i.e., if none or multiple slicing arguments are present), the static analysis may throw an error."
+  requireOneSlicingArgument: Boolean = true
+) on FIELD_DEFINITION
