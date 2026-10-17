@@ -10,67 +10,70 @@ namespace PostSys.Gui.Configuration;
 [DataContract]
 public record ApplicationConfiguration
 {
-	/// <summary>Адрес подключения к сервису.</summary>
-	[JsonPropertyName("service_address")]
-	public string ServiceAddress { get; set; } = DefaultServiceAddress();
+    /// <summary>Адрес подключения к службе.</summary>
+    [JsonPropertyName("service_address")]
+    public string ServiceAddress { get; set; } = DefaultServiceAddress();
 
-	/// <summary>Ключ Яндекс.API.</summary>
-	[JsonPropertyName("yandex_api_key")]
-	public Guid YandexApiKey { get; set; } = Guid.Parse("abdd66b3-331d-4c4b-910d-4e6830274ddc");
+    /// <summary>Ключ Яндекс.API.</summary>
+    [JsonPropertyName("yandex_api_key")]
+    public Guid YandexApiKey { get; set; } = Guid.Parse("abdd66b3-331d-4c4b-910d-4e6830274ddc");
 
-	/// <summary>Загружает конфигурацию приложения.</summary>
-	public static ApplicationConfiguration Load(string path)
-	{
-		try
-		{
-			var directory = Path.GetDirectoryName(path);
-			if(!string.IsNullOrWhiteSpace(directory))
-				Directory.CreateDirectory(directory);
+    /// <summary>Код языка интерфейса (по умолчанию ru-RU).</summary>
+    [JsonPropertyName("ui_language")]
+    public string UiLanguage { get; set; } = "ru-RU";
 
-			if(!File.Exists(path) || new FileInfo(path).Length == 0)
-			{
-				var defaults = new ApplicationConfiguration();
-				defaults.Save(path);
-				return defaults;
-			}
+    /// <summary>Загружает конфигурацию приложения.</summary>
+    /// <param name="path">Путь к файлу настроек.</param>
+    /// <returns>Загруженная или созданная по умолчанию конфигурация.</returns>
+    public static ApplicationConfiguration Load(string path)
+    {
+        try
+        {
+            var directory = Path.GetDirectoryName(path);
+            if(!string.IsNullOrWhiteSpace(directory))
+                Directory.CreateDirectory(directory);
 
-			using var json = File.OpenRead(path);
-			return JsonSerializer.Deserialize<ApplicationConfiguration>(json)
-				?? new ApplicationConfiguration();
-		}
-		catch
-		{
-			return new ApplicationConfiguration();
-		}
-	}
+            if(!File.Exists(path) || new FileInfo(path).Length == 0)
+            {
+                var defaults = new ApplicationConfiguration();
+                defaults.Save(path);
+                return defaults;
+            }
 
-	/// <summary>Сохраняет конфигурацию по пути.</summary>
-	public void Save(string path)
-	{
-		try
-		{
-			var directory = Path.GetDirectoryName(path);
-			if(!string.IsNullOrWhiteSpace(directory))
-				Directory.CreateDirectory(directory);
+            using var json = File.OpenRead(path);
+            return JsonSerializer.Deserialize<ApplicationConfiguration>(json) ?? new();
+        }
+        catch
+        {
+            return new();
+        }
+    }
 
-			var json = JsonSerializer.Serialize(this, new JsonSerializerOptions
-			{
-				WriteIndented = true
-			});
-			File.WriteAllText(path, json);
-		}
-		catch
-		{
-			// Mobile sandbox / read-only FS — не роняем приложение.
-		}
-	}
+    /// <summary>Сохраняет конфигурацию по пути.</summary>
+    /// <param name="path">Путь к файлу настроек.</param>
+    public void Save(string path)
+    {
+        try
+        {
+            var directory = Path.GetDirectoryName(path);
+            if(!string.IsNullOrWhiteSpace(directory))
+                Directory.CreateDirectory(directory);
 
-	private static string DefaultServiceAddress()
-	{
-		// Android emulator: host loopback.
-		if(OperatingSystem.IsAndroid())
-			return "http://10.0.2.2:5000";
+            var json = JsonSerializer.Serialize(this, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+            File.WriteAllText(path, json);
+        }
+        catch
+        {
+            // ignored
+        }
+    }
 
-		return "http://localhost:5000";
-	}
+    private static string DefaultServiceAddress()
+    {
+        // Эмулятор Android: замыкание на хост (host loopback).
+        return OperatingSystem.IsAndroid() ? "http://10.0.2.2:5000" : "http://localhost:5000";
+    }
 }

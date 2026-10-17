@@ -19,6 +19,8 @@ using PostSys.Client.Data.Subscriptions;
 using PostSys.Gui.Common.ViewModels;
 using PostSys.Gui.Common.Services.Dialogs;
 using PostSys.Gui.Helpers;
+using PostSys.Gui.Services.Storage;
+using PostSys.Gui.Localization;
 using PostSys.ReadModels;
 using PostSys.ReadModels.Contracts;
 using PostSys.ReadModels.Helpers;
@@ -41,6 +43,7 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 	private readonly IClientGraphQlClient _clientGraphQlClient;
 	private readonly IPackageGraphQlClient _packageGraphQlClient;
 	private readonly PostmanHelper _postmanHelper;
+	private readonly IOrdersCache _ordersCache;
 	private readonly IServiceProvider _serviceProvider;
 
 	#endregion
@@ -75,12 +78,13 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 
 	/// <summary>Создаёт экземпляр класса <see cref="OrdersViewModel"/>.</summary>
 	/// <param name="postmanHelper">Данные об авторизованном почтальоне.</param>
-	/// <param name="addressClient">Клиент получения адреса Яндекс.API.</param>
-	/// <param name="clientGraphQlClient">Клиент GraphQL для сущности "Клиент".</param>
-	/// <param name="packageGraphQlClient">Клиент GraphQL для сущности "Посылка".</param>
-	/// <param name="clientsMessageHandler"><see cref="IClientsMessageHandler"/>.</param>
-	/// <param name="packagesMessageHandler"><see cref="IPackagesMessageHandler"/>.</param>
-	/// <param name="serviceProvider">Провайдер зарегистрированных сервисов.</param>
+	/// <param name="addressClient">Клиент получения адреса через Яндекс.API.</param>
+	/// <param name="clientGraphQlClient">Клиент запросов к сущности «Клиент».</param>
+	/// <param name="packageGraphQlClient">Клиент запросов к сущности «Посылка».</param>
+	/// <param name="clientsMessageHandler">Обработчик уведомлений о клиентах.</param>
+	/// <param name="packagesMessageHandler">Обработчик уведомлений о посылках.</param>
+	/// <param name="ordersCache">Локальный кэш заказов для автономного режима.</param>
+	/// <param name="serviceProvider">Поставщик зарегистрированных служб.</param>
 	public OrdersViewModel(
 		PostmanHelper postmanHelper,
 		IAddressClient addressClient,
@@ -88,6 +92,7 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 		IPackageGraphQlClient packageGraphQlClient,
 		IClientsMessageHandler clientsMessageHandler,
 		IPackagesMessageHandler packagesMessageHandler,
+		IOrdersCache ordersCache,
 		IServiceProvider serviceProvider)
 	{
 		Activator = new();
@@ -96,6 +101,7 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 		_addressClient = addressClient;
 		_clientGraphQlClient = clientGraphQlClient;
 		_packageGraphQlClient = packageGraphQlClient;
+		_ordersCache = ordersCache;
 		_serviceProvider = serviceProvider;
 
 		this.WhenActivated(d =>
@@ -163,27 +169,82 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 				return (await LoadOrderDescriptionAsync(info, clientInfo));
 			});
 
-			var orderModels = (await Task.WhenAll(addressTasks)).OfType<OrderDescriptionViewModel>();
+			var orderModels = (await Task.WhenAll(addressTasks)).OfType<OrderDescriptionViewModel>().ToList();
 			OrderDescriptionViewModels = new AvaloniaList<OrderDescriptionViewModel>(orderModels);
-		}
-		catch(GraphQlClientException graphQlEx)
-		{
-			await DialogServiceInteractions.ShowErrorMessage.Handle(new()
-			{
-				Title = "GraphQL Error",
-				Message = graphQlEx.Message
-			});
-			Log.Error(graphQlEx, "GraphQL error occurred while initializing orders.");
+			await PersistCacheAsync(orderModels);
 		}
 		catch(Exception ex)
 		{
+			Log.Error(ex, "Failed to load orders from service, trying cache.");
+			if(await TryLoadFromCacheAsync())
+			{
+				await DialogServiceInteractions.ShowErrorMessage.Handle(new()
+				{
+					Title = UiLocalizer.Get("Title_Offline"),
+					Message = UiLocalizer.Get("Msg_CachedOrders")
+				});
+				return;
+			}
+
 			await DialogServiceInteractions.ShowErrorMessage.Handle(new()
 			{
-				Title = "Unexpected Error",
-				Message = "An unexpected error occurred while loading orders. Please try again later."
+				Title = UiLocalizer.Get("Title_Error"),
+				Message = ex is GraphQlClientException gex ? gex.Message : UiLocalizer.Get("Msg_LoadOrdersFailed")
 			});
-			Log.Error(ex, "Unexpected error occurred while initializing orders.");
 		}
+	}
+
+	private async Task PersistCacheAsync(IReadOnlyList<OrderDescriptionViewModel> orders)
+	{
+		if(_postmanHelper.PostmanId == Guid.Empty)
+			return;
+
+		var cached = orders.Select(o => new CachedOrder(
+			o.PackageId,
+			o.ClientInfo.Id,
+			o.Status.ToString(),
+			o.Address,
+			$"{o.ClientInfo.Fullname.Surname} {o.ClientInfo.Fullname.Name}",
+			o.ClientInfo.PhoneNumber,
+			o.ImagePath)).ToList();
+
+		await _ordersCache.SaveAsync(_postmanHelper.PostmanId, cached);
+	}
+
+	private async Task<bool> TryLoadFromCacheAsync()
+	{
+		if(_postmanHelper.PostmanId == Guid.Empty)
+			return false;
+
+		var cached = await _ordersCache.LoadAsync(_postmanHelper.PostmanId);
+		if(cached is null || cached.Count == 0)
+			return false;
+
+		var models = new List<OrderDescriptionViewModel>();
+		foreach(var item in cached)
+		{
+			var vm = _serviceProvider.GetRequiredService<OrderDescriptionViewModel>();
+			vm.ShowErrorMessage = DialogServiceInteractions.ShowErrorMessage;
+			vm.PackageId = item.PackageId;
+			vm.ImagePath = item.ImagePath;
+			vm.Address = item.Address;
+			if(Enum.TryParse<PackageStatus>(item.Status, out var status))
+				vm.Status = status;
+			vm.ClientInfo = new ClientOfOrderHelper
+			{
+				Id = item.ClientId,
+				PhoneNumber = item.PhoneNumber,
+				Fullname = new Fullname
+				{
+					Surname = item.ClientFullname,
+					Name = string.Empty
+				}
+			};
+			models.Add(vm);
+		}
+
+		OrderDescriptionViewModels = new AvaloniaList<OrderDescriptionViewModel>(models);
+		return true;
 	}
 
 	/// <summary>Задаёт описание заказа в модель представления.</summary>
@@ -216,8 +277,8 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 		{
 			await DialogServiceInteractions.ShowErrorMessage.Handle(new()
 			{
-				Title = "Address Retrieval Error",
-				Message = "Failed to retrieve the address for the order. Please verify the coordinates."
+				Title = UiLocalizer.Get("Title_AddressError"),
+				Message = UiLocalizer.Get("Msg_AddressRetrieveFailed")
 			});
 			Log.Error(addrEx, "Error retrieving address for package ID {PackageId}.", newData.Id);
 			orderDescriptionViewModel.Address = "Address not available";
@@ -279,7 +340,7 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 			{
 				await DialogServiceInteractions.ShowErrorMessage.Handle(new()
 				{
-					Title = "GraphQL Error",
+					Title = UiLocalizer.Get("Title_ServiceError"),
 					Message = graphQlEx.Message
 				});
 				Log.Error(graphQlEx, "GraphQL error occurred while initializing orders.");
@@ -289,8 +350,8 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 			{
 				await DialogServiceInteractions.ShowErrorMessage.Handle(new()
 				{
-					Title = "Unexpected Error",
-					Message = "An unexpected error occurred while loading orders. Please try again later."
+					Title = UiLocalizer.Get("Title_UnexpectedError"),
+					Message = UiLocalizer.Get("Msg_LoadOrdersUnexpected")
 				});
 				Log.Error(ex, "Unexpected error occurred while initializing orders.");
 				return;
@@ -332,7 +393,7 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 				{
 					await DialogServiceInteractions.ShowErrorMessage.Handle(new()
 					{
-						Title = "GraphQL Error",
+						Title = UiLocalizer.Get("Title_ServiceError"),
 						Message = graphQlEx.Message
 					});
 					Log.Error(graphQlEx, "GraphQL error occurred while initializing orders.");
@@ -342,8 +403,8 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 				{
 					await DialogServiceInteractions.ShowErrorMessage.Handle(new()
 					{
-						Title = "Unexpected Error",
-						Message = "An unexpected error occurred while loading orders. Please try again later."
+						Title = UiLocalizer.Get("Title_UnexpectedError"),
+						Message = UiLocalizer.Get("Msg_LoadOrdersUnexpected")
 					});
 					Log.Error(ex, "Unexpected error occurred while initializing orders.");
 					return;

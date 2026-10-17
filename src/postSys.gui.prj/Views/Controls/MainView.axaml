@@ -3,6 +3,7 @@
              xmlns:locConverters="using:PostSys.Gui.Converters"
              xmlns:vm="using:PostSys.Gui.ViewModels"
              xmlns:views="using:PostSys.Gui.Views.Controls"
+             xmlns:loc="using:PostSys.Gui.Localization"
              x:Class="PostSys.Gui.Views.Controls.MainView"
              x:DataType="vm:MainWindowViewModel">
 
@@ -25,7 +26,7 @@
     </Style>
   </UserControl.Styles>
 
-  <Grid RowDefinitions="Auto, *, Auto">
+  <Grid RowDefinitions="Auto, Auto, *, Auto">
     <Grid RowDefinitions="*, Auto" ColumnDefinitions="*, *, *">
       <Panel Background="Orange" Grid.ColumnSpan="3">
         <Image Source="avares://postSys.gui/Assets/main_logo.png"
@@ -33,10 +34,10 @@
                HorizontalAlignment="Center"
                Margin="10,5">
           <Image.Width>
-            <OnFormFactor Desktop="250" Default="160" />
+            <OnFormFactor Desktop="250" Default="140" />
           </Image.Width>
           <Image.Height>
-            <OnFormFactor Desktop="180" Default="100" />
+            <OnFormFactor Desktop="180" Default="88" />
           </Image.Height>
         </Image>
         <StackPanel Orientation="Horizontal"
@@ -61,6 +62,25 @@
     </Grid>
 
     <Panel Grid.Row="1">
+      <Border Padding="10,6" Background="#2E7D32" IsVisible="{Binding IsServiceOnline}">
+        <TextBlock Text="{Binding ConnectionStatusText}" Foreground="White" FontSize="13"/>
+      </Border>
+      <Border Padding="10,6" Background="#C62828" IsVisible="{Binding !IsServiceOnline}">
+        <Grid ColumnDefinitions="*, Auto">
+          <TextBlock Text="{Binding ConnectionStatusText}"
+                     Foreground="White"
+                     FontSize="13"
+                     VerticalAlignment="Center"
+                     TextWrapping="Wrap"/>
+          <Button Grid.Column="1"
+                  Content="{loc:Loc Retry}"
+                  Margin="8,0,0,0"
+                  Command="{Binding RetryConnectionCommand}"/>
+        </Grid>
+      </Border>
+    </Panel>
+
+    <Panel Grid.Row="2">
       <ContentControl Content="{Binding CurrentView, Converter={StaticResource ViewModelToViewConverter}}"
                       IsEnabled="{Binding IsEnabledComponents}"
                       IsVisible="{Binding OverlayView, Converter={x:Static ObjectConverters.IsNull}}"/>
@@ -68,7 +88,7 @@
                       IsVisible="{Binding OverlayView, Converter={x:Static ObjectConverters.IsNotNull}}"/>
     </Panel>
 
-    <Panel Grid.Row="2"
+    <Panel Grid.Row="3"
            IsEnabled="{Binding IsEnabledComponents}"
            IsVisible="{Binding OverlayView, Converter={x:Static ObjectConverters.IsNull}}">
       <views:ButtonsView DataContext="{Binding ButtonsViewModel}"/>

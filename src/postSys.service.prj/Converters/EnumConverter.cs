@@ -7,16 +7,12 @@ namespace PostSys.Service.Common.Converters;
 /// <typeparam name="TOutput">“ип возвращаемого enum.</typeparam>
 public static class EnumConverter<TInput, TOutput>
 {
-	#region Methods
-
-	/// <summary> онвертирует значение одного enum в значение другого enum.</summary>
-	/// <param name="inputEnum">Enum дл€ преобразовани€.</param>
-	/// <returns>Enum заданного типа.</returns>
-	public static TOutput Convert(TInput inputEnum)
-	{
-		ArgumentNullException.ThrowIfNull(inputEnum);
-		return (TOutput)Enum.Parse(typeof(TOutput), inputEnum.ToString()!);
-	}
-
-	#endregion
+    /// <summary> онвертирует значение одного enum в значение другого enum.</summary>
+    /// <param name="inputEnum">Enum дл€ преобразовани€.</param>
+    /// <returns>Enum заданного типа.</returns>
+    public static TOutput Convert(TInput inputEnum)
+    {
+        ArgumentNullException.ThrowIfNull(inputEnum);
+        return (TOutput)Enum.Parse(typeof(TOutput), inputEnum.ToString()!);
+    }
 }

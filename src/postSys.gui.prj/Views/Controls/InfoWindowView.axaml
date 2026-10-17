@@ -1,19 +1,20 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:PostSys.Gui.ViewModels"
+             xmlns:loc="using:PostSys.Gui.Localization"
              x:Class="PostSys.Gui.Views.Controls.InfoWindowView"
              x:DataType="vm:InfoWindowViewModel">
   <Border Background="#F5F5F5" Padding="16">
     <Grid RowDefinitions="Auto, Auto, Auto" Margin="10">
       <StackPanel>
-        <TextBlock Text="PostSys" FontWeight="Bold"/>
-        <TextBlock Text="Delivery system"/>
+        <TextBlock Text="{loc:Loc Info_AppName}" FontWeight="Bold"/>
+        <TextBlock Text="{loc:Loc Info_Subtitle}"/>
         <TextBlock Text="{Binding VersionGui}" Margin="0,10,0,0"/>
         <TextBlock Text="{Binding VersionApi}"/>
       </StackPanel>
       <StackPanel Grid.Row="1" Margin="0,12,0,0">
         <Border Classes="BorderOfWindow"/>
-        <TextBlock Margin="0,5" Text="Technical support"/>
+        <TextBlock Margin="0,5" Text="{loc:Loc Info_Support}"/>
         <TextBlock Text="+7 911 548 15 25" Foreground="Blue" Margin="0,4"/>
         <TextBlock Text="nanonikich@gmail.com" Foreground="Blue" Margin="0,4"/>
         <Border Classes="BorderOfWindow" Margin="0,8,0,0"/>
@@ -21,7 +22,7 @@
       <TextBlock Grid.Row="2"
                  Margin="0,12,0,0"
                  TextWrapping="Wrap"
-                 Text="© Exclusive rights belong to Nanonikich"/>
+                 Text="{loc:Loc Info_Copyright}"/>
     </Grid>
   </Border>
 </UserControl>

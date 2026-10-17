@@ -1,12 +1,13 @@
-using ReactiveUI.Avalonia;
-using PostSys.Gui.ViewModels;
+using Avalonia.Controls;
 
 namespace PostSys.Gui.Views.Controls;
 
-public partial class AuthorizationView : ReactiveUserControl<AuthorizationViewModel>
+/// <summary>Представление экрана входа.</summary>
+public partial class AuthorizationView : UserControl
 {
-	public AuthorizationView()
-	{
-		InitializeComponent();
-	}
+    /// <summary>Создаёт экземпляр класса <see cref="AuthorizationView"/>.</summary>
+    public AuthorizationView()
+    {
+        InitializeComponent();
+    }
 }

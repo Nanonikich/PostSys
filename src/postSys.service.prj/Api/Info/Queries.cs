@@ -1,5 +1,4 @@
 using HotChocolate.Types;
-
 using PostSys.Framework.Common;
 
 namespace PostSys.Service.Api.Info;
@@ -8,15 +7,11 @@ namespace PostSys.Service.Api.Info;
 [QueryType]
 public static class Queries
 {
-	#region Methods
-
-	/// <summary>Возвращает клиента по идентификатору.</summary>
-	/// <returns>Клиент, если он существует.</returns>
-	public static string GetVersion()
-	{
-		var assembly = AssemblyInfo.FromEntryAssembly();
-		return $"{assembly.Version!.Major}.{assembly.Version.Minor}.{assembly.Version.Build}";
-	}
-
-	#endregion
+    /// <summary>Возвращает клиента по идентификатору.</summary>
+    /// <returns>Клиент, если он существует.</returns>
+    public static string GetVersion()
+    {
+        var assembly = AssemblyInfo.FromEntryAssembly();
+        return $"{assembly.Version!.Major}.{assembly.Version.Minor}.{assembly.Version.Build}";
+    }
 }

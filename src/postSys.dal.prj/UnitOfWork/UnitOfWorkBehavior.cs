@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-
 using MediatR;
 
 namespace PostSys.Dal.Common.UnitOfWork;
@@ -11,45 +10,33 @@ namespace PostSys.Dal.Common.UnitOfWork;
 /// <typeparam name="TResponse">Тип возвращаемого ответа.</typeparam>
 public class UnitOfWorkBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
-	#region Data
+    private readonly IUnitOfWork _unitOfWork;
 
-	private readonly IUnitOfWork _unitOfWork;
+    /// <summary>Создаёт экземпляр класса <see cref="UnitOfWorkBehavior{TRequest, TResponse}"/>.</summary>
+    /// <param name="unitOfWork"><see cref="IUnitOfWork"/>.</param>
+    /// <exception cref="ArgumentNullException">Значение <paramref name="unitOfWork"/> не определено.</exception>
+    public UnitOfWorkBehavior(IUnitOfWork unitOfWork)
+    {
+        ArgumentNullException.ThrowIfNull(unitOfWork);
+        _unitOfWork = unitOfWork;
+    }
 
-	#endregion
-
-	#region .ctor
-
-	/// <summary>Создаёт экземпляр класса <see cref="UnitOfWorkBehavior{TRequest, TResponse}"/>.</summary>
-	/// <param name="unitOfWork"><see cref="IUnitOfWork"/>.</param>
-	/// <exception cref="ArgumentNullException">Значение <paramref name="unitOfWork"/> не определено.</exception>
-	public UnitOfWorkBehavior(IUnitOfWork unitOfWork)
-	{
-		ArgumentNullException.ThrowIfNull(unitOfWork);
-		_unitOfWork = unitOfWork;
-	}
-
-	#endregion
-
-	#region Methods
-
-	/// <inheritdoc/>
-	public async Task<TResponse> Handle(
-		TRequest request,
-		RequestHandlerDelegate<TResponse> next,
-		CancellationToken cancellationToken)
-	{
-		try
-		{
-			var response = await next(cancellationToken);
-			await _unitOfWork.CommitAsync(cancellationToken);
-			return response;
-		}
-		catch
-		{
-			await _unitOfWork.RollbackAsync(cancellationToken);
-			throw;
-		}
-	}
-
-	#endregion
+    /// <inheritdoc/>
+    public async Task<TResponse> Handle(
+        TRequest request,
+        RequestHandlerDelegate<TResponse> next,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var response = await next(cancellationToken);
+            await _unitOfWork.CommitAsync(cancellationToken);
+            return response;
+        }
+        catch
+        {
+            await _unitOfWork.RollbackAsync(cancellationToken);
+            throw;
+        }
+    }
 }

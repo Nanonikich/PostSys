@@ -13,6 +13,7 @@ using PostSys.Gui.Common.Helpers;
 using PostSys.Gui.Common.ViewModels;
 using PostSys.Gui.Configuration;
 using PostSys.Gui.Helpers;
+using PostSys.Gui.Localization;
 using PostSys.ReadModels.Contracts;
 
 namespace PostSys.Gui.ViewModels;
@@ -140,8 +141,8 @@ public class OrderDescriptionViewModel : ViewModelBase, IActivatableViewModel
 			{
 				await ShowErrorMessage.Handle(new()
 				{
-					Title = "Order Change Failed",
-					Message = "Unable to change the order for the specified postman. Please try again."
+					Title = UiLocalizer.Get("Title_OrderChangeFailed"),
+					Message = UiLocalizer.Get("Msg_OrderChangeFailed")
 				});
 				Log.Warn($"Failed to change order for Postman ID {postmanId}.");
 				return;
@@ -153,7 +154,7 @@ public class OrderDescriptionViewModel : ViewModelBase, IActivatableViewModel
 		{
 			await ShowErrorMessage.Handle(new()
 			{
-				Title = "GraphQL Error",
+				Title = UiLocalizer.Get("Title_ServiceError"),
 				Message = graphQlEx.Message
 			});
 			Log.Error(graphQlEx, "Error while changing order for Postman ID {PostmanId}.", postmanId);
@@ -162,8 +163,8 @@ public class OrderDescriptionViewModel : ViewModelBase, IActivatableViewModel
 		{
 			await ShowErrorMessage.Handle(new()
 			{
-				Title = "Unexpected Error",
-				Message = "An unexpected error occurred while changing the order. Please try again later."
+				Title = UiLocalizer.Get("Title_UnexpectedError"),
+				Message = UiLocalizer.Get("Msg_OrderChangeUnexpected")
 			});
 			Log.Error(ex, "Unexpected error while changing order for Postman ID {PostmanId}.", postmanId);
 		}
@@ -180,8 +181,8 @@ public class OrderDescriptionViewModel : ViewModelBase, IActivatableViewModel
 				Log.Warn($"Failed to change package status for Package ID {PackageId}.");
 				await ShowErrorMessage.Handle(new()
 				{
-					Title = "Status Change Failed",
-					Message = "Unable to change the package status. Please try again."
+					Title = UiLocalizer.Get("Title_StatusChangeFailed"),
+					Message = UiLocalizer.Get("Msg_StatusChangeFailed")
 				});
 			}
 			else
@@ -194,8 +195,8 @@ public class OrderDescriptionViewModel : ViewModelBase, IActivatableViewModel
 		{
 			await ShowErrorMessage.Handle(new()
 			{
-				Title = "Status Change Error",
-				Message = "An error occurred while changing the package status. Please try again later."
+				Title = UiLocalizer.Get("Title_StatusChangeError"),
+				Message = UiLocalizer.Get("Msg_StatusChangeUnexpected")
 			});
 			Log.Error(ex, "Error while changing package status for Package ID {PackageId}.", PackageId);
 		}

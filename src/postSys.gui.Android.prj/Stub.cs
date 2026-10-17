@@ -1,6 +1,6 @@
 #if !ANDROID
 namespace PostSys.Gui.Android;
 
-/// <summary>Placeholder so the Android project compiles without Android SDK.</summary>
+/// <summary>Заглушка, позволяющая собрать Android-проект без Android SDK.</summary>
 internal static class Stub;
 #endif

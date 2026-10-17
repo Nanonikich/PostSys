@@ -9,7 +9,7 @@ namespace PostSys.Application.Commands.Postmen;
 /// <param name="Email">Email почтальона для доступа в систему.</param>
 /// <param name="Password">Пароль почтальона для доступа в систему.</param>
 public record CreatePostmanCommand(
-	FullnameDto Fullname,
-	Guid PackageId,
-	string Email,
-	string Password) : ICommand<Guid>;
+    FullnameDto Fullname,
+    Guid PackageId,
+    string Email,
+    string Password) : ICommand<Guid>;

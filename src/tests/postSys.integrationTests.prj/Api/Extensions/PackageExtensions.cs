@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-
 using HotChocolate.Execution;
 
 namespace PostSys.IntegrationTests.Api.Extensions;
@@ -30,5 +29,5 @@ public static class PackageExtensions
 						";
 
 	public static async Task<IExecutionResult> GetPackagesAsync(this IRequestExecutor executor) =>
-		await executor.ExecuteAsync(GetPackagesQuery);
+		await GraphQlTestExecute.ExecuteAsync(executor, GetPackagesQuery);
 }

@@ -1,7 +1,5 @@
 using System;
-
 using Microsoft.EntityFrameworkCore;
-
 using PostSys.Application.Abstractions;
 using PostSys.Dal.Common.Contracts;
 
@@ -11,14 +9,8 @@ namespace PostSys.Dal.Common.UnitOfWork;
 /// <typeparam name="TContext">Тип контекста.</typeparam>
 public class UnitOfWorkFactory<TContext> : IUnitOfWorkFactory where TContext : DbContext
 {
-	#region Data
-
 	private readonly TContext _dbContext;
 	private readonly IDomainEventDispatcher _domainEventDispatcher;
-
-	#endregion
-
-	#region .ctor
 
 	/// <summary>Создаёт экземпляр класса <see cref="UnitOfWorkFactory{TContext}"/>.</summary>
 	/// <param name="dbContext">Контекст базы данных.</param>
@@ -30,15 +22,9 @@ public class UnitOfWorkFactory<TContext> : IUnitOfWorkFactory where TContext : D
 		_domainEventDispatcher = domainEventDispatcher ?? throw new ArgumentNullException(nameof(domainEventDispatcher));
 	}
 
-	#endregion
-
-	#region Methods
-
 	/// <summary>Создает единицу работы с БД.</summary>
 	/// <param name="unitOfWorkType">Тип единицы работы.</param>
 	/// <returns>Единица работы.</returns>
 	public IUnitOfWork Create(UnitOfWorkType unitOfWorkType = UnitOfWorkType.Transaction) =>
 		new UnitOfWork<TContext>(_dbContext, _domainEventDispatcher);
-
-	#endregion
 }

@@ -2,11 +2,9 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
 using HotChocolate;
 using HotChocolate.Data;
 using HotChocolate.Types;
-
 using PostSys.Application.Abstractions.Queries;
 using PostSys.ReadModels;
 
@@ -16,25 +14,21 @@ namespace PostSys.Service.Api.Packages;
 [QueryType]
 public static class Queries
 {
-	#region Methods
+    /// <summary>Возвращает посылку по идентификатору.</summary>
+    public static Task<Package?> GetPackageByIdAsync(
+        Guid id,
+        [Service] IPackageQueries queries,
+        CancellationToken cancellationToken)
+    {
+        return queries.GetByIdAsync(id, cancellationToken);
+    }
 
-	/// <summary>Возвращает посылку по идентификатору.</summary>
-	public static Task<Package?> GetPackageByIdAsync(
-		Guid id,
-		[Service] IPackageQueries queries,
-		CancellationToken cancellationToken)
-	{
-		return queries.GetByIdAsync(id, cancellationToken);
-	}
-
-	/// <summary>Возвращает все посылки.</summary>
-	[UseOffsetPaging]
-	[UseFiltering]
-	[UseSorting]
-	public static IQueryable<Package> GetPackages([Service] IPackageQueries queries)
-	{
-		return queries.Query();
-	}
-
-	#endregion
+    /// <summary>Возвращает все посылки.</summary>
+    [UseOffsetPaging]
+    [UseFiltering]
+    [UseSorting]
+    public static IQueryable<Package> GetPackages([Service] IPackageQueries queries)
+    {
+        return queries.Query();
+    }
 }

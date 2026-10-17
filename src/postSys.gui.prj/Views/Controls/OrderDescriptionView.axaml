@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:locConverters="using:PostSys.Gui.Converters"
              xmlns:vm="using:PostSys.Gui.ViewModels"
+             xmlns:loc="using:PostSys.Gui.Localization"
              x:Class="PostSys.Gui.Views.Controls.OrderDescriptionView"
              x:DataType="vm:OrderDescriptionViewModel">
 
@@ -29,7 +30,7 @@
             <TextBlock Text="{Binding Status, Converter={StaticResource StatusToStringConverter}}"
                        Margin="0, 5" Grid.Row="3"/>
           </Grid>
-          <Button Content="Select"
+          <Button Content="{loc:Loc Select}"
                   Command="{Binding SelectOrderCommand}"
                   Grid.Column="2"
                   Margin="10, 0"

@@ -2,10 +2,12 @@ using Avalonia.Controls;
 
 namespace PostSys.Gui.Views.Controls;
 
+/// <summary>Представление окна настроек (мобильное наложение).</summary>
 public partial class SettingsWindowView : UserControl
 {
-	public SettingsWindowView()
-	{
-		InitializeComponent();
-	}
+    /// <summary>Создаёт представление настроек.</summary>
+    public SettingsWindowView()
+    {
+        InitializeComponent();
+    }
 }

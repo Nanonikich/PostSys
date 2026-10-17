@@ -7,6 +7,7 @@
     <TrimMode>copyused</TrimMode>
     <RootNamespace>PostSys.Gui</RootNamespace>
     <AvaloniaUseBindingsByDefault>true</AvaloniaUseBindingsByDefault>
+    <NeutralResourcesLanguage>ru-RU</NeutralResourcesLanguage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,12 +20,6 @@
     <PackageReference Include="Avalonia.Fonts.Inter" />
     <PackageReference Include="Avalonia.Themes.Fluent" />
     <PackageReference Include="ReactiveUI.Avalonia" />
-    <PackageReference Include="ReactiveUI.Disposables" />
-    <PackageReference Include="AvaloniaUI.DiagnosticsSupport">
-      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
-      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="FluentIcons.Avalonia" />
     <PackageReference Include="MessageBox.Avalonia" />
     <PackageReference Include="System.Reactive" />
     <PackageReference Include="Microsoft.Build.CopyOnWrite">
@@ -50,9 +45,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Update="Localization\UiStrings.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Localization\UiStrings.en.resx">
+      <DependentUpon>UiStrings.resx</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

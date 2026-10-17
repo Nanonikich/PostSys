@@ -8,8 +8,6 @@ namespace PostSys.ReadModels.Contracts;
 [DataContract]
 public class EntityChangeMessageModel
 {
-	#region Properties
-
 	/// <summary>Возвращает сущность, над которой была выполнена операция.</summary>
 	/// <value>Сущность, над которой была выполнена операция.</value>
 	[JsonPropertyName("entity")]
@@ -20,10 +18,6 @@ public class EntityChangeMessageModel
 	[JsonPropertyName("id")]
 	public Guid Id { get; }
 
-	#endregion
-
-	#region .ctor
-
 	/// <summary>Создаёт экземпляр класса <see cref="EntityChangeMessageModel"/>.</summary>
 	/// <param name="entity">Сущность, над которой была выполнена операция.</param>
 	/// <param name="id">Идентификатор сущности.</param>
@@ -32,6 +26,4 @@ public class EntityChangeMessageModel
 		Entity = entity;
 		Id = id;
 	}
-
-	#endregion
 }

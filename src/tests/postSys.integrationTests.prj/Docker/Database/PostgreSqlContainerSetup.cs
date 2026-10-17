@@ -1,14 +1,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-
 using Npgsql;
-
-using NUnit.Framework;
-
 using Testcontainers.PostgreSql;
 
 namespace PostSys.IntegrationTests.Common.Docker.Database;
@@ -38,113 +33,105 @@ namespace PostSys.IntegrationTests.Common.Docker.Database;
 /// </remarks>
 [SetUpFixture]
 public abstract class PostgreSqlContainerSetup<TEntryPoint, TDbContext>
-	where TEntryPoint : class where TDbContext : DbContext
+    where TEntryPoint : class where TDbContext : DbContext
 {
-	#region Data
+    private PostgreSqlContainer? _container;
+    private TestApplicationFactory<TEntryPoint>? _factory;
+    private MigrationPerformer<TDbContext>? _migrator;
 
-	private PostgreSqlContainer? _container;
-	private TestApplicationFactory<TEntryPoint>? _factory;
-	private MigrationPerformer<TDbContext>? _migrator;
+    /// <summary>Возвращает флаг необходимости запуска миграций.</summary>
+    protected virtual bool NeedMigrations { get; } = true;
 
-	#endregion
+    #region Methods
 
-	#region Properties
+    /// <summary>Инициализирует окружение SUT.</summary>
+    /// <value>Асинхронная операция.</value>
+    [OneTimeSetUp]
+    public async Task OneTimeSetUpAsync()
+    {
+        var (connectionString, containerConfiguration) = LoadConfiguration();
 
-	/// <summary>Возвращает флаг необходимости запуска миграций.</summary>
-	protected virtual bool NeedMigrations { get; } = true;
+        if(containerConfiguration?.UseContainer == true)
+        {
+            _container = BuildContainer(containerConfiguration);
+            await _container.StartAsync();
+            connectionString = _container.GetConnectionString();
+        }
 
-	#endregion
+        if(string.IsNullOrEmpty(connectionString))
+            throw new InvalidOperationException(
+                "Строка подключения к БД не задана в конфигурации (секция ConnectionStrings__TestConnection).");
 
-	#region Methods
+        _factory = new(connectionString);
 
-	/// <summary>Инициализирует окружение SUT.</summary>
-	/// <value>Асинхронная операция.</value>
-	[OneTimeSetUp]
-	public async Task OneTimeSetUpAsync()
-	{
-		var (connectionString, containerConfiguration) = LoadConfiguration();
+        if(NeedMigrations)
+        {
+            _migrator = new(_factory.Services);
+            try
+            {
+                await _migrator.MigrateUpAsync();
+            }
+            catch(PostgresException ex)
+            {
+                Console.WriteLine($"Ошибка миграции: {ex.Message}");
+            }
+        }
 
-		if(containerConfiguration?.UseContainer == true)
-		{
-			_container = BuildContainer(containerConfiguration);
-			await _container.StartAsync();
-			connectionString = _container.GetConnectionString();
-		}
+        SystemUnderTest.DataSourceConnectionString = connectionString;
+    }
 
-		if(string.IsNullOrEmpty(connectionString))
-			throw new InvalidOperationException(
-				"Строка подключения к БД не задана в конфигурации (секция ConnectionStrings__TestConnection).");
+    /// <summary>Деинициализирует окружение SUT.</summary>
+    /// <value>Асинхронная операция.</value>
+    [OneTimeTearDown]
+    public async Task OneTimeTearDownAsync()
+    {
+        if(_migrator != null) await _migrator.MigrateDownAsync();
 
-		_factory = new TestApplicationFactory<TEntryPoint>(connectionString);
+        if(_factory != null) await _factory.DisposeAsync();
 
-		if(NeedMigrations)
-		{
-			_migrator = new MigrationPerformer<TDbContext>(_factory.Services);
-			try
-			{
-				await _migrator.MigrateUpAsync();
-			}
-			catch(PostgresException ex)
-			{
-				Console.WriteLine($"Ошибка миграции: {ex.Message}");
-			}
-		}
+        await CleanupContainerAsync();
+    }
 
-		SystemUnderTest.DataSourceConnectionString = connectionString;
-	}
+    private async Task CleanupContainerAsync()
+    {
+        if(_container != null)
+        {
+            await _container.StopAsync();
+            await _container.DisposeAsync();
+        }
+    }
 
-	/// <summary>Деинициализирует окружение SUT.</summary>
-	/// <value>Асинхронная операция.</value>
-	[OneTimeTearDown]
-	public async Task OneTimeTearDownAsync()
-	{
-		if(_migrator != null) await _migrator.MigrateDownAsync();
+    private static PostgreSqlContainer BuildContainer(ContainerConfiguration configuration) =>
+        new PostgreSqlBuilder(configuration.ImageName).Build();
 
-		if(_factory != null) await _factory.DisposeAsync();
+    private static (string?, ContainerConfiguration? containerConfiguration) LoadConfiguration()
+    {
+        var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json", false)
+                                                      .AddEnvironmentVariables()
+                                                      .Build();
 
-		await CleanupContainerAsync();
-	}
+        var containerConfiguration = configuration.GetRequiredSection("DockerSettings")
+                                                  .Get<ContainerConfiguration>();
+        var connectionString = configuration.GetConnectionString("TestConnection");
+        return (connectionString, containerConfiguration);
+    }
 
-	private async Task CleanupContainerAsync()
-	{
-		if(_container != null)
-		{
-			await _container.StopAsync();
-			await _container.DisposeAsync();
-		}
-	}
+    #endregion
 
-	private static PostgreSqlContainer BuildContainer(ContainerConfiguration configuration) =>
-		new PostgreSqlBuilder(configuration.ImageName).Build();
+    #region Type: ContainerConfiguration
 
-	private static (string?, ContainerConfiguration? containerConfiguration) LoadConfiguration()
-	{
-		var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json", false)
-													  .AddEnvironmentVariables()
-													  .Build();
+    private class ContainerConfiguration
+    {
+        /// <summary>Возвращает имя образа.</summary>
+        /// <value>Имя образа.</value>
+        [Required]
+        public string ImageName { get; init; } = "postgres:latest";
 
-		var containerConfiguration = configuration.GetRequiredSection("DockerSettings")
-												  .Get<ContainerConfiguration>();
-		var connectionString = configuration.GetConnectionString("TestConnection");
-		return (connectionString, containerConfiguration);
-	}
+        /// <summary>Возвращает значение, указывающее, что PostgreSQL для тестирования будет запущен в контейнере.</summary>
+        /// <value>Значение, указывающее, что PostgreSQL для тестирования будет запущен в контейнере.</value>
+        [Required]
+        public bool UseContainer { get; init; } = true;
+    }
 
-	#endregion
-
-	#region Type: ContainerConfiguration
-
-	private class ContainerConfiguration
-	{
-		/// <summary>Возвращает имя образа.</summary>
-		/// <value>Имя образа.</value>
-		[Required]
-		public string ImageName { get; init; } = "postgres:latest";
-
-		/// <summary>Возвращает значение, указывающее, что PostgreSQL для тестирования будет запущен в контейнере.</summary>
-		/// <value>Значение, указывающее, что PostgreSQL для тестирования будет запущен в контейнере.</value>
-		[Required]
-		public bool UseContainer { get; init; } = true;
-	}
-
-	#endregion
+    #endregion
 }

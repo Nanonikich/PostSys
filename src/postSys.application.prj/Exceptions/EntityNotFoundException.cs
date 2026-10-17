@@ -5,43 +5,43 @@ namespace PostSys.Application.Exceptions;
 /// </summary>
 public sealed class EntityNotFoundException : Exception
 {
-	/// <summary>Возвращает текстовое представление идентификатора сущности.</summary>
-	/// <value>Текстовое представление идентификатора сущности.</value>
-	public string EntityId { get; }
+    /// <summary>Возвращает текстовое представление идентификатора сущности.</summary>
+    /// <value>Текстовое представление идентификатора сущности.</value>
+    public string EntityId { get; }
 
-	/// <summary>Возвращает тип сущности.</summary>
-	/// <value>Тип сущности.</value>
-	public string EntityType { get; }
+    /// <summary>Возвращает тип сущности.</summary>
+    /// <value>Тип сущности.</value>
+    public string EntityType { get; }
 
-	/// <summary>Конструктор по умолчанию.</summary>
-	public EntityNotFoundException()
-		: base("Entity not found.")
-	{
-		EntityId = string.Empty;
-		EntityType = string.Empty;
-	}
+    /// <summary>Конструктор по умолчанию.</summary>
+    public EntityNotFoundException()
+        : base("Entity not found.")
+    {
+        EntityId = string.Empty;
+        EntityType = string.Empty;
+    }
 
-	/// <summary>Создаёт экземпляр класса <see cref="EntityNotFoundException" />.</summary>
-	/// <param name="entityType">Тип сущности.</param>
-	/// <param name="entityId">Текстовое представление идентификатора сущности.</param>
-	public EntityNotFoundException(string entityType, string entityId)
-		: base(
-			!string.IsNullOrWhiteSpace(entityId) || !string.IsNullOrWhiteSpace(entityType)
-			? string.IsNullOrWhiteSpace(entityType) ? "Entity not found."
-			: string.IsNullOrWhiteSpace(entityId) ? "Entity with type not found."
-			: "Entity with type and id not found." : "Entity not found.")
-	{
-		EntityType = entityType;
-		EntityId = entityId;
-	}
+    /// <summary>Создаёт экземпляр класса <see cref="EntityNotFoundException" />.</summary>
+    /// <param name="entityType">Тип сущности.</param>
+    /// <param name="entityId">Текстовое представление идентификатора сущности.</param>
+    public EntityNotFoundException(string entityType, string entityId)
+        : base(
+            !string.IsNullOrWhiteSpace(entityId) || !string.IsNullOrWhiteSpace(entityType)
+            ? string.IsNullOrWhiteSpace(entityType) ? "Entity not found."
+            : string.IsNullOrWhiteSpace(entityId) ? "Entity with type not found."
+            : "Entity with type and id not found." : "Entity not found.")
+    {
+        EntityType = entityType;
+        EntityId = entityId;
+    }
 
-	/// <summary>Проверяет сущность на Null и если  равна, создает исключение.</summary>
-	/// <param name="entity">Проверяемая сущность.</param>
-	/// <param name="entityType">Тип сущности.</param>
-	/// <param name="entityId">Текстовое представление идентификатора сущности.</param>
-	/// <exception cref="EntityNotFoundException">Если сущность равна Null.</exception>
-	public static void ThrowIfNull(object? entity, string entityType, string entityId)
-	{
-		if(entity == null) throw new EntityNotFoundException(entityType, entityId);
-	}
+    /// <summary>Проверяет сущность на Null и если  равна, создает исключение.</summary>
+    /// <param name="entity">Проверяемая сущность.</param>
+    /// <param name="entityType">Тип сущности.</param>
+    /// <param name="entityId">Текстовое представление идентификатора сущности.</param>
+    /// <exception cref="EntityNotFoundException">Если сущность равна Null.</exception>
+    public static void ThrowIfNull(object? entity, string entityType, string entityId)
+    {
+        if(entity == null) throw new EntityNotFoundException(entityType, entityId);
+    }
 }

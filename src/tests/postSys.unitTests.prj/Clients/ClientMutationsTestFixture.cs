@@ -1,10 +1,7 @@
 using System;
 using System.Linq;
-
 using CSharpFunctionalExtensions;
-
 using NUnit.Framework;
-
 using PostSys.Domain.Clients;
 using PostSys.Domain.Events;
 using PostSys.Domain.ValueObjects;
@@ -15,62 +12,62 @@ namespace PostSys.UnitTests.Clients;
 [TestFixture]
 public class ClientMutationsTestFixture
 {
-	[Test]
-	[Description("Проверяет создание клиента без данных об имени.")]
-	public void Create_client_without_fullname_impossible()
-	{
-		// Arrange
-		var phoneNumber = PhoneNumber.Create("8953-522-66-88");
+    [Test]
+    [Description("Проверяет создание клиента без данных об имени.")]
+    public void Create_client_without_fullname_impossible()
+    {
+        // Arrange
+        var phoneNumber = PhoneNumber.Create("8953-522-66-88");
 
-		// Act & Assert
-		Assert.Throws<ArgumentNullException>(() => Client.Create(
-			null!,
-			phoneNumber.Value));
-	}
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => Client.Create(
+            null!,
+            phoneNumber.Value));
+    }
 
-	[Test]
-	[Description("Проверяет, что при создании клиента поднимается доменное событие.")]
-	public void Create_client_raises_domain_event()
-	{
-		var client = ClientTestHelper.CreateClient();
+    [Test]
+    [Description("Проверяет, что при создании клиента поднимается доменное событие.")]
+    public void Create_client_raises_domain_event()
+    {
+        var client = ClientTestHelper.CreateClient();
 
-		Assert.That(client.DomainEvents.OfType<ClientCreated>().Any(), Is.True);
-		Assert.That(client.Id, Is.Not.EqualTo(Guid.Empty));
-	}
+        Assert.That(client.DomainEvents.OfType<ClientCreated>().Any(), Is.True);
+        Assert.That(client.Id, Is.Not.EqualTo(Guid.Empty));
+    }
 
-	[Test]
-	[Description("Проверяет изменение данных об имени клиента.")]
-	public void Change_client_fullname_success()
-	{
-		// Arrange
-		var client = ClientTestHelper.CreateClient();
-		var newFullname = Fullname.Create("Иванов", "Андрей", "Андреевич");
+    [Test]
+    [Description("Проверяет изменение данных об имени клиента.")]
+    public void Change_client_fullname_success()
+    {
+        // Arrange
+        var client = ClientTestHelper.CreateClient();
+        var newFullname = Fullname.Create("Иванов", "Андрей", "Андреевич");
 
-		// Act & Assert
-		Assert.DoesNotThrow(() => client.ChangeFullname(newFullname.Value));
-	}
+        // Act & Assert
+        Assert.DoesNotThrow(() => client.ChangeFullname(newFullname.Value));
+    }
 
-	[Test]
-	[Description("Проверяет изменение номера телефона клиента.")]
-	public void Change_client_phone_number_success()
-	{
-		// Arrange
-		var client = ClientTestHelper.CreateClient();
-		var newPhoneNumber = PhoneNumber.Create("8933-655-28-71");
+    [Test]
+    [Description("Проверяет изменение номера телефона клиента.")]
+    public void Change_client_phone_number_success()
+    {
+        // Arrange
+        var client = ClientTestHelper.CreateClient();
+        var newPhoneNumber = PhoneNumber.Create("8933-655-28-71");
 
-		// Act & Assert
-		Assert.DoesNotThrow(() => client.ChangePhoneNumber(newPhoneNumber.Value));
-	}
+        // Act & Assert
+        Assert.DoesNotThrow(() => client.ChangePhoneNumber(newPhoneNumber.Value));
+    }
 
-	[Test]
-	[Description("Проверяет изменение номера телефона клиента на некорректный номер.")]
-	public void Change_client_phone_number_to_incorrect_impossible()
-	{
-		// Arrange
-		var client = ClientTestHelper.CreateClient();
-		var newPhoneNumber = PhoneNumber.Create("111");
+    [Test]
+    [Description("Проверяет изменение номера телефона клиента на некорректный номер.")]
+    public void Change_client_phone_number_to_incorrect_impossible()
+    {
+        // Arrange
+        var client = ClientTestHelper.CreateClient();
+        var newPhoneNumber = PhoneNumber.Create("111");
 
-		// Act & Assert
-		Assert.Throws<ResultFailureException>(() => client.ChangePhoneNumber(newPhoneNumber.Value));
-	}
+        // Act & Assert
+        Assert.Throws<ResultFailureException>(() => client.ChangePhoneNumber(newPhoneNumber.Value));
+    }
 }

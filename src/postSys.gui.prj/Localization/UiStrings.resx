@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Email" xml:space="preserve"><value>Эл. почта</value></data>
+  <data name="Password" xml:space="preserve"><value>Пароль</value></data>
+  <data name="RememberMe" xml:space="preserve"><value>Запомнить меня</value></data>
+  <data name="LogIn" xml:space="preserve"><value>Войти</value></data>
+  <data name="Retry" xml:space="preserve"><value>Повторить</value></data>
+  <data name="Ok" xml:space="preserve"><value>ОК</value></data>
+  <data name="Select" xml:space="preserve"><value>Выбрать</value></data>
+
+  <data name="Nav_Profile" xml:space="preserve"><value>Профиль</value></data>
+  <data name="Nav_Orders" xml:space="preserve"><value>Заказы</value></data>
+  <data name="Nav_CurrentOrder" xml:space="preserve"><value>Текущий заказ</value></data>
+
+  <data name="Connection_Connecting" xml:space="preserve"><value>Подключение…</value></data>
+  <data name="Connection_Online" xml:space="preserve"><value>В сети</value></data>
+  <data name="Connection_Offline" xml:space="preserve"><value>Нет связи — нажмите «Повторить»</value></data>
+  <data name="Connection_Reconnecting" xml:space="preserve"><value>Переподключение…</value></data>
+
+  <data name="Settings_ServiceAddress" xml:space="preserve"><value>Адрес службы:</value></data>
+  <data name="Settings_YandexApiKey" xml:space="preserve"><value>Ключ Яндекс.API:</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>Язык:</value></data>
+
+  <data name="Info_AppName" xml:space="preserve"><value>PostSys</value></data>
+  <data name="Info_Subtitle" xml:space="preserve"><value>Система доставки</value></data>
+  <data name="Info_Support" xml:space="preserve"><value>Техническая поддержка</value></data>
+  <data name="Info_Copyright" xml:space="preserve"><value>© Исключительные права принадлежат Nanonikich</value></data>
+  <data name="Info_VersionGui" xml:space="preserve"><value>Версия приложения: {0}</value></data>
+  <data name="Info_VersionApi" xml:space="preserve"><value>Версия службы: {0}</value></data>
+  <data name="Info_VersionApiUnavailable" xml:space="preserve"><value>Версия службы: недоступна</value></data>
+  <data name="Info_VersionApiError" xml:space="preserve"><value>Версия службы: ошибка получения</value></data>
+
+  <data name="Title_ValidationError" xml:space="preserve"><value>Ошибка проверки</value></data>
+  <data name="Title_Error" xml:space="preserve"><value>Ошибка</value></data>
+  <data name="Title_Warning" xml:space="preserve"><value>Внимание</value></data>
+  <data name="Title_AuthorizationError" xml:space="preserve"><value>Ошибка входа</value></data>
+  <data name="Title_Offline" xml:space="preserve"><value>Автономный режим</value></data>
+  <data name="Title_AddressError" xml:space="preserve"><value>Ошибка адреса</value></data>
+  <data name="Title_ServiceError" xml:space="preserve"><value>Ошибка службы</value></data>
+  <data name="Title_UnexpectedError" xml:space="preserve"><value>Непредвиденная ошибка</value></data>
+  <data name="Title_OrderChangeFailed" xml:space="preserve"><value>Не удалось сменить заказ</value></data>
+  <data name="Title_StatusChangeFailed" xml:space="preserve"><value>Не удалось сменить статус</value></data>
+  <data name="Title_StatusChangeError" xml:space="preserve"><value>Ошибка смены статуса</value></data>
+
+  <data name="Msg_EmailPasswordRequired" xml:space="preserve"><value>Эл. почта и пароль не должны быть пустыми.</value></data>
+  <data name="Msg_UnexpectedTryLater" xml:space="preserve"><value>Произошла непредвиденная ошибка. Попробуйте позже.</value></data>
+  <data name="Msg_ServiceAddressInvalid" xml:space="preserve"><value>Адрес службы указан неверно.</value></data>
+  <data name="Msg_YandexKeyInvalid" xml:space="preserve"><value>Ключ Яндекс.API указан неверно.</value></data>
+  <data name="Msg_ServiceAddressChanged" xml:space="preserve"><value>Адрес службы изменён. Войдите снова.</value></data>
+  <data name="Msg_AccountDeleted" xml:space="preserve"><value>Учётная запись удалена.</value></data>
+  <data name="Msg_CachedOrders" xml:space="preserve"><value>Показаны сохранённые заказы. Данные могут быть устаревшими.</value></data>
+  <data name="Msg_LoadOrdersFailed" xml:space="preserve"><value>Не удалось загрузить заказы.</value></data>
+  <data name="Msg_AddressRetrieveFailed" xml:space="preserve"><value>Не удалось получить адрес заказа. Проверьте координаты.</value></data>
+  <data name="Msg_LoadOrdersUnexpected" xml:space="preserve"><value>Непредвиденная ошибка при загрузке заказов. Попробуйте позже.</value></data>
+  <data name="Msg_OrderChangeFailed" xml:space="preserve"><value>Не удалось назначить заказ выбранному почтальону. Попробуйте снова.</value></data>
+  <data name="Msg_OrderChangeUnexpected" xml:space="preserve"><value>Непредвиденная ошибка при смене заказа. Попробуйте позже.</value></data>
+  <data name="Msg_StatusChangeFailed" xml:space="preserve"><value>Не удалось изменить статус посылки. Попробуйте снова.</value></data>
+  <data name="Msg_StatusChangeUnexpected" xml:space="preserve"><value>Ошибка при изменении статуса посылки. Попробуйте позже.</value></data>
+
+  <data name="Status_OnWarehouse" xml:space="preserve"><value>На складе</value></data>
+  <data name="Status_InWork" xml:space="preserve"><value>В работе</value></data>
+  <data name="Status_End" xml:space="preserve"><value>Доставлено</value></data>
+  <data name="Status_Unknown" xml:space="preserve"><value>Неизвестно</value></data>
+
+  <data name="Language_Ru" xml:space="preserve"><value>Русский</value></data>
+  <data name="Language_En" xml:space="preserve"><value>English</value></data>
+</root>

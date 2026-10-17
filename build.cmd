@@ -1,5 +1,4 @@
-@set DOTNET_CLI_UI_LANGUAGE=en
-@echo Building PostSys...
-cd src
-@dotnet build --configuration Release PostSys.sln
-@pause
+@echo off
+call "%~dp0tools\build.cmd"
+if errorlevel 1 exit /b %ERRORLEVEL%
+pause

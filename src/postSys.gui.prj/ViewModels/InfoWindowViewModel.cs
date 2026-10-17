@@ -7,76 +7,76 @@ using ReactiveUI;
 using PostSys.Client.Data;
 using PostSys.Framework.Common;
 using PostSys.Gui.Common.ViewModels;
+using PostSys.Gui.Localization;
 
 namespace PostSys.Gui.ViewModels;
 
-/// <summary>Модель представления окна "О программе".</summary>
+/// <summary>Модель представления экрана «О программе».</summary>
 public class InfoWindowViewModel : ViewModelBase
 {
-	#region Statics
-
 	private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
-	#endregion
+	private readonly IInfoGraphQlClient _infoGraphQlClient;
+	private string? _cachedApiVersion;
+	private bool _apiVersionLoaded;
+	private string _versionGui = string.Empty;
+	private string _versionApi = string.Empty;
 
-	#region Data
-
-	private string _versionGui;
-	private string _versionApi;
-
-	#endregion
-
-	#region Properties
-
-	/// <summary>Возвращает или задаёт версию приложения.</summary>
-	/// <value>Версия приложения.</value>
+	/// <summary>Строка версии приложения.</summary>
 	public string VersionGui
 	{
 		get => _versionGui;
 		set => this.RaiseAndSetIfChanged(ref _versionGui, value);
 	}
 
-	/// <summary>Возвращает или задаёт версию сервиса.</summary>
-	/// <value>Версия сервиса.</value>
+	/// <summary>Строка версии службы.</summary>
 	public string VersionApi
 	{
 		get => _versionApi;
 		set => this.RaiseAndSetIfChanged(ref _versionApi, value);
 	}
 
-	#endregion
-
-	#region .ctor
-
 	/// <summary>Создаёт экземпляр класса <see cref="InfoWindowViewModel"/>.</summary>
-	/// <param name="infoGraphQlClient"><see cref="IInfoGraphQlClient"/>.</param>
+	/// <param name="infoGraphQlClient">Клиент сведений о службе.</param>
 	public InfoWindowViewModel(IInfoGraphQlClient infoGraphQlClient)
 	{
-		var version = AssemblyInfo.FromEntryAssembly().Version;
-		VersionGui = $"Version GUI: {version!.Major}.{version!.Minor}.{version!.Build}";
-
-		InitializeAsync(infoGraphQlClient);
+		_infoGraphQlClient = infoGraphQlClient;
+		RefreshLocalizedTexts();
+		InitializeAsync();
 	}
 
-	#endregion
+	/// <summary>Обновляет локализованные строки после смены языка.</summary>
+	public void RefreshLocalizedTexts()
+	{
+		var version = AssemblyInfo.FromEntryAssembly().Version;
+		VersionGui = UiLocalizer.Format(
+			"Info_VersionGui",
+			$"{version!.Major}.{version.Minor}.{version.Build}");
 
-	#region Methods
+		if(!_apiVersionLoaded)
+			return;
 
-	private async void InitializeAsync(IInfoGraphQlClient infoGraphQlClient)
+		VersionApi = string.IsNullOrWhiteSpace(_cachedApiVersion)
+			? UiLocalizer.Get("Info_VersionApiUnavailable")
+			: UiLocalizer.Format("Info_VersionApi", _cachedApiVersion);
+	}
+
+	private async void InitializeAsync()
 	{
 		try
 		{
-			var versionApi = await infoGraphQlClient.GetVersionAsync();
-			VersionApi = string.IsNullOrWhiteSpace(versionApi)
-				? "Version API: Cannot get version"
-				: $"Version API: {versionApi}";
+			_cachedApiVersion = await _infoGraphQlClient.GetVersionAsync();
+			_apiVersionLoaded = true;
+			VersionApi = string.IsNullOrWhiteSpace(_cachedApiVersion)
+				? UiLocalizer.Get("Info_VersionApiUnavailable")
+				: UiLocalizer.Format("Info_VersionApi", _cachedApiVersion);
 		}
 		catch(Exception ex)
 		{
-			VersionApi = "Version API: Error while fetching version";
+			_apiVersionLoaded = true;
+			_cachedApiVersion = null;
+			VersionApi = UiLocalizer.Get("Info_VersionApiError");
 			Log.Error(ex, "Error while fetching version.");
 		}
 	}
-
-	#endregion
 }

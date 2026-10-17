@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Email" xml:space="preserve"><value>Email</value></data>
+  <data name="Password" xml:space="preserve"><value>Password</value></data>
+  <data name="RememberMe" xml:space="preserve"><value>Remember me</value></data>
+  <data name="LogIn" xml:space="preserve"><value>Log in</value></data>
+  <data name="Retry" xml:space="preserve"><value>Retry</value></data>
+  <data name="Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Select" xml:space="preserve"><value>Select</value></data>
+
+  <data name="Nav_Profile" xml:space="preserve"><value>Profile</value></data>
+  <data name="Nav_Orders" xml:space="preserve"><value>Orders</value></data>
+  <data name="Nav_CurrentOrder" xml:space="preserve"><value>Current order</value></data>
+
+  <data name="Connection_Connecting" xml:space="preserve"><value>Connecting…</value></data>
+  <data name="Connection_Online" xml:space="preserve"><value>Online</value></data>
+  <data name="Connection_Offline" xml:space="preserve"><value>Offline — tap Retry</value></data>
+  <data name="Connection_Reconnecting" xml:space="preserve"><value>Reconnecting…</value></data>
+
+  <data name="Settings_ServiceAddress" xml:space="preserve"><value>Service address:</value></data>
+  <data name="Settings_YandexApiKey" xml:space="preserve"><value>Yandex API key:</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>Language:</value></data>
+
+  <data name="Info_AppName" xml:space="preserve"><value>PostSys</value></data>
+  <data name="Info_Subtitle" xml:space="preserve"><value>Delivery system</value></data>
+  <data name="Info_Support" xml:space="preserve"><value>Technical support</value></data>
+  <data name="Info_Copyright" xml:space="preserve"><value>© Exclusive rights belong to Nanonikich</value></data>
+  <data name="Info_VersionGui" xml:space="preserve"><value>App version: {0}</value></data>
+  <data name="Info_VersionApi" xml:space="preserve"><value>Service version: {0}</value></data>
+  <data name="Info_VersionApiUnavailable" xml:space="preserve"><value>Service version: unavailable</value></data>
+  <data name="Info_VersionApiError" xml:space="preserve"><value>Service version: fetch error</value></data>
+
+  <data name="Title_ValidationError" xml:space="preserve"><value>Validation error</value></data>
+  <data name="Title_Error" xml:space="preserve"><value>Error</value></data>
+  <data name="Title_Warning" xml:space="preserve"><value>Warning</value></data>
+  <data name="Title_AuthorizationError" xml:space="preserve"><value>Sign-in error</value></data>
+  <data name="Title_Offline" xml:space="preserve"><value>Offline</value></data>
+  <data name="Title_AddressError" xml:space="preserve"><value>Address error</value></data>
+  <data name="Title_ServiceError" xml:space="preserve"><value>Service error</value></data>
+  <data name="Title_UnexpectedError" xml:space="preserve"><value>Unexpected error</value></data>
+  <data name="Title_OrderChangeFailed" xml:space="preserve"><value>Order change failed</value></data>
+  <data name="Title_StatusChangeFailed" xml:space="preserve"><value>Status change failed</value></data>
+  <data name="Title_StatusChangeError" xml:space="preserve"><value>Status change error</value></data>
+
+  <data name="Msg_EmailPasswordRequired" xml:space="preserve"><value>Email and password must not be empty.</value></data>
+  <data name="Msg_UnexpectedTryLater" xml:space="preserve"><value>An unexpected error occurred. Please try again later.</value></data>
+  <data name="Msg_ServiceAddressInvalid" xml:space="preserve"><value>Service address is incorrect.</value></data>
+  <data name="Msg_YandexKeyInvalid" xml:space="preserve"><value>Yandex API key is incorrect.</value></data>
+  <data name="Msg_ServiceAddressChanged" xml:space="preserve"><value>Service address changed. Please sign in again.</value></data>
+  <data name="Msg_AccountDeleted" xml:space="preserve"><value>Account has been deleted.</value></data>
+  <data name="Msg_CachedOrders" xml:space="preserve"><value>Showing cached orders. Some data may be outdated.</value></data>
+  <data name="Msg_LoadOrdersFailed" xml:space="preserve"><value>Failed to load orders.</value></data>
+  <data name="Msg_AddressRetrieveFailed" xml:space="preserve"><value>Failed to retrieve the address. Please verify the coordinates.</value></data>
+  <data name="Msg_LoadOrdersUnexpected" xml:space="preserve"><value>An unexpected error occurred while loading orders.</value></data>
+  <data name="Msg_OrderChangeFailed" xml:space="preserve"><value>Unable to change the order. Please try again.</value></data>
+  <data name="Msg_OrderChangeUnexpected" xml:space="preserve"><value>An unexpected error occurred while changing the order.</value></data>
+  <data name="Msg_StatusChangeFailed" xml:space="preserve"><value>Unable to change the package status.</value></data>
+  <data name="Msg_StatusChangeUnexpected" xml:space="preserve"><value>An error occurred while changing the package status.</value></data>
+
+  <data name="Status_OnWarehouse" xml:space="preserve"><value>On warehouse</value></data>
+  <data name="Status_InWork" xml:space="preserve"><value>In work</value></data>
+  <data name="Status_End" xml:space="preserve"><value>Delivered</value></data>
+  <data name="Status_Unknown" xml:space="preserve"><value>Unknown</value></data>
+
+  <data name="Language_Ru" xml:space="preserve"><value>Русский</value></data>
+  <data name="Language_En" xml:space="preserve"><value>English</value></data>
+</root>

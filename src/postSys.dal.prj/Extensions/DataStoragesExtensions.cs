@@ -1,14 +1,13 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-
 using PostSys.Application.Abstractions;
 using PostSys.Application.Abstractions.Queries;
 using PostSys.Dal.Common.Extensions;
 using PostSys.Dal.Events;
+using PostSys.Dal.Outbox;
 using PostSys.Dal.Persistence;
 using PostSys.Dal.Persistence.Clients;
 using PostSys.Dal.Persistence.Packages;
@@ -16,7 +15,6 @@ using PostSys.Dal.Persistence.Postmen;
 using PostSys.Dal.ReadModel;
 using PostSys.Dal.ReadModel.Queries;
 using PostSys.Dal.Services;
-
 using PostSys.Domain.Abstractions;
 using PostSys.Domain.Clients;
 using PostSys.Domain.Packages;
@@ -29,59 +27,59 @@ namespace PostSys.Dal.Extensions;
 /// <summary>Определяет методы расширения для настройки инструментов хранения данных.</summary>
 public static class DataStoragesExtensions
 {
-	#region Methods
+    /// <summary>Регистрирует data storages для использования в сервисе.</summary>
+    /// <param name="serviceCollection"><see cref="IServiceCollection" />.</param>
+    /// <param name="databaseConnectionString">Строка подключения к БД.</param>
+    public static IServiceCollection AddDatabase(this IServiceCollection serviceCollection, string databaseConnectionString)
+    {
+        ArgumentNullException.ThrowIfNull(serviceCollection);
+        ArgumentException.ThrowIfNullOrWhiteSpace(databaseConnectionString);
+        serviceCollection
+            .AddDbContextPool<WriteDbContext>(SetupOptions)
+            .AddDbContextPool<ReadDbContext>(SetupOptions)
+            .AddUnitOfWork<WriteDbContext>()
+            .AddRepositories()
+            .AddServices();
 
-	/// <summary>Регистрирует data storages для использования в сервисе.</summary>
-	/// <param name="serviceCollection"><see cref="IServiceCollection" />.</param>
-	/// <param name="databaseConnectionString">Строка подключения к БД.</param>
-	public static IServiceCollection AddDatabase(this IServiceCollection serviceCollection, string databaseConnectionString)
-	{
-		ArgumentNullException.ThrowIfNull(serviceCollection);
-		ArgumentException.ThrowIfNullOrWhiteSpace(databaseConnectionString);
-		serviceCollection
-			.AddDbContextPool<WriteDbContext>(SetupOptions)
-			.AddDbContextPool<ReadDbContext>(SetupOptions)
-			.AddUnitOfWork<WriteDbContext>()
-			.AddRepositories()
-			.AddServices();
+        return serviceCollection;
 
-		return serviceCollection;
+        void SetupOptions(DbContextOptionsBuilder builder)
+        {
+            builder
+                .UseNpgsql(databaseConnectionString)
+                .UseSnakeCaseNamingConvention();
+        }
+    }
 
-		void SetupOptions(DbContextOptionsBuilder builder)
-		{
-			builder
-				.UseNpgsql(databaseConnectionString)
-				.UseSnakeCaseNamingConvention();
-		}
-	}
+    /// <summary>Применяет миграции схемы к базе данных.</summary>
+    /// <param name="services">Поставщик служб.</param>
+    /// <param name="cancellationToken">Токен отмены операции.</param>
+    /// <returns>Задача применения миграций.</returns>
+    public static async Task MigrateDatabaseAsync(this IServiceProvider services, CancellationToken cancellationToken = default)
+    {
+        await using var scope = services.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<WriteDbContext>();
+        await db.Database.MigrateAsync(cancellationToken);
+    }
 
-	/// <summary>Применяет EF-миграции к БД (удобно для Docker / первого запуска).</summary>
-	public static async Task MigrateDatabaseAsync(this IServiceProvider services, CancellationToken cancellationToken = default)
-	{
-		await using var scope = services.CreateAsyncScope();
-		var db = scope.ServiceProvider.GetRequiredService<WriteDbContext>();
-		await db.Database.MigrateAsync(cancellationToken);
-	}
+    private static IServiceCollection AddRepositories(this IServiceCollection serviceCollection)
+    {
+        return serviceCollection
+            .AddScoped<IPostmanRepository, PostmanRepository>()
+            .AddScoped<IClientRepository, ClientRepository>()
+            .AddScoped<IPackageRepository, PackageRepository>();
+    }
 
-	private static IServiceCollection AddRepositories(this IServiceCollection serviceCollection)
-	{
-		return serviceCollection
-			.AddScoped<IPostmanRepository, PostmanRepository>()
-			.AddScoped<IClientRepository, ClientRepository>()
-			.AddScoped<IPackageRepository, PackageRepository>();
-	}
-
-	private static IServiceCollection AddServices(this IServiceCollection serviceCollection)
-	{
-		return serviceCollection
-			.AddScoped<IPostmanParametersChecker, PostmanParametersChecker>()
-			.AddScoped<IPackageParametersChecker, PackageParametersChecker>()
-			.AddSingleton<IPasswordHasher, PasswordHasher>()
-			.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>()
-			.AddScoped<IClientQueries, ClientQueries>()
-			.AddScoped<IPackageQueries, PackageQueries>()
-			.AddScoped<IPostmanQueries, PostmanQueries>();
-	}
-
-	#endregion
+    private static IServiceCollection AddServices(this IServiceCollection serviceCollection)
+    {
+        return serviceCollection
+            .AddScoped<IPostmanParametersChecker, PostmanParametersChecker>()
+            .AddScoped<IPackageParametersChecker, PackageParametersChecker>()
+            .AddSingleton<IPasswordHasher, PasswordHasher>()
+            .AddScoped<IDomainEventDispatcher, DomainEventDispatcher>()
+            .AddScoped<IClientQueries, ClientQueries>()
+            .AddScoped<IPackageQueries, PackageQueries>()
+            .AddScoped<IPostmanQueries, PostmanQueries>()
+            .AddScoped<IOutboxStore, OutboxStore>();
+    }
 }

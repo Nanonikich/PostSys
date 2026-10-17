@@ -1,59 +1,35 @@
 using System;
 using System.Reactive;
 using System.Threading.Tasks;
-
 using Avalonia.Controls;
-
 using MsBox.Avalonia.Enums;
-
-using ReactiveUI;
-
 using PostSys.Gui.Common.Helpers;
 using PostSys.Gui.Common.Services.IconProvider;
 using PostSys.Gui.Common.ViewModels;
 
 namespace PostSys.Gui.Common.Services.Dialogs;
 
-/// <summary>Обработчик показа сообщений и диалогов для desktop/mobile.</summary>
+/// <summary>Обработчик показа сообщений и закрытия наложений на мобильном клиенте.</summary>
 public class DialogReactiveWindow
 {
 	private readonly TopLevel _topLevel;
-	private readonly Action<object>? _showOverlay;
 	private readonly Action? _clearOverlay;
 
 	/// <summary>Создаёт обработчик диалогов.</summary>
-	public DialogReactiveWindow(
-		TopLevel topLevel,
-		Action<object>? showOverlay = null,
-		Action? clearOverlay = null)
+	/// <param name="topLevel">Корневой визуальный элемент приложения.</param>
+	/// <param name="clearOverlay">Скрытие наложения (необязательно).</param>
+	public DialogReactiveWindow(TopLevel topLevel, Action? clearOverlay = null)
 	{
 		_topLevel = topLevel ?? throw new ArgumentNullException(nameof(topLevel));
-		_showOverlay = showOverlay;
 		_clearOverlay = clearOverlay;
 	}
 
-	/// <summary>Провайдер иконки приложения.</summary>
+	/// <summary>Поставщик значка приложения.</summary>
 	public IApplicationIconProvider IconProvider { get; set; } = null!;
 
-	/// <summary>Показывает диалоговое окно или overlay на mobile.</summary>
-	public async Task ShowDialogOrOverlayAsync<TViewModel, TDialogWindow>(
-		IInteractionContext<TViewModel, Unit?> interaction)
-		where TViewModel : ViewModelBase
-		where TDialogWindow : Window, new()
-	{
-		if(_topLevel is Window owner)
-		{
-			var dialog = new TDialogWindow { DataContext = interaction.Input };
-			var result = await dialog.ShowDialog<Unit?>(owner);
-			interaction.SetOutput(result);
-			return;
-		}
-
-		_showOverlay?.Invoke(interaction.Input!);
-		interaction.SetOutput(Unit.Default);
-	}
-
 	/// <summary>Показывает сообщение с описанием ошибки.</summary>
+	/// <param name="interaction">Контекст взаимодействия с текстом сообщения.</param>
+	/// <returns>Задача показа диалога.</returns>
 	public async Task ShowErrorMessageAsync(IInteractionContext<MessageContent, bool> interaction)
 	{
 		var box = MsBox.Avalonia.MessageBoxManager.GetMessageBoxStandard(
@@ -75,6 +51,8 @@ public class DialogReactiveWindow
 	}
 
 	/// <summary>Показывает сообщение с вопросом.</summary>
+	/// <param name="interaction">Контекст взаимодействия с текстом сообщения.</param>
+	/// <returns>Задача показа диалога.</returns>
 	public async Task ShowQuestionMessageAsync(IInteractionContext<MessageContent, bool> interaction)
 	{
 		var box = MsBox.Avalonia.MessageBoxManager.GetMessageBoxStandard(
@@ -95,7 +73,8 @@ public class DialogReactiveWindow
 		interaction.SetOutput(result == ButtonResult.Yes);
 	}
 
-	/// <summary>Закрытие окна-владельца или overlay.</summary>
+	/// <summary>Закрывает наложение или окно-владелец.</summary>
+	/// <param name="interaction">Контекст взаимодействия закрытия.</param>
 	public void CloseWindow(IInteractionContext<bool, bool> interaction)
 	{
 		if(_topLevel is Window window)

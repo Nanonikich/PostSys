@@ -1,6 +1,5 @@
 using PostSys.Application.Contracts;
 using PostSys.Application.Cqrs.Core;
-
 using PostSys.Domain.Contracts;
 
 namespace PostSys.Application.Commands.Packages;
@@ -12,8 +11,8 @@ namespace PostSys.Application.Commands.Packages;
 /// <param name="ClientId">Идентификатор клиента.</param>
 /// <param name="PostmanId">Идентификатор почтальона.</param>
 public record CreatePackageCommand(
-	DimensionsDto Dimensions,
-	AddressDto Address,
-	PackageStatus Status,
-	Guid ClientId,
-	Guid PostmanId) : ICommand<Guid>;
+    DimensionsDto Dimensions,
+    AddressDto Address,
+    PackageStatus Status,
+    Guid ClientId,
+    Guid PostmanId) : ICommand<Guid>;
