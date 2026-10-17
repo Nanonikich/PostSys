@@ -1,33 +1,33 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PostSys.Client.Data;
 
-/// <summary>РљР»РёРµРЅС‚ GraphQL РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РџРѕС‡С‚Р°Р»СЊРѕРЅ".</summary>
+/// <summary>Клиент GraphQL для сущности "Почтальон".</summary>
 public interface IPostmanGraphQlClient
 {
 	#region Methods
 
-	/// <summary>РџРѕР»СѓС‡Р°РµС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїРѕС‡С‚Р°Р»СЊРѕРЅР°С… РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР°Рј.</summary>
-	/// <param name="idsOfPostmen">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ РїРѕС‡С‚Р°Р»СЊРѕРЅРѕРІ.</param>
-	/// <param name="cancellationToken">РўРѕРєРµРЅ РѕС‚РјРµРЅС‹.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ, РІРѕР·РІСЂР°С‰Р°СЋС‰Р°СЏ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїРѕС‡С‚Р°Р»СЊРѕРЅР°С… РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР°Рј.</returns>
+	/// <summary>Получает информацию о почтальонах по идентификаторам.</summary>
+	/// <param name="idsOfPostmen">Идентификаторы почтальонов.</param>
+	/// <param name="cancellationToken">Токен отмены.</param>
+	/// <returns>Асинхронная операция, возвращающая информацию о почтальонах по идентификаторам.</returns>
 	Task<IReadOnlyList<ReadModels.Postman>> GetPostmenByIdsAsync(Guid[] idsOfPostmen, CancellationToken cancellationToken = default);
 
-	/// <summary>РџРѕР»СѓС‡Р°РµС‚ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕС‡С‚Р°Р»СЊРѕРЅР° РїРѕ РґР°РЅРЅС‹Рј РґР»СЏ Р°РІС‚РѕСЂРёР·Р°С†РёРё.</summary>
-	/// <param name="email">Email РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</param>
-	/// <param name="password">РџР°СЂРѕР»СЊ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</param>
-	/// <param name="cancellationToken">РўРѕРєРµРЅ РѕС‚РјРµРЅС‹.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ, РІРѕР·РІСЂР°С‰Р°СЋС‰Р°СЏ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ Р°РІС‚РѕСЂРёР·РѕРІР°РЅРЅРѕРіРѕ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</returns>
+	/// <summary>Получает идентификатор почтальона по данным для авторизации.</summary>
+	/// <param name="email">Email почтальона.</param>
+	/// <param name="password">Пароль почтальона.</param>
+	/// <param name="cancellationToken">Токен отмены.</param>
+	/// <returns>Асинхронная операция, возвращающая идентификатор авторизованного почтальона.</returns>
 	Task<Guid> GetAuthorizationPostmanIdAsync(string email, string password, CancellationToken cancellationToken = default);
 
-	/// <summary>РџСЂРёСЃРІР°РёРІР°РµС‚ РїРѕСЃС‹Р»РєСѓ РїРѕС‡С‚Р°Р»СЊРѕРЅСѓ.</summary>
-	/// <param name="postmanId">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</param>
-	/// <param name="packageId">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕСЃС‹Р»РєРё.</param>
-	/// <param name="cancellationToken">РўРѕРєРµРЅ РѕС‚РјРµРЅС‹.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ, РІРѕР·РІСЂР°С‰Р°СЋС‰Р°СЏ СѓСЃРїРµС€РЅРѕСЃС‚СЊ РІС‹РїРѕР»РЅРµРЅРёСЏ Р·Р°РїСЂРѕСЃР°.</returns>
+	/// <summary>Присваивает посылку почтальону.</summary>
+	/// <param name="postmanId">Идентификатор почтальона.</param>
+	/// <param name="packageId">Идентификатор посылки.</param>
+	/// <param name="cancellationToken">Токен отмены.</param>
+	/// <returns>Асинхронная операция, возвращающая успешность выполнения запроса.</returns>
 	Task<bool> ChangePostmanPackageAsync(Guid postmanId, Guid packageId, CancellationToken cancellationToken = default);
 
 	#endregion

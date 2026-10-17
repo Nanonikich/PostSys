@@ -22,7 +22,7 @@ public class ClientMutationsTestFixture
 
 		// Act & Assert
 		Assert.Throws<ArgumentNullException>(() => Client.Create(
-			null,
+			null!,
 			phoneNumber.Value));
 	}
 

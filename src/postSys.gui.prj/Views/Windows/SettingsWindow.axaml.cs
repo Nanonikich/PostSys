@@ -1,6 +1,6 @@
 using System.Reactive.Disposables;
 
-using Avalonia.ReactiveUI;
+using ReactiveUI.Avalonia;
 
 using ReactiveUI;
 
@@ -15,14 +15,12 @@ public partial class SettingsWindow : ReactiveWindow<SettingsWindowViewModel>
 	{
 		InitializeComponent();
 
-		this.WhenActivated(_ =>
+		this.WhenActivated(d =>
 		{
 			var iteractionImpl = new DialogServiceInteractionSource<SettingsWindow>(this);
 			iteractionImpl.Register(ViewModel!.DialogServiceInteractions);
 
-			Disposable
-				.Create(() => iteractionImpl.Dispose())
-				.DisposeWith(_);
+			d(Disposable.Create(() => iteractionImpl.Dispose()));
 		});
 	}
 }

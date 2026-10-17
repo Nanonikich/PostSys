@@ -1,25 +1,25 @@
-п»їusing System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PostSys.Client.Data.SignalR;
 
-/// <summary>РљР»РёРµРЅС‚ SignalR.</summary>
+/// <summary>Клиент SignalR.</summary>
 public interface ISignalRClient : IAsyncDisposable
 {
 	#region Events
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ СЃРµСЂРІРёСЃР°.</summary>
-	event EventHandler<bool> ChangeServiceStatusEvent;
+	/// <summary>Событие изменения состояния сервиса.</summary>
+	event EventHandler<bool>? ChangeServiceStatusEvent;
 
 	#endregion
 
 	#region Methods
 
-	/// <summary>Р—Р°РїСѓСЃРє РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє СЃРµСЂРІРёСЃСѓ РїРѕ SignalR.</summary>
-	/// <param name="url">РђРґСЂРµСЃ.</param>
-	/// <param name="cancellationToken">РўРѕРєРµРЅ РѕС‚РјРµРЅС‹.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ.</returns>
+	/// <summary>Запуск подключения к сервису по SignalR.</summary>
+	/// <param name="url">Адрес.</param>
+	/// <param name="cancellationToken">Токен отмены.</param>
+	/// <returns>Асинхронная операция.</returns>
 	Task StartAsync(string url, CancellationToken cancellationToken = default);
 
 	#endregion

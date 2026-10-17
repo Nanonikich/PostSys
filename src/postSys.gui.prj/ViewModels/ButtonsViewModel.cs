@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +11,7 @@ using PostSys.Gui.Helpers;
 
 namespace PostSys.Gui.ViewModels;
 
-/// <summary>РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РѕСЃРЅРѕРІРЅС‹С… РєРЅРѕРїРѕРє.</summary>
+/// <summary>Модель представления основных кнопок.</summary>
 public class ButtonsViewModel : ViewModelBase
 {
 	#region Data
@@ -22,8 +22,8 @@ public class ButtonsViewModel : ViewModelBase
 
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РЅР°СЃС‚СЂРѕР№РєРё РґР»СЏ РєРЅРѕРїРѕРє.</summary>
-	/// <value>РќР°СЃС‚СЂРѕР№РєРё РґР»СЏ РєРЅРѕРїРѕРє.</value>
+	/// <summary>Возвращает или задаёт настройки для кнопок.</summary>
+	/// <value>Настройки для кнопок.</value>
 	public AvaloniaList<ButtonConfiguration> ButtonOptions
 	{
 		get => _buttonOptions;
@@ -34,21 +34,21 @@ public class ButtonsViewModel : ViewModelBase
 
 	#region Events
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ РЅР°Р¶Р°С‚РёСЏ РѕСЃРЅРѕРІРЅРѕР№ РєРЅРѕРїРєРё.</summary>
+	/// <summary>Событие нажатия основной кнопки.</summary>
 	public event EventHandler<string> ButtonClickedEvent;
 
 	#endregion
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="ButtonsViewModel"/>.</summary>
+	/// <summary>Создаёт экземпляр класса <see cref="ButtonsViewModel"/>.</summary>
 	public ButtonsViewModel() => InitializeButtonOptions();
 
 	#endregion
 
 	#region Methods
 
-	/// <summary>РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РїР°СЂР°РјРµС‚СЂС‹ РєРЅРѕРїРѕРє.</summary>
+	/// <summary>Инициализирует параметры кнопок.</summary>
 	private void InitializeButtonOptions()
 	{
 		ButtonOptions.AddRange(
@@ -59,11 +59,11 @@ public class ButtonsViewModel : ViewModelBase
 		]);
 	}
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ РєРЅРѕРїРєРё.</summary>
-	/// <param name="title">РќР°Р·РІР°РЅРёРµ РєРЅРѕРїРєРё.</param>
-	/// <param name="imageSource">РСЃС‚РѕС‡РЅРёРє РёР·РѕР±СЂР°Р¶РµРЅРёСЏ.</param>
-	/// <param name="isEnabled">РџСЂРёР·РЅР°Рє РґРѕСЃС‚СѓРїРЅРѕСЃС‚Рё РєРЅРѕРїРєРё.</param>
-	/// <returns>РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ РєРЅРѕРїРєРё.</returns>
+	/// <summary>Создаёт конфигурацию кнопки.</summary>
+	/// <param name="title">Название кнопки.</param>
+	/// <param name="imageSource">Источник изображения.</param>
+	/// <param name="isEnabled">Признак доступности кнопки.</param>
+	/// <returns>Конфигурация кнопки.</returns>
 	private ButtonConfiguration CreateButton(string title, string imageSource, bool isEnabled) => new()
 	{
 		Title = title,
@@ -72,8 +72,8 @@ public class ButtonsViewModel : ViewModelBase
 		ClickCommand = ReactiveCommand.Create(() => ButtonClickedEvent?.Invoke(this, title))
 	};
 
-	/// <summary>РњРµРЅСЏРµС‚ СЃРѕСЃС‚РѕСЏРЅРёРµ РєРЅРѕРїРѕРє.</summary>
-	/// <param name="buttonStatuses">Р”Р°РЅРЅС‹Рµ РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ РєРЅРѕРїРѕРє.</param>
+	/// <summary>Меняет состояние кнопок.</summary>
+	/// <param name="buttonStatuses">Данные для обновления состояния кнопок.</param>
 	public void SetButtonEnabled(Dictionary<string, bool> buttonStatuses)
 	{
 		foreach(var item in buttonStatuses)

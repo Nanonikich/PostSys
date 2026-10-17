@@ -13,11 +13,11 @@ public class Client : Entity<Guid>, ISoftDelete
 
 	/// <summary>Возвращает или задаёт данные об имени клиента.</summary>
 	/// <value>Данные об имени клиента.</value>
-	public Fullname Fullname { get; private set; }
+	public Fullname Fullname { get; private set; } = null!;
 
 	/// <summary>Возвращает или задаёт номер телефона клиента.</summary>
 	/// <value>Номер телефона клиента.</value>
-	public PhoneNumber PhoneNumber { get; private set; }
+	public PhoneNumber PhoneNumber { get; private set; } = null!;
 
 	/// <summary>Возвращает или задаёт флаг удаления клиента.</summary>
 	/// <value>Флаг удаления клиента.</value>

@@ -9,41 +9,42 @@
 
 ### База данных
 
-- Entity Framework Core 8.0.11
-- Health Checks 8.0.2
+- Entity Framework Core 10.0.13
+- Health Checks 9.0.0
 
 ### Тестирование
 
-- Microsoft.AspNetCore.Mvc.Testing 8.0.11
-- Moq 4.20.72
-- NUnit 4.3.2
-- Respawn 6.2.1
-- Snapshooter 1.0.1
-- Testcontainers 4.3.0
+- Microsoft.AspNetCore.Mvc.Testing 10.0.13
+- Moq 4.21.0
+- NUnit 5.0.0
+- Respawn 7.0.0
+- Snapshooter 1.3.1
+- Testcontainers 4.16.0
 
 ### Архитектура и паттерны
 
-- HotChocolate 15.0.3
-- MediatR 12.4.1
+- HotChocolate 16.6.8
+- MediatR 14.2.0
 
 ### Инфраструктура
 
-- Microsoft.Extensions.DependencyInjection 8.0.2
-- NLog 5.4.0
+- Microsoft.Extensions.* 10.0.13
+- NLog 6.2.2
 
 ### Дополнительные библиотеки
 
-- CSharpFunctionalExtensions 3.5.1
+- CSharpFunctionalExtensions 3.7.0
 
 ### Библиотеки приложения
 
-- Avalonia 11.2.4
-- Splat.Microsoft.Extensions.DependencyInjection 15.3.1
+- Avalonia 12.1.4
+- ReactiveUI.Avalonia 12.1.6
+- Splat.Microsoft.Extensions.DependencyInjection 21.0.0
 
 ### Клиент
 
 - GraphQL.Client 6.1.0
-- Microsoft.AspNetCore.SignalR.Client 8.0.12
+- Microsoft.AspNetCore.SignalR.Client 10.0.13
 
 </details>
 
@@ -80,7 +81,7 @@
 
 Если нет MS Visual Studio 2022:
 
-1. Убедиться, что установлен пакет SDK для .NET 8.0.
+1. Убедиться, что установлен пакет SDK для .NET 10.0.
 2. Клонировать репозиторий PostSys.
 3. Запустить "build.cmd".
 4. Запустить exe-файл `postSys.service`, расположенный по пути `./src/postSys.service.prj/bin/Release/`.

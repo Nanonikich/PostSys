@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -11,29 +11,29 @@ using PostSys.ReadModels.Helpers;
 
 namespace PostSys.Client.Subscriptions;
 
-/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёР№, РїРѕР»СѓС‡РµРЅРЅС‹С… РѕС‚ РїРѕРґРїРёСЃРѕРє HotChocolate РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РџРѕСЃС‹Р»РєР°".</summary>
-/// <param name="packageGraphQlClient">РљР»РёРµРЅС‚ GraphQL РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РџРѕСЃС‹Р»РєР°".</param>
+/// <summary>Обработчик сообщений, полученных от подписок HotChocolate для сущности "Посылка".</summary>
+/// <param name="packageGraphQlClient">Клиент GraphQL для сущности "Посылка".</param>
 public class PackagesMessageHandler(IPackageGraphQlClient packageGraphQlClient) : IPackagesMessageHandler
 {
 	#region Events
 
 	/// <inheritdoc/>
-	public event EventHandler<Package> CreatedPackageEvent;
+	public event EventHandler<Package>? CreatedPackageEvent;
 
 	/// <inheritdoc/>
-	public event EventHandler<Package> ChangedPackageEvent;
+	public event EventHandler<Package>? ChangedPackageEvent;
 
 	/// <inheritdoc/>
-	public event EventHandler<Guid> DeletedPackageEvent;
+	public event EventHandler<Guid>? DeletedPackageEvent;
 
 	/// <inheritdoc/>
-	public event EventHandler<KeyValuePair<Guid, Address>> ChangedPackageAddressEvent;
+	public event EventHandler<KeyValuePair<Guid, Address>>? ChangedPackageAddressEvent;
 
 	/// <inheritdoc/>
-	public event EventHandler<KeyValuePair<Guid, Dimensions>> ChangedPackageDimensionsEvent;
+	public event EventHandler<KeyValuePair<Guid, Dimensions>>? ChangedPackageDimensionsEvent;
 
 	/// <inheritdoc/>
-	public event EventHandler<KeyValuePair<Guid, PackageStatus>> ChangedPackageStatusEvent;
+	public event EventHandler<KeyValuePair<Guid, PackageStatus>>? ChangedPackageStatusEvent;
 
 	#endregion
 

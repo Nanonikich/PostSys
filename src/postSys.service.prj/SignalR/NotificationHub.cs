@@ -1,19 +1,19 @@
-п»їusing System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.SignalR;
 
 namespace PostSys.Service.SignalR;
 
-/// <summary>РҐР°Р± СѓРІРµРґРѕРјР»РµРЅРёР№ РІРЅРµС€РЅРёС… СЃРµСЂРІРёСЃРѕРІ.</summary>
+/// <summary>Хаб уведомлений внешних сервисов.</summary>
 public class NotificationHub : Hub
 {
 	#region Methods
 
-	/// <summary>РЈРІРµРґРѕРјР»СЏРµС‚ Рѕ СЃРѕСЃС‚РѕСЏРЅРёРё СЃРµСЂРІРёСЃР°.</summary>
-	/// <param name="isAvailable">Р”РѕСЃС‚СѓРїРµРЅ Р»Рё СЃРµСЂРІРёСЃ.</param>
-	/// <param name="cancellationToken">РўРѕРєРµРЅ РѕС‚РјРµРЅС‹.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ.</returns>
+	/// <summary>Уведомляет о состоянии сервиса.</summary>
+	/// <param name="isAvailable">Доступен ли сервис.</param>
+	/// <param name="cancellationToken">Токен отмены.</param>
+	/// <returns>Асинхронная операция.</returns>
 	public async Task NotifyServiceStatus(bool isAvailable, CancellationToken cancellationToken = default)
 	{
 		await Clients.All.SendAsync("ReceiveServiceStatus", isAvailable, cancellationToken);

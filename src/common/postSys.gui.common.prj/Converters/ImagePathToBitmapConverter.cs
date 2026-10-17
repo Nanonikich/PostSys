@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -10,7 +10,7 @@ using Avalonia.Platform;
 
 namespace PostSys.Gui.Common.Converters;
 
-/// <summary>РљРѕРЅРІРµСЂС‚РµСЂ РёР·РѕР±СЂР°Р¶РµРЅРёР№ РІ Bitmap.</summary>
+/// <summary>Конвертер изображений в Bitmap.</summary>
 public class ImagePathToBitmapConverter : IValueConverter
 {
 	#region Methods
@@ -20,7 +20,9 @@ public class ImagePathToBitmapConverter : IValueConverter
 	{
 		try
 		{
-			return new Bitmap(AssetLoader.Open(new Uri($"avares://{Assembly.GetEntryAssembly().GetName().Name}{value}")));
+			var assemblyName = Assembly.GetEntryAssembly()?.GetName().Name
+				?? throw new InvalidOperationException("Entry assembly is not available.");
+			return new Bitmap(AssetLoader.Open(new Uri($"avares://{assemblyName}{value}")));
 		}
 		catch(FileNotFoundException ex)
 		{

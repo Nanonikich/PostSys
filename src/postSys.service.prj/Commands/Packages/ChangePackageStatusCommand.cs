@@ -1,11 +1,11 @@
-п»їusing System;
+using System;
 
 using PostSys.ReadModels.Contracts;
 using PostSys.Service.Common.Cqrs.Core;
 
 namespace PostSys.Service.Commands.Packages;
 
-/// <summary>РџСЂРµРґСЃС‚Р°РІР»СЏРµС‚ РєРѕРјР°РЅРґСѓ РёР·РјРµРЅРµРЅРёСЏ СЃС‚Р°С‚СѓСЃР° РїРѕСЃС‹Р»РєРё.</summary>
-/// <param name="Id">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕСЃС‹Р»РєРё.</param>
-/// <param name="Status">РЎС‚Р°С‚СѓСЃ РїРѕСЃС‹Р»РєРё РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ.</param>
+/// <summary>Представляет команду изменения статуса посылки.</summary>
+/// <param name="Id">Идентификатор посылки.</param>
+/// <param name="Status">Статус посылки для обновления.</param>
 public record ChangePackageStatusCommand(Guid Id, PackageStatus Status) : ICommand<bool>;

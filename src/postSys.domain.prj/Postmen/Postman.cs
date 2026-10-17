@@ -1,4 +1,4 @@
-п»їusing CSharpFunctionalExtensions;
+using CSharpFunctionalExtensions;
 
 using PostSys.Common.Data;
 using PostSys.Domain.Packages;
@@ -7,49 +7,49 @@ using PostSys.Domain.ValueObjects;
 
 namespace PostSys.Domain.Postmen;
 
-/// <summary>РњРѕРґРµР»СЊ, РѕРїРёСЃС‹РІР°СЋС‰Р°СЏ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
+/// <summary>Модель, описывающая почтальона.</summary>
 public class Postman : Entity<Guid>, ISoftDelete
 {
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РґР°РЅРЅС‹Рµ РѕР± РёРјРµРЅРё РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-	/// <value>Р”Р°РЅРЅС‹Рµ РѕР± РёРјРµРЅРё РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</value>
-	public Fullname Fullname { get; private set; }
+	/// <summary>Возвращает или задаёт данные об имени почтальона.</summary>
+	/// <value>Данные об имени почтальона.</value>
+	public Fullname Fullname { get; private set; } = null!;
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕСЃС‹Р»РєРё.</summary>
-	/// <value>РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕСЃС‹Р»РєРё.</value>
+	/// <summary>Возвращает или задаёт идентификатор посылки.</summary>
+	/// <value>Идентификатор посылки.</value>
 	public Guid PostmanPackageId { get; private set; }
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ email РїРѕС‡С‚Р°Р»СЊРѕРЅР° РґР»СЏ РґРѕСЃС‚СѓРїР° РІ СЃРёСЃС‚РµРјСѓ.</summary>
-	/// <value>Email РїРѕС‡С‚Р°Р»СЊРѕРЅР° РґР»СЏ РґРѕСЃС‚СѓРїР° РІ СЃРёСЃС‚РµРјСѓ.</value>
-	public Email Email { get; private set; }
+	/// <summary>Возвращает или задаёт email почтальона для доступа в систему.</summary>
+	/// <value>Email почтальона для доступа в систему.</value>
+	public Email Email { get; private set; } = null!;
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РїР°СЂРѕР»СЊ РїРѕС‡С‚Р°Р»СЊРѕРЅР° РґР»СЏ РґРѕСЃС‚СѓРїР° РІ СЃРёСЃС‚РµРјСѓ.</summary>
-	/// <value>РџР°СЂРѕР»СЊ РїРѕС‡С‚Р°Р»СЊРѕРЅР° РґР»СЏ РґРѕСЃС‚СѓРїР° РІ СЃРёСЃС‚РµРјСѓ.</value>
-	public Password Password { get; private set; }
+	/// <summary>Возвращает или задаёт пароль почтальона для доступа в систему.</summary>
+	/// <value>Пароль почтальона для доступа в систему.</value>
+	public Password Password { get; private set; } = null!;
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ С„Р»Р°Рі СѓРґР°Р»РµРЅРёСЏ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-	/// <value>Р¤Р»Р°Рі СѓРґР°Р»РµРЅРёСЏ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</value>
+	/// <summary>Возвращает или задаёт флаг удаления почтальона.</summary>
+	/// <value>Флаг удаления почтальона.</value>
 	public bool IsDeleted { get; private set; }
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РЅР°РІРёРіР°С†РёРѕРЅРЅРѕРµ СЃРІРѕР№СЃС‚РІРѕ РґР»СЏ СЃРІСЏР·Рё СЃ РїРѕСЃС‹Р»РєР°РјРё.</summary>
-	/// <value>РќР°РІРёРіР°С†РёРѕРЅРЅРѕРµ СЃРІРѕР№СЃС‚РІРѕ РґР»СЏ СЃРІСЏР·Рё СЃ РїРѕСЃС‹Р»РєР°РјРё.</value>
+	/// <summary>Возвращает или задаёт навигационное свойство для связи с посылками.</summary>
+	/// <value>Навигационное свойство для связи с посылками.</value>
 	public ICollection<Package> Packages { get; private set; } = [];
 
 	#endregion
 
 	#region .ctor
 
-	/// <summary>РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ.</summary>
+	/// <summary>Конструктор по умолчанию.</summary>
 	private Postman()
 	{
 	}
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="Postman"/>.</summary>
-	/// <param name="fullname">Р”Р°РЅРЅС‹Рµ РѕР± РёРјРµРЅРё РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</param>
-	/// <param name="postmanPackageId">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕСЃС‹Р»РєРё.</param>
-	/// <param name="email">Email РїРѕС‡С‚Р°Р»СЊРѕРЅР° РґР»СЏ РґРѕСЃС‚СѓРїР° РІ СЃРёСЃС‚РµРјСѓ.</param>
-	/// <param name="password">РџР°СЂРѕР»СЊ РїРѕС‡С‚Р°Р»СЊРѕРЅР° РґР»СЏ РґРѕСЃС‚СѓРїР° РІ СЃРёСЃС‚РµРјСѓ.</param>
+	/// <summary>Создаёт экземпляр класса <see cref="Postman"/>.</summary>
+	/// <param name="fullname">Данные об имени почтальона.</param>
+	/// <param name="postmanPackageId">Идентификатор посылки.</param>
+	/// <param name="email">Email почтальона для доступа в систему.</param>
+	/// <param name="password">Пароль почтальона для доступа в систему.</param>
 	private Postman(
 		Fullname fullname,
 		Guid postmanPackageId,
@@ -66,11 +66,11 @@ public class Postman : Entity<Guid>, ISoftDelete
 
 	#region Methods
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ РЅРѕРІРѕСЋ РїРѕСЃС‹Р»РєСѓ СЃ СѓРєР°Р·Р°РЅРЅС‹РјРё РґР°РЅРЅС‹РјРё.</summary>
-	/// <param name="fullname">Р”Р°РЅРЅС‹Рµ РѕР± РёРјРµРЅРё РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</param>
-	/// <param name="packageId">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕСЃС‹Р»РєРё.</param>
-	/// <param name="email">Email РїРѕС‡С‚Р°Р»СЊРѕРЅР° РґР»СЏ РґРѕСЃС‚СѓРїР° РІ СЃРёСЃС‚РµРјСѓ.</param>
-	/// <param name="password">РџР°СЂРѕР»СЊ РїРѕС‡С‚Р°Р»СЊРѕРЅР° РґР»СЏ РґРѕСЃС‚СѓРїР° РІ СЃРёСЃС‚РµРјСѓ.</param>
+	/// <summary>Создаёт новою посылку с указанными данными.</summary>
+	/// <param name="fullname">Данные об имени почтальона.</param>
+	/// <param name="packageId">Идентификатор посылки.</param>
+	/// <param name="email">Email почтальона для доступа в систему.</param>
+	/// <param name="password">Пароль почтальона для доступа в систему.</param>
 	/// <param name="checker"><see cref="IPostmanParametersChecker"/>.</param>
 	public static async Task<Postman> CreateAsync(
 		Fullname fullname,
@@ -90,8 +90,8 @@ public class Postman : Entity<Guid>, ISoftDelete
 		return new Postman(fullname, packageId, email, password);
 	}
 
-	/// <summary>РР·РјРµРЅСЏРµС‚ РґР°РЅРЅС‹Рµ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-	/// <param name="newPackageId">РќРѕРІС‹Р№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕСЃС‹Р»РєРё.</param>
+	/// <summary>Изменяет данные почтальона.</summary>
+	/// <param name="newPackageId">Новый идентификатор посылки.</param>
 	/// <param name="checker"><see cref="IPostmanParametersChecker"/>.</param>
 	public async Task ChangeAsync(Guid newPackageId, IPostmanParametersChecker checker)
 	{
@@ -104,27 +104,27 @@ public class Postman : Entity<Guid>, ISoftDelete
 		PostmanPackageId = newPackageId;
 	}
 
-	/// <summary>РР·РјРµРЅСЏРµС‚ РёРјСЏ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-	/// <param name="newFullname">РќРѕРІС‹Рµ РґР°РЅРЅС‹Рµ РѕР± РёРјРµРЅРё РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</param>
+	/// <summary>Изменяет имя почтальона.</summary>
+	/// <param name="newFullname">Новые данные об имени почтальона.</param>
 	public void ChangeFullname(Fullname newFullname)
 	{
 		Fullname = newFullname ?? throw new ArgumentNullException(nameof(newFullname));
 	}
 
-	/// <summary>РР·РјРµРЅСЏРµС‚ Email РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-	/// <param name="newEmail">РќРѕРІС‹Р№ Email.</param>
+	/// <summary>Изменяет Email почтальона.</summary>
+	/// <param name="newEmail">Новый Email.</param>
 	/// <param name="checker"><see cref="IPostmanParametersChecker"/>.</param>
 	public async Task ChangeEmailAsync(Email newEmail, IPostmanParametersChecker checker)
 	{
-		ArgumentNullException.ThrowIfNull(nameof(newEmail));
+		ArgumentNullException.ThrowIfNull(newEmail);
 
 		if(!await checker.CheckUniqueEmailAsync(newEmail.Value)) throw new ArgumentException("Email must be unique!");
 
 		Email = newEmail;
 	}
 
-	/// <summary>РР·РјРµРЅСЏРµС‚ РїР°СЂРѕР»СЊ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-	/// <param name="newPassword">РќРѕРІС‹Р№ РїР°СЂРѕР»СЊ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</param>
+	/// <summary>Изменяет пароль почтальона.</summary>
+	/// <param name="newPassword">Новый пароль почтальона.</param>
 	public void ChangePassword(Password newPassword)
 	{
 		Password = newPassword ?? throw new ArgumentNullException(nameof(newPassword));
@@ -132,8 +132,8 @@ public class Postman : Entity<Guid>, ISoftDelete
 	
 	#region ISoftDelete
 
-	/// <summary>РЈРґР°Р»СЏРµС‚ РїРѕС‡С‚Р°Р»СЊРѕРЅР° (soft delete).</summary>
-	/// <returns>РЈРґР°Р»РѕСЃСЊ Р»Рё РІС‹РїРѕР»РЅРёС‚СЊ РѕРїРµСЂР°С†РёСЋ СѓРґР°Р»РµРЅРёСЏ.</returns>
+	/// <summary>Удаляет почтальона (soft delete).</summary>
+	/// <returns>Удалось ли выполнить операцию удаления.</returns>
 	public bool Delete()
 	{
 		if(!IsDeleted)

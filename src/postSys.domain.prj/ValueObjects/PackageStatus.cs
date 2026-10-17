@@ -1,22 +1,22 @@
-п»їusing CSharpFunctionalExtensions;
+using CSharpFunctionalExtensions;
 
 namespace PostSys.Domain.ValueObjects;
 
-/// <summary>РЎС‚Р°С‚СѓСЃ РїРѕСЃС‹Р»РєРё.</summary>
+/// <summary>Статус посылки.</summary>
 public class PackageStatus : ValueObject
 {
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃС‚Р°С‚СѓСЃ РїРѕСЃС‹Р»РєРё.</summary>
-	/// <value>РЎС‚Р°С‚СѓСЃ РїРѕСЃС‹Р»РєРё.</value>
+	/// <summary>Возвращает статус посылки.</summary>
+	/// <value>Статус посылки.</value>
 	public Contracts.PackageStatus Value { get; }
 
 	#endregion
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="PackageStatus"/>.</summary>
-	/// <param name="value">Р—РЅР°С‡РµРЅРёРµ СЃС‚Р°С‚СѓСЃР° РїРѕСЃС‹Р»РєРё.</param>
+	/// <summary>Создаёт экземпляр класса <see cref="PackageStatus"/>.</summary>
+	/// <param name="value">Значение статуса посылки.</param>
 	private PackageStatus(Contracts.PackageStatus value)
 	{
 		Value = value;
@@ -26,9 +26,9 @@ public class PackageStatus : ValueObject
 
 	#region Methods
 
-	/// <summary>Р—Р°РґР°С‘С‚ Р·РЅР°С‡РµРЅРёРµ СЃС‚Р°С‚СѓСЃР° РїРѕСЃС‹Р»РєРё.</summary>
-	/// <param name="value">Р—РЅР°С‡РµРЅРёРµ СЃС‚Р°С‚СѓСЃР° РїРѕСЃС‹Р»РєРё.</param>
-	/// <returns>Р РµР·СѓР»СЊС‚Р°С‚ Р·Р°РґР°РЅРёСЏ Р·РЅР°С‡РµРЅРёСЏ СЃС‚Р°С‚СѓСЃР° РїРѕСЃС‹Р»РєРё.</returns>
+	/// <summary>Задаёт значение статуса посылки.</summary>
+	/// <param name="value">Значение статуса посылки.</param>
+	/// <returns>Результат задания значения статуса посылки.</returns>
 	public static Result<PackageStatus> Create(Contracts.PackageStatus value)
 	{ 
 		return Result.Success(new PackageStatus(value));

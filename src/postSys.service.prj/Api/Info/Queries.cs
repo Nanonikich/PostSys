@@ -1,17 +1,17 @@
-п»їusing HotChocolate.Types;
+using HotChocolate.Types;
 
 using PostSys.Framework.Common;
 
 namespace PostSys.Service.Api.Info;
 
-/// <summary>РћРїСЂРµРґРµР»СЏРµС‚ Р·Р°РїСЂРѕСЃС‹ GraphQL РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё Рѕ СЃРµСЂРІРёСЃРµ.</summary>
+/// <summary>Определяет запросы GraphQL для получения информации о сервисе.</summary>
 [QueryType]
 public static class Queries
 {
 	#region Methods
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РєР»РёРµРЅС‚Р° РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂСѓ.</summary>
-	/// <returns>РљР»РёРµРЅС‚, РµСЃР»Рё РѕРЅ СЃСѓС‰РµСЃС‚РІСѓРµС‚.</returns>
+	/// <summary>Возвращает клиента по идентификатору.</summary>
+	/// <returns>Клиент, если он существует.</returns>
 	public static string GetVersion()
 	{
 		var assembly = AssemblyInfo.FromEntryAssembly();

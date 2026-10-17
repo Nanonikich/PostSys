@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 
 using Avalonia;
-using Avalonia.ReactiveUI;
+using ReactiveUI.Avalonia;
 
 namespace PostSys.Gui;
 
@@ -18,7 +18,7 @@ public class Program
 	private static AppBuilder BuildAvaloniaApp()
 		=> AppBuilder.Configure<App>()
 			.UsePlatformDetect()
-			.UseReactiveUI()
+			.UseReactiveUI(rxui => rxui.WithExceptionHandler(new ExceptionHandler()))
 			.WithInterFont()
 			.LogToTrace();
 }

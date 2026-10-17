@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Globalization;
 
 using Avalonia;
@@ -8,7 +8,7 @@ using PostSys.ReadModels.Helpers;
 
 namespace PostSys.Gui.Converters;
 
-/// <summary>РљРѕРЅРІРµСЂС‚РµСЂ РїРµСЂРµРІРѕРґР° Р·РЅР°С‡РµРЅРёСЏ РёРјРµРЅРё РІ string РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ.</summary>
+/// <summary>Конвертер перевода значения имени в string для отображения.</summary>
 public sealed class FullnameToStringConverter : IValueConverter
 {
 	#region Methods

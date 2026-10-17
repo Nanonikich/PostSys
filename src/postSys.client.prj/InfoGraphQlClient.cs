@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,7 +10,7 @@ using PostSys.Client.Data;
 
 namespace PostSys.Client;
 
-/// <summary>РљР»РёРµРЅС‚ GraphQL РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё Рѕ СЃРµСЂРІРёСЃРµ.</summary>
+/// <summary>Клиент GraphQL для получения информации о сервисе.</summary>
 public class InfoGraphQlClient : IInfoGraphQlClient
 {
 	#region Data
@@ -22,8 +22,8 @@ public class InfoGraphQlClient : IInfoGraphQlClient
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="InfoGraphQlClient"/>.</summary>
-	/// <param name="endpoint">РђРґСЂРµСЃ.</param>
+	/// <summary>Создаёт экземпляр класса <see cref="InfoGraphQlClient"/>.</summary>
+	/// <param name="endpoint">Адрес.</param>
 	public InfoGraphQlClient(string endpoint = "http://localhost:5000")
 	{
 		_url = endpoint + "/graphql";
@@ -58,8 +58,8 @@ public class InfoGraphQlClient : IInfoGraphQlClient
 
 	private class ResponseType
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ Рё Р·Р°РґР°РµС‚ РІРµСЂСЃРёСЋ СЃРµСЂРІРёСЃР°.</summary>
-		/// <value>Р’РµСЂСЃРёСЏ СЃРµСЂРІРёСЃР°.</value>
+		/// <summary>Возвращает и задает версию сервиса.</summary>
+		/// <value>Версия сервиса.</value>
 		public string Version { get; set; }
 	}
 

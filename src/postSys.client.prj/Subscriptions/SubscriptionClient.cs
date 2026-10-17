@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Reactive;
@@ -16,7 +16,7 @@ using PostSys.ReadModels.Contracts;
 
 namespace PostSys.Client.Subscriptions;
 
-/// <summary>РљР»РёРµРЅС‚ РґР»СЏ РїРѕРґРїРёСЃРѕРє РЅР° СЃРѕР±С‹С‚РёСЏ.</summary>
+/// <summary>Клиент для подписок на события.</summary>
 public class SubscriptionClient : ISubscriptionClient
 {
 	#region Statics
@@ -38,11 +38,11 @@ public class SubscriptionClient : ISubscriptionClient
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="SubscriptionClient"/>.</summary>
-	/// <param name="endpoint">РђРґСЂРµСЃ.</param>
-	/// <param name="clientsHandler">РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёР№ С‚РѕРїРёРєР° clients.</param>
-	/// <param name="postmenHandler">РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёР№ С‚РѕРїРёРєР° postmen.</param>
-	/// <param name="packagesHandler">РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёР№ С‚РѕРїРёРєР° packages.</param>
+	/// <summary>Создаёт экземпляр класса <see cref="SubscriptionClient"/>.</summary>
+	/// <param name="endpoint">Адрес.</param>
+	/// <param name="clientsHandler">Обработчик сообщений топика clients.</param>
+	/// <param name="postmenHandler">Обработчик сообщений топика postmen.</param>
+	/// <param name="packagesHandler">Обработчик сообщений топика packages.</param>
 	public SubscriptionClient(
 		string endpoint,
 		IClientsMessageHandler clientsHandler,

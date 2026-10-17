@@ -1,18 +1,18 @@
-п»їusing System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PostSys.Client.Data;
 
-/// <summary>РљР»РёРµРЅС‚ РїРѕР»СѓС‡РµРЅРёСЏ Р°РґСЂРµСЃР° С‡РµСЂРµР· РЇРЅРґРµРєСЃ.API РїРѕ РєРѕРѕСЂРґРёРЅР°С‚Р°Рј.</summary>
+/// <summary>Клиент получения адреса через Яндекс.API по координатам.</summary>
 public interface IAddressClient
 {
 	#region Methods
 
-	/// <summary>РџРѕР»СѓС‡Р°РµС‚ РєРѕРЅРєСЂРµС‚РЅС‹Р№ Р°РґСЂРµСЃ СЃ РїРѕРјРѕС‰СЊСЋ РЇРЅРґРµРєСЃ.API РїРѕ РєРѕРѕСЂРґРёРЅР°С‚Р°Рј.</summary>
-	/// <param name="latitude">РђРґСЂРµСЃ - С€РёСЂРѕС‚Р°.</param>
-	/// <param name="longitude">РђРґСЂРµСЃ - РґРѕР»РіРѕС‚Р°.</param>
-	/// <param name="cancellationToken">РўРѕРєРµРЅ РѕС‚РјРµРЅС‹.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ, РІРѕР·РІСЂР°С‰Р°СЋС‰Р°СЏ РєРѕРЅРєСЂРµС‚РЅС‹Р№ Р°РґСЂРµСЃ РїРѕ РєРѕРѕСЂРґРёРЅР°С‚Р°Рј.</returns>
+	/// <summary>Получает конкретный адрес с помощью Яндекс.API по координатам.</summary>
+	/// <param name="latitude">Адрес - широта.</param>
+	/// <param name="longitude">Адрес - долгота.</param>
+	/// <param name="cancellationToken">Токен отмены.</param>
+	/// <returns>Асинхронная операция, возвращающая конкретный адрес по координатам.</returns>
 	Task<string> GetAddressAsync(double latitude, double longitude, CancellationToken cancellationToken = default);
 
 	#endregion

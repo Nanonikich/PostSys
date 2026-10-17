@@ -1,32 +1,32 @@
-п»їusing System;
+using System;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
 namespace PostSys.ReadModels.Contracts;
 
-/// <summary>РњРѕРґРµР»СЊ СЃРѕРѕР±С‰РµРЅРёСЏ, РѕС‚РїСЂР°РІР»СЏРµРјРѕРіРѕ РїРѕРґРїРёСЃС‡РёРєР°Рј, РѕР± РёР·РјРµРЅРµРЅРёРё РїР°СЂР°РјРµС‚СЂР° СЃСѓС‰РЅРѕСЃС‚Рё.</summary>
+/// <summary>Модель сообщения, отправляемого подписчикам, об изменении параметра сущности.</summary>
 [DataContract]
 public class EntityParameterChangeMessageModel
 {
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃСѓС‰РЅРѕСЃС‚СЊ, РЅР°Рґ РєРѕС‚РѕСЂРѕР№ Р±С‹Р»Р° РІС‹РїРѕР»РЅРµРЅР° РѕРїРµСЂР°С†РёСЏ.</summary>
-	/// <value>РЎСѓС‰РЅРѕСЃС‚СЊ, РЅР°Рґ РєРѕС‚РѕСЂРѕР№ Р±С‹Р»Р° РІС‹РїРѕР»РЅРµРЅР° РѕРїРµСЂР°С†РёСЏ.</value>
+	/// <summary>Возвращает сущность, над которой была выполнена операция.</summary>
+	/// <value>Сущность, над которой была выполнена операция.</value>
 	[JsonPropertyName("entity")]
 	public string Entity { get; }
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РґРµР№СЃС‚РІРёРµ, РІС‹РїРѕР»РЅРµРЅРЅРѕРµ РЅР°Рґ СЃСѓС‰РЅРѕСЃС‚СЊСЋ.</summary>
-	/// <value>Р”РµР№СЃС‚РІРёРµ, РІС‹РїРѕР»РЅРµРЅРЅРѕРµ РЅР°Рґ СЃСѓС‰РЅРѕСЃС‚СЊСЋ.</value>
+	/// <summary>Возвращает действие, выполненное над сущностью.</summary>
+	/// <value>Действие, выполненное над сущностью.</value>
 	[JsonPropertyName("action")]
 	public string Action { get; }
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃСѓС‰РЅРѕСЃС‚Рё.</summary>
-	/// <value>РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃСѓС‰РЅРѕСЃС‚Рё.</value>
+	/// <summary>Возвращает идентификатор сущности.</summary>
+	/// <value>Идентификатор сущности.</value>
 	[JsonPropertyName("id")]
 	public Guid Id { get; }
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РЅРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР° СЃСѓС‰РЅРѕСЃС‚Рё.</summary>
-	/// <value>РќРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР° СЃСѓС‰РЅРѕСЃС‚Рё.</value>
+	/// <summary>Возвращает новое значение параметра сущности.</summary>
+	/// <value>Новое значение параметра сущности.</value>
 	[JsonPropertyName("value")]
 	public string Value { get; }
 
@@ -34,11 +34,11 @@ public class EntityParameterChangeMessageModel
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="EntityParameterChangeMessageModel"/>.</summary>
-	/// <param name="entity">РЎСѓС‰РЅРѕСЃС‚СЊ, РЅР°Рґ РєРѕС‚РѕСЂРѕР№ Р±С‹Р»Р° РІС‹РїРѕР»РЅРµРЅР° РѕРїРµСЂР°С†РёСЏ.</param>
-	/// <param name="action">Р”РµР№СЃС‚РІРёРµ, РІС‹РїРѕР»РЅРµРЅРЅРѕРµ РЅР°Рґ СЃСѓС‰РЅРѕСЃС‚СЊСЋ.</param>
-	/// <param name="id">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃСѓС‰РЅРѕСЃС‚Рё.</param>
-	/// <param name="value">РќРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР° СЃСѓС‰РЅРѕСЃС‚Рё.</param>
+	/// <summary>Создаёт экземпляр класса <see cref="EntityParameterChangeMessageModel"/>.</summary>
+	/// <param name="entity">Сущность, над которой была выполнена операция.</param>
+	/// <param name="action">Действие, выполненное над сущностью.</param>
+	/// <param name="id">Идентификатор сущности.</param>
+	/// <param name="value">Новое значение параметра сущности.</param>
 	public EntityParameterChangeMessageModel(string entity, string action, Guid id, string value)
 	{
 		Entity = entity;

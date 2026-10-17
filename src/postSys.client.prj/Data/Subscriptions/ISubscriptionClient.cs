@@ -1,16 +1,16 @@
-п»їusing System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace PostSys.Client.Data.Subscriptions;
 
-/// <summary>РљР»РёРµРЅС‚ РґР»СЏ РїРѕРґРїРёСЃРѕРє РЅР° СЃРѕР±С‹С‚РёСЏ.</summary>
+/// <summary>Клиент для подписок на события.</summary>
 public interface ISubscriptionClient
 {
 	#region Methods
 
-	/// <summary>РџРѕРґРїРёСЃС‹РІР°РµС‚СЃСЏ РЅР° СЃРѕР±С‹С‚РёСЏ HotChocolate.</summary>
+	/// <summary>Подписывается на события HotChocolate.</summary>
 	Task StartConsuming();
 
-	/// <summary>РћС‚РїРёСЃС‹РІР°РµС‚СЃСЏ РѕС‚ СЃРѕР±С‹С‚РёР№ HotChocolate.</summary>
+	/// <summary>Отписывается от событий HotChocolate.</summary>
 	void StopConsuming();
 
 	#endregion

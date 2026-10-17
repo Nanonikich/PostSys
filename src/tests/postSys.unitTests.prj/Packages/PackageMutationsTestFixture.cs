@@ -23,7 +23,7 @@ public class PackageMutationsTestFixture
 			.GetPackageParametersCheckerMock().Object;
 
 		// Act & Assert
-		Assert.DoesNotThrowAsync(
+		await Assert.DoesNotThrowAsync(
 			() => package.ChangeAsync(Guid.NewGuid(), Guid.NewGuid(), mockPackageParametersChecker));
 	}
 
@@ -68,7 +68,7 @@ public class PackageMutationsTestFixture
 		var package = await PackageTestHelper.CreatePackageAsync();
 
 		// Act & Assert
-		Assert.Throws<ArgumentNullException>(() => package.ChangeAddress(null));
+		Assert.Throws<ArgumentNullException>(() => package.ChangeAddress(null!));
 	}
 
 	[Test]

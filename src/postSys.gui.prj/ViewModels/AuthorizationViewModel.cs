@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using System.Threading.Tasks;
@@ -16,7 +16,7 @@ using PostSys.Gui.Helpers;
 
 namespace PostSys.Gui.ViewModels;
 
-/// <summary>РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ Р°РІС‚РѕСЂРёР·Р°С†РёРё.</summary>
+/// <summary>Модель представления авторизации.</summary>
 public class AuthorizationViewModel : ViewModelBase
 {
 	#region Static
@@ -38,47 +38,47 @@ public class AuthorizationViewModel : ViewModelBase
 
 	#region Commands
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕРјР°РЅРґСѓ РґР»СЏ Р°РІС‚РѕСЂРёР·Р°С†РёРё.</summary>
-	/// <value>РљРѕРјР°РЅРґР° РґР»СЏ Р°РІС‚РѕСЂРёР·Р°С†РёРё.</value>
+	/// <summary>Возвращает команду для авторизации.</summary>
+	/// <value>Команда для авторизации.</value>
 	public ICommand AuthorizationCommand { get; }
 
 	#endregion
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ Email РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.</summary>
-	/// <value>Email РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.</value>
+	/// <summary>Возвращает или задаёт Email пользователя.</summary>
+	/// <value>Email пользователя.</value>
 	public string Email
 	{
 		get => _email;
 		set => this.RaiseAndSetIfChanged(ref _email, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РїР°СЂРѕР»СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.</summary>
-	/// <value>РџР°СЂРѕР»СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.</value>
+	/// <summary>Возвращает или задаёт пароль пользователя.</summary>
+	/// <value>Пароль пользователя.</value>
 	public string Password
 	{
 		get => _password;
 		set => this.RaiseAndSetIfChanged(ref _password, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РґРёР°Р»РѕРіРѕРІС‹РјРё РѕРєРЅР°РјРё.</summary>
-	/// <value>Р’Р·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РґРёР°Р»РѕРіРѕРІС‹РјРё РѕРєРЅР°РјРё.</value>
+	/// <summary>Возвращает взаимодействие с диалоговыми окнами.</summary>
+	/// <value>Взаимодействие с диалоговыми окнами.</value>
 	public DialogServiceInteractions DialogServiceInteractions { get; init; } = new();
 
 	#endregion
 
 	#region Events
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ СѓСЃРїРµС€РЅРѕР№ Р°РІС‚РѕСЂРёР·Р°С†РёРё.</summary>
+	/// <summary>Событие успешной авторизации.</summary>
 	public event EventHandler<bool> SuccessfulAuthorizationEvent;
 
 	#endregion
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="AuthorizationViewModel"/>.</summary>
-	/// <param name="postmanHelper">Р”Р°РЅРЅС‹Рµ РѕР± Р°РІС‚РѕСЂРёР·РѕРІР°РЅРЅРѕРј РїРѕС‡С‚Р°Р»СЊРѕРЅРµ.</param>
-	/// <param name="postmanGraphQlClient">РљР»РёРµРЅС‚ GraphQL РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РџРѕС‡С‚Р°Р»СЊРѕРЅ".</param>
-	/// <param name="appConfiguration">РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ.</param>
+	/// <summary>Создаёт экземпляр класса <see cref="AuthorizationViewModel"/>.</summary>
+	/// <param name="postmanHelper">Данные об авторизованном почтальоне.</param>
+	/// <param name="postmanGraphQlClient">Клиент GraphQL для сущности "Почтальон".</param>
+	/// <param name="appConfiguration">Конфигурация приложения.</param>
 	public AuthorizationViewModel(
 		PostmanHelper postmanHelper,
 		IPostmanGraphQlClient postmanGraphQlClient,
@@ -94,8 +94,8 @@ public class AuthorizationViewModel : ViewModelBase
 
 	#region Methods
 
-	/// <summary>Р’С‹РїРѕР»РЅСЏРµС‚ Р°РІС‚РѕСЂРёР·Р°С†РёСЋ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.</summary>
-	/// <param name="serviceAddress">РђРґСЂРµСЃ СЃРµСЂРІРёСЃР°.</param>
+	/// <summary>Выполняет авторизацию пользователя.</summary>
+	/// <param name="serviceAddress">Адрес сервиса.</param>
 	private async Task UserAuthorizationAsync(string serviceAddress)
 	{
 		if(string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))

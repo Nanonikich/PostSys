@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
@@ -8,7 +8,7 @@ using PostSys.Client.Data;
 
 namespace PostSys.Client;
 
-/// <summary>РљР»РёРµРЅС‚ РїРѕР»СѓС‡РµРЅРёСЏ Р°РґСЂРµСЃР° С‡РµСЂРµР· РЇРЅРґРµРєСЃ.API РїРѕ РєРѕРѕСЂРґРёРЅР°С‚Р°Рј.</summary>
+/// <summary>Клиент получения адреса через Яндекс.API по координатам.</summary>
 public class AddressClient : IAddressClient
 {
 	#region Data
@@ -19,8 +19,8 @@ public class AddressClient : IAddressClient
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="AddressClient"/>.</summary>
-	/// <param name="apiKey">РљР»СЋС‡ Рє РЇРЅРґРµРєСЃ.API.</param>
+	/// <summary>Создаёт экземпляр класса <see cref="AddressClient"/>.</summary>
+	/// <param name="apiKey">Ключ к Яндекс.API.</param>
 	public AddressClient(Guid apiKey)
 	{
 		_apiKey = apiKey;
@@ -49,9 +49,11 @@ public class AddressClient : IAddressClient
 			{
 				var addressDetails = geoObjects[0].GetProperty("GeoObject");
 
-				string fullAddress = addressDetails.GetProperty("metaDataProperty").GetProperty("GeocoderMetaData").GetProperty("text").GetString();
-
-				return fullAddress;
+				return addressDetails
+					.GetProperty("metaDataProperty")
+					.GetProperty("GeocoderMetaData")
+					.GetProperty("text")
+					.GetString() ?? "Address not found.";
 			}
 		}
 

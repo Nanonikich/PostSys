@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 
 using ReactiveUI;
 
@@ -7,7 +7,7 @@ using PostSys.ReadModels.Helpers;
 
 namespace PostSys.Gui.Helpers;
 
-/// <summary>РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ Р·Р°РєР°Р·С‡РёРєР°.</summary>
+/// <summary>Модель представления заказчика.</summary>
 public sealed class ClientOfOrderHelper : ViewModelBase
 {
 	#region Data
@@ -19,20 +19,20 @@ public sealed class ClientOfOrderHelper : ViewModelBase
 
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РєР»РёРµРЅС‚Р°.</summary>
-	/// <value>РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РєР»РёРµРЅС‚Р°.</value>
+	/// <summary>Возвращает идентификатор клиента.</summary>
+	/// <value>Идентификатор клиента.</value>
 	public Guid Id { get; init; }
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РґР°РЅРЅС‹Рµ РѕР± РёРјРµРЅРё РєР»РёРµРЅС‚Р°.</summary>
-	/// <value>Р”Р°РЅРЅС‹Рµ РѕР± РёРјРµРЅРё РєР»РёРµРЅС‚Р°.</value>
+	/// <summary>Возвращает или задаёт данные об имени клиента.</summary>
+	/// <value>Данные об имени клиента.</value>
 	public Fullname Fullname
 	{
 		get => _fullname;
 		set => this.RaiseAndSetIfChanged(ref _fullname, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РЅРѕРјРµСЂ С‚РµР»РµС„РѕРЅР° РєР»РёРµРЅС‚Р°.</summary>
-	/// <value>РќРѕРјРµСЂ С‚РµР»РµС„РѕРЅР° РєР»РёРµРЅС‚Р°.</value>
+	/// <summary>Возвращает или задаёт номер телефона клиента.</summary>
+	/// <value>Номер телефона клиента.</value>
 	public string PhoneNumber
 	{
 		get => _phoneNumber;

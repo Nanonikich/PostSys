@@ -1,4 +1,4 @@
-п»їusing System.Windows.Input;
+using System.Windows.Input;
 
 using ReactiveUI;
 
@@ -6,7 +6,7 @@ using PostSys.Gui.Common.ViewModels;
 
 namespace PostSys.Gui.Helpers;
 
-/// <summary>РќР°СЃС‚СЂРѕР№РєРё РґР»СЏ РѕСЃРЅРѕРІРЅС‹С… РєРЅРѕРїРѕРє.</summary>
+/// <summary>Настройки для основных кнопок.</summary>
 public sealed class ButtonConfiguration : ViewModelBase
 {
 	#region Data
@@ -19,32 +19,32 @@ public sealed class ButtonConfiguration : ViewModelBase
 
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ Р·Р°РіРѕР»РѕРІРѕРє.</summary>
-	/// <value>Р—Р°РіРѕР»РѕРІРѕРє.</value>
+	/// <summary>Возвращает или задаёт заголовок.</summary>
+	/// <value>Заголовок.</value>
 	public string Title
 	{
 		get => _title;
 		set => this.RaiseAndSetIfChanged(ref _title, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РїСѓС‚СЊ Рє РёР·РѕР±СЂР°Р¶РµРЅРёСЋ.</summary>
-	/// <value>РџСѓС‚СЊ Рє РёР·РѕР±СЂР°Р¶РµРЅРёСЋ.</value>
+	/// <summary>Возвращает или задаёт путь к изображению.</summary>
+	/// <value>Путь к изображению.</value>
 	public string ImageSource
 	{
 		get => _imageSource;
 		set => this.RaiseAndSetIfChanged(ref _imageSource, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ СЃРѕСЃС‚РѕСЏРЅРёРµ РєРЅРѕРїРєРё.</summary>
-	/// <value>РЎРѕСЃС‚РѕСЏРЅРёРµ РєРЅРѕРїРєРё.</value>
+	/// <summary>Возвращает или задаёт состояние кнопки.</summary>
+	/// <value>Состояние кнопки.</value>
 	public bool IsEnabled
 	{
 		get => _isEnabled;
 		set => this.RaiseAndSetIfChanged(ref _isEnabled, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕРјР°РЅРґСѓ РЅР°Р¶Р°С‚РёСЏ РєРЅРѕРїРєРё.</summary>
-	/// <value>РљРѕРјР°РЅРґР° РЅР°Р¶Р°С‚РёСЏ РєРЅРѕРїРєРё.</value>
+	/// <summary>Возвращает команду нажатия кнопки.</summary>
+	/// <value>Команда нажатия кнопки.</value>
 	public ICommand ClickCommand { get; init; }
 
 	#endregion

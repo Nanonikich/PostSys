@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -26,7 +26,7 @@ using PostSys.ReadModels.Helpers;
 
 namespace PostSys.Gui.ViewModels;
 
-/// <summary>РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ Р·Р°РєР°Р·РѕРІ.</summary>
+/// <summary>Модель представления заказов.</summary>
 public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 {
 	#region Static
@@ -52,12 +52,12 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 	/// <inheritdoc/>
 	public ViewModelActivator Activator { get; }
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РґРёР°Р»РѕРіРѕРІС‹РјРё РѕРєРЅР°РјРё.</summary>
-	/// <value>Р’Р·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РґРёР°Р»РѕРіРѕРІС‹РјРё РѕРєРЅР°РјРё.</value>
+	/// <summary>Возвращает взаимодействие с диалоговыми окнами.</summary>
+	/// <value>Взаимодействие с диалоговыми окнами.</value>
 	public DialogServiceInteractions DialogServiceInteractions { get; init; } = new();
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РјРѕРґРµР»Рё РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РѕРїРёСЃР°РЅРёР№ Р·Р°РєР°Р·РѕРІ.</summary>
-	/// <value>РњРѕРґРµР»Рё РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РѕРїРёСЃР°РЅРёР№ Р·Р°РєР°Р·РѕРІ.</value>
+	/// <summary>Возвращает или задаёт модели представления описаний заказов.</summary>
+	/// <value>Модели представления описаний заказов.</value>
 	public AvaloniaList<OrderDescriptionViewModel> OrderDescriptionViewModels
 	{
 		get => _orderDescriptionViewModels;
@@ -68,22 +68,22 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 
 	#region Events
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ СЃРЅСЏС‚РёСЏ РІС‹Р±СЂР°РЅРЅРѕРіРѕ Р·Р°РєР°Р·Р° СЃ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
+	/// <summary>Событие снятия выбранного заказа с почтальона.</summary>
 	public event EventHandler<Guid> ClearCurrentOrderEvent;
 
 	#endregion
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="OrdersViewModel"/>.</summary>
-	/// <param name="postmanHelper">Р”Р°РЅРЅС‹Рµ РѕР± Р°РІС‚РѕСЂРёР·РѕРІР°РЅРЅРѕРј РїРѕС‡С‚Р°Р»СЊРѕРЅРµ.</param>
-	/// <param name="addressClient">РљР»РёРµРЅС‚ РїРѕР»СѓС‡РµРЅРёСЏ Р°РґСЂРµСЃР° РЇРЅРґРµРєСЃ.API.</param>
-	/// <param name="clientGraphQlClient">РљР»РёРµРЅС‚ GraphQL РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РљР»РёРµРЅС‚".</param>
-	/// <param name="packageGraphQlClient">РљР»РёРµРЅС‚ GraphQL РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РџРѕСЃС‹Р»РєР°".</param>
+	/// <summary>Создаёт экземпляр класса <see cref="OrdersViewModel"/>.</summary>
+	/// <param name="postmanHelper">Данные об авторизованном почтальоне.</param>
+	/// <param name="addressClient">Клиент получения адреса Яндекс.API.</param>
+	/// <param name="clientGraphQlClient">Клиент GraphQL для сущности "Клиент".</param>
+	/// <param name="packageGraphQlClient">Клиент GraphQL для сущности "Посылка".</param>
 	/// <param name="clientsMessageHandler"><see cref="IClientsMessageHandler"/>.</param>
 	/// <param name="packagesMessageHandler"><see cref="IPackagesMessageHandler"/>.</param>
-	/// <param name="appConfiguration">РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ.</param>
-	/// <param name="serviceProvider">РџСЂРѕРІР°Р№РґРµСЂ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹С… СЃРµСЂРІРёСЃРѕРІ.</param>
+	/// <param name="appConfiguration">Конфигурация приложения.</param>
+	/// <param name="serviceProvider">Провайдер зарегистрированных сервисов.</param>
 	public OrdersViewModel(
 		PostmanHelper postmanHelper,
 		IAddressClient addressClient,
@@ -103,42 +103,48 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 		_appConfiguration = appConfiguration;
 		_serviceProvider = serviceProvider;
 
-		this.WhenActivated(async disposables =>
+		this.WhenActivated(d =>
 		{
-			await InitOrderDescriptionViewModelsAsync();
-
-			clientsMessageHandler.ChangedClientFullnameEvent += OnChangedClientFullname;
-			clientsMessageHandler.ChangedClientPhoneNumberEvent += OnChangedClientPhoneNumber;
-
-			packagesMessageHandler.CreatedPackageEvent += OnCreatedPackageAsync;
-			packagesMessageHandler.ChangedPackageEvent += OnChangedPackageAsync;
-			packagesMessageHandler.ChangedPackageAddressEvent += OnChangedPackageAddress;
-			packagesMessageHandler.ChangedPackageDimensionsEvent += OnChangedPackageDimensions;
-			packagesMessageHandler.ChangedPackageStatusEvent += OnChangedPackageStatus;
-			packagesMessageHandler.DeletedPackageEvent += OnDeletedPackage;
-
-			Disposable
-				.Create(() =>
-				{
-					clientsMessageHandler.ChangedClientFullnameEvent -= OnChangedClientFullname;
-					clientsMessageHandler.ChangedClientPhoneNumberEvent -= OnChangedClientPhoneNumber;
-
-					packagesMessageHandler.CreatedPackageEvent -= OnCreatedPackageAsync;
-					packagesMessageHandler.ChangedPackageEvent -= OnChangedPackageAsync;
-					packagesMessageHandler.ChangedPackageAddressEvent -= OnChangedPackageAddress;
-					packagesMessageHandler.ChangedPackageDimensionsEvent -= OnChangedPackageDimensions;
-					packagesMessageHandler.ChangedPackageStatusEvent -= OnChangedPackageStatus;
-					packagesMessageHandler.DeletedPackageEvent -= OnDeletedPackage;
-				})
-				.DisposeWith(disposables);
+			_ = ActivateAsync(d, clientsMessageHandler, packagesMessageHandler);
 		});
+	}
+
+	private async Task ActivateAsync(
+		Action<IDisposable> d,
+		IClientsMessageHandler clientsMessageHandler,
+		IPackagesMessageHandler packagesMessageHandler)
+	{
+		await InitOrderDescriptionViewModelsAsync();
+
+		clientsMessageHandler.ChangedClientFullnameEvent += OnChangedClientFullname;
+		clientsMessageHandler.ChangedClientPhoneNumberEvent += OnChangedClientPhoneNumber;
+
+		packagesMessageHandler.CreatedPackageEvent += OnCreatedPackageAsync;
+		packagesMessageHandler.ChangedPackageEvent += OnChangedPackageAsync;
+		packagesMessageHandler.ChangedPackageAddressEvent += OnChangedPackageAddress;
+		packagesMessageHandler.ChangedPackageDimensionsEvent += OnChangedPackageDimensions;
+		packagesMessageHandler.ChangedPackageStatusEvent += OnChangedPackageStatus;
+		packagesMessageHandler.DeletedPackageEvent += OnDeletedPackage;
+
+		d(Disposable.Create(() =>
+		{
+			clientsMessageHandler.ChangedClientFullnameEvent -= OnChangedClientFullname;
+			clientsMessageHandler.ChangedClientPhoneNumberEvent -= OnChangedClientPhoneNumber;
+
+			packagesMessageHandler.CreatedPackageEvent -= OnCreatedPackageAsync;
+			packagesMessageHandler.ChangedPackageEvent -= OnChangedPackageAsync;
+			packagesMessageHandler.ChangedPackageAddressEvent -= OnChangedPackageAddress;
+			packagesMessageHandler.ChangedPackageDimensionsEvent -= OnChangedPackageDimensions;
+			packagesMessageHandler.ChangedPackageStatusEvent -= OnChangedPackageStatus;
+			packagesMessageHandler.DeletedPackageEvent -= OnDeletedPackage;
+		}));
 	}
 
 	#endregion
 
 	#region Methods
 
-	/// <summary>Р—Р°РіСЂСѓР·РєР° СЃРїРёСЃРєР° Р·Р°РєР°Р·РѕРІ.</summary>
+	/// <summary>Загрузка списка заказов.</summary>
 	private async Task InitOrderDescriptionViewModelsAsync()
 	{
 		try
@@ -164,7 +170,7 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 				return (await LoadOrderDescriptionAsync(info, clientInfo));
 			});
 
-			var orderModels = (await Task.WhenAll(addressTasks)).Where(m => m != null);
+			var orderModels = (await Task.WhenAll(addressTasks)).OfType<OrderDescriptionViewModel>();
 			OrderDescriptionViewModels = new AvaloniaList<OrderDescriptionViewModel>(orderModels);
 		}
 		catch(GraphQlClientException graphQlEx)
@@ -187,10 +193,10 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 		}
 	}
 
-	/// <summary>Р—Р°РґР°С‘С‚ РѕРїРёСЃР°РЅРёРµ Р·Р°РєР°Р·Р° РІ РјРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ.</summary>
-	/// <param name="newData">РџРѕСЃС‹Р»РєР°.</param>
-	/// <param name="clientInfo">Р”Р°РЅРЅС‹Рµ Рѕ РєР»РёРµРЅС‚Рµ.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ, РІРѕР·РІСЂР°С‰Р°СЋС‰Р°СЏ РјРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ СЃ РѕРїРёСЃР°РЅРёРµРј Р·Р°РєР°Р·Р°.</returns>
+	/// <summary>Задаёт описание заказа в модель представления.</summary>
+	/// <param name="newData">Посылка.</param>
+	/// <param name="clientInfo">Данные о клиенте.</param>
+	/// <returns>Асинхронная операция, возвращающая модель представления с описанием заказа.</returns>
 	private async Task<OrderDescriptionViewModel?> LoadOrderDescriptionAsync(Package newData, ReadModels.Client clientInfo)
 	{
 		var orderDescriptionViewModel = _serviceProvider.GetRequiredService<OrderDescriptionViewModel>();
@@ -227,9 +233,9 @@ public class OrdersViewModel : ViewModelBase, IActivatableViewModel
 		return null;
 	}
 
-	/// <summary>РџРѕР»СѓС‡Р°РµС‚ РїСѓС‚СЊ Рє РёР·РѕР±СЂР°Р¶РµРЅРёСЋ Р·Р°РєР°Р·Р°.</summary>
-	/// <param name="dimensions">РџР°СЂР°РјРµС‚СЂС‹ РїРѕСЃС‹Р»РєРё.</param>
-	/// <returns>РџСѓС‚СЊ Рє РёР·РѕР±СЂР°Р¶РµРЅРёСЋ Р·Р°РєР°Р·Р°.</returns>
+	/// <summary>Получает путь к изображению заказа.</summary>
+	/// <param name="dimensions">Параметры посылки.</param>
+	/// <returns>Путь к изображению заказа.</returns>
 	private string GetOrderImage(ReadModels.Helpers.Dimensions dimensions)
 	{
 		if(dimensions.Weight > 1.0 || dimensions.Length > 20.0 || dimensions.Height > 20.0)

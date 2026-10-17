@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 
-using Avalonia.ReactiveUI;
+using ReactiveUI.Avalonia;
 
 using ReactiveUI;
 
@@ -15,8 +15,8 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 {
 	#region Data
 
-	private DialogReactiveWindow _dialogReactiveWindow;
-	private List<IDisposable> _interactionsDispose;
+	private DialogReactiveWindow _dialogReactiveWindow = null!;
+	private List<IDisposable> _interactionsDispose = null!;
 
 	#endregion
 
@@ -28,7 +28,7 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 
 		_dialogReactiveWindow = new(this);
 
-		this.WhenActivated(_ =>
+		this.WhenActivated(d =>
 		{
 			var iteractionImpl = new DialogServiceInteractionSource<MainWindow>(this);
 			iteractionImpl.Register(ViewModel!.DialogServiceInteractions);
@@ -47,14 +47,12 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 				},
 			];
 
-			Disposable
-				.Create(() =>
-				{
-					iteractionImpl.Dispose();
-					_interactionsDispose.ForEach(x => x.Dispose());
-					_interactionsDispose.Clear();
-				})
-				.DisposeWith(_);
+			d(Disposable.Create(() =>
+			{
+				iteractionImpl.Dispose();
+				_interactionsDispose.ForEach(x => x.Dispose());
+				_interactionsDispose.Clear();
+			}));
 		});
 	}
 

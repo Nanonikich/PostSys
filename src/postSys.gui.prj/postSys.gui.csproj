@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Nullable>enable</Nullable>
           <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
@@ -42,8 +42,9 @@
     <PackageReference Include="Avalonia.Desktop" />
     <PackageReference Include="Avalonia.Fonts.Inter" />
     <PackageReference Include="Avalonia.Themes.Fluent" />
-    <PackageReference Include="Avalonia.ReactiveUI" />
-    <PackageReference Include="Avalonia.Diagnostics" />
+    <PackageReference Include="ReactiveUI.Avalonia" />
+    <PackageReference Include="ReactiveUI.Disposables" />
+    <PackageReference Include="AvaloniaUI.DiagnosticsSupport" />
     <PackageReference Include="FluentIcons.Avalonia" />
     <PackageReference Include="Microsoft.Build.CopyOnWrite">
       <PrivateAssets>all</PrivateAssets>

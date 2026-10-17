@@ -1,13 +1,13 @@
-п»їusing System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PostSys.Client.Data;
 
-/// <summary>РљР»РёРµРЅС‚ GraphQL РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё Рѕ СЃРµСЂРІРёСЃРµ.</summary>
+/// <summary>Клиент GraphQL для получения информации о сервисе.</summary>
 public interface IInfoGraphQlClient
 {
-	/// <summary>РџРѕР»СѓС‡Р°РµС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РІРµСЂСЃРёРё СЃРµСЂРІРёСЃР°.</summary>
-	/// <param name="cancellationToken">РўРѕРєРµРЅ РѕС‚РјРµРЅС‹.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ, РІРѕР·РІСЂР°С‰Р°СЋС‰Р°СЏ РІРµСЂСЃРёСЋ СЃРµСЂРІРёСЃР°.</returns>
+	/// <summary>Получает информацию о версии сервиса.</summary>
+	/// <param name="cancellationToken">Токен отмены.</param>
+	/// <returns>Асинхронная операция, возвращающая версию сервиса.</returns>
 	Task<string> GetVersionAsync(CancellationToken cancellationToken = default);
 }

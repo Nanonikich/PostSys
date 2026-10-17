@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Threading.Tasks;
 using System.Reactive.Linq;
 using System.Windows.Input;
@@ -17,7 +17,7 @@ using PostSys.ReadModels.Contracts;
 
 namespace PostSys.Gui.ViewModels;
 
-/// <summary>РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РѕРїРёСЃР°РЅРёСЏ РїРѕСЃС‹Р»РєРё.</summary>
+/// <summary>Модель представления описания посылки.</summary>
 public class OrderDescriptionViewModel : ViewModelBase, IActivatableViewModel
 {
 	#region Static
@@ -41,8 +41,8 @@ public class OrderDescriptionViewModel : ViewModelBase, IActivatableViewModel
 
 	#region Commands
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕРјР°РЅРґСѓ РєРЅРѕРїРєРё РІС‹Р±РѕСЂР° Р·Р°РєР°Р·Р°.</summary>
-	/// <value>РљРѕРјР°РЅРґР° РєРЅРѕРїРєРё РІС‹Р±РѕСЂР° Р·Р°РєР°Р·Р°.</value>
+	/// <summary>Возвращает команду кнопки выбора заказа.</summary>
+	/// <value>Команда кнопки выбора заказа.</value>
 	public ICommand SelectOrderCommand { get; }
 
 	#endregion
@@ -50,63 +50,63 @@ public class OrderDescriptionViewModel : ViewModelBase, IActivatableViewModel
 	/// <inheritdoc/>
 	public ViewModelActivator Activator { get; }
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ С„Р»Р°Рі РІС‹Р±СЂР°РЅРЅРѕР№ РїРѕС‡С‚Р°Р»СЊРѕРЅРѕРј РїРѕСЃС‹Р»РєРё.</summary>
-	/// <value>Р¤Р»Р°Рі РІС‹Р±СЂР°РЅРЅРѕР№ РїРѕС‡С‚Р°Р»СЊРѕРЅРѕРј РїРѕСЃС‹Р»РєРё.</value>
+	/// <summary>Возвращает или задаёт флаг выбранной почтальоном посылки.</summary>
+	/// <value>Флаг выбранной почтальоном посылки.</value>
 	public bool IsCurrent { get; private set; }
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕСЃС‹Р»РєРё.</summary>
-	/// <value>РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕСЃС‹Р»РєРё.</value>
+	/// <summary>Возвращает или задаёт идентификатор посылки.</summary>
+	/// <value>Идентификатор посылки.</value>
 	public Guid PackageId
 	{
 		get => _packageId;
 		set => this.RaiseAndSetIfChanged(ref _packageId, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РїСѓС‚СЊ Рє РёР·РѕР±СЂР°Р¶РµРЅРёСЋ РїРѕСЃС‹Р»РєРё.</summary>
-	/// <value>РџСѓС‚СЊ Рє РёР·РѕР±СЂР°Р¶РµРЅРёСЋ РїРѕСЃС‹Р»РєРё.</value>
+	/// <summary>Возвращает или задаёт путь к изображению посылки.</summary>
+	/// <value>Путь к изображению посылки.</value>
 	public string ImagePath
 	{
 		get => _imagePath;
 		set => this.RaiseAndSetIfChanged(ref _imagePath, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ Р°РґСЂРµСЃ, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅР°С…РѕРґРёС‚СЃСЏ РєР»РёРµРЅС‚.</summary>
-	/// <value>РђРґСЂРµСЃ, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅР°С…РѕРґРёС‚СЃСЏ РєР»РёРµРЅС‚.</value>
+	/// <summary>Возвращает или задаёт адрес, по которому находится клиент.</summary>
+	/// <value>Адрес, по которому находится клиент.</value>
 	public string Address
 	{
 		get => _address;
 		set => this.RaiseAndSetIfChanged(ref _address, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ Р°РґСЂРµСЃ, РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РєР»РёРµРЅС‚Р°.</summary>
-	/// <value>РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РєР»РёРµРЅС‚Р°.</value>
+	/// <summary>Возвращает или задаёт адрес, идентификатор клиента.</summary>
+	/// <value>Идентификатор клиента.</value>
 	public ClientOfOrderHelper ClientInfo
 	{
 		get => _clientInfo;
 		set => this.RaiseAndSetIfChanged(ref _clientInfo, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ СЃС‚Р°С‚СѓСЃ Р·Р°РєР°Р·Р°.</summary>
-	/// <value>РЎС‚Р°С‚СѓСЃ Р·Р°РєР°Р·Р°.</value>
+	/// <summary>Возвращает или задаёт статус заказа.</summary>
+	/// <value>Статус заказа.</value>
 	public PackageStatus Status
 	{
 		get => _status;
 		set => this.RaiseAndSetIfChanged(ref _status, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ СѓРІРµРґРѕРјР»РµРЅРёРµ РѕР± РѕС€РёР±РєРµ.</summary>
-	/// <value>РЈРІРµРґРѕРјР»РµРЅРёРµ РѕР± РѕС€РёР±РєРµ.</value>
+	/// <summary>Возвращает или задаёт уведомление об ошибке.</summary>
+	/// <value>Уведомление об ошибке.</value>
 	public Interaction<MessageContent, bool> ShowErrorMessage { get; set; } = new();
 
 	#endregion
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="OrderDescriptionViewModel"/>.</summary>
-	/// <param name="postmanHelper">Р”Р°РЅРЅС‹Рµ РѕР± Р°РІС‚РѕСЂРёР·РѕРІР°РЅРЅРѕРј РїРѕС‡С‚Р°Р»СЊРѕРЅРµ.</param>
-	/// <param name="postmanGraphQlClient">РљР»РёРµРЅС‚ GraphQL РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РџРѕС‡С‚Р°Р»СЊРѕРЅ".</param>
-	/// <param name="packageGraphQlClient">РљР»РёРµРЅС‚ GraphQL РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РџРѕСЃС‹Р»РєР°".</param>
-	/// <param name="appConfiguration">РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ.</param>
+	/// <summary>Создаёт экземпляр класса <see cref="OrderDescriptionViewModel"/>.</summary>
+	/// <param name="postmanHelper">Данные об авторизованном почтальоне.</param>
+	/// <param name="postmanGraphQlClient">Клиент GraphQL для сущности "Почтальон".</param>
+	/// <param name="packageGraphQlClient">Клиент GraphQL для сущности "Посылка".</param>
+	/// <param name="appConfiguration">Конфигурация приложения.</param>
 	public OrderDescriptionViewModel(
 		PostmanHelper postmanHelper,
 		IPostmanGraphQlClient postmanGraphQlClient,

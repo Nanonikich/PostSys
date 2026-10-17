@@ -27,7 +27,7 @@ public class SchemaTestFixture
 			.AddGraphQl<ReadDbContext>()
 			.BuildSchemaAsync();
 		var fullName = new NUnitSnapshotFullNameReader().ReadSnapshotFullName();
-		var schemaString = schema.Print();
+		var schemaString = schema.ToString();
 		schemaString.MatchSnapshot(new SnapshotFullName("schema.graphql", fullName.FolderPath));
 	}
 

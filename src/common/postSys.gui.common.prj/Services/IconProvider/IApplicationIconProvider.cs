@@ -1,14 +1,14 @@
-п»їusing Avalonia.Controls;
+using Avalonia.Controls;
 
 namespace PostSys.Gui.Common.Services.IconProvider;
 
-/// <summary>РРєРѕРЅРєР° РґР»СЏ РѕРєРѕРЅ.</summary>
+/// <summary>Иконка для окон.</summary>
 public interface IApplicationIconProvider
 {
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРєРѕРЅРєСѓ РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
-	/// <value>РРєРѕРЅРєР° РїСЂРёР»РѕР¶РµРЅРёСЏ.</value>
+	/// <summary>Возвращает иконку приложения.</summary>
+	/// <value>Иконка приложения.</value>
 	WindowIcon Icon { get; }
 
 	#endregion

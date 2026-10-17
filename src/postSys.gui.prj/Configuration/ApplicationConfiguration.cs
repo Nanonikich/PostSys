@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text.Json;
@@ -6,19 +6,19 @@ using System.Text.Json.Serialization;
 
 namespace PostSys.Gui.Configuration;
 
-/// <summary>Р”Р°С‚Р°РєРѕРЅС‚СЂР°РєС‚, СЃРѕРґРµСЂР¶Р°С‰РёР№ РЅР°СЃС‚СЂРѕР№РєРё РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
+/// <summary>Датаконтракт, содержащий настройки приложения.</summary>
 [DataContract]
 public record ApplicationConfiguration
 {
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ Рё Р·Р°РґР°РµС‚ Р°РґСЂРµСЃ РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє СЃРµСЂРІРёСЃСѓ.</summary>
-	/// <value>РђРґСЂРµСЃ РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє СЃРµСЂРІРёСЃСѓ.</value>
+	/// <summary>Возвращает и задает адрес подключения к сервису.</summary>
+	/// <value>Адрес подключения к сервису.</value>
 	[JsonPropertyName("service_address")]
 	public string ServiceAddress { get; set; } = "http://localhost:5000";
 	
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ Рё Р·Р°РґР°РµС‚ РєР»СЋС‡ РЇРЅРґРµРєСЃ.API.</summary>
-	/// <value>РљР»СЋС‡ РЇРЅРґРµРєСЃ.API.</value>
+	/// <summary>Возвращает и задает ключ Яндекс.API.</summary>
+	/// <value>Ключ Яндекс.API.</value>
 	[JsonPropertyName("yandex_api_key")]
 	public Guid YandexApiKey { get; set; } = Guid.Parse("abdd66b3-331d-4c4b-910d-4e6830274ddc");
 
@@ -26,16 +26,17 @@ public record ApplicationConfiguration
 
 	#region Methods
 
-	/// <summary>Р—Р°РіСЂСѓР¶Р°РµС‚ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
-	/// <param name="path">РџСѓС‚СЊ Рє С„Р°Р№Р»Сѓ РєРѕРЅС„РёРіСѓСЂР°С†РёРё.</param>
-	/// <returns>РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ.</returns>
+	/// <summary>Загружает конфигурацию приложения.</summary>
+	/// <param name="path">Путь к файлу конфигурации.</param>
+	/// <returns>Конфигурация приложения.</returns>
 	public static ApplicationConfiguration Load(string path)
 	{
 		try
 		{
 			using var json = new FileStream(path, FileMode.OpenOrCreate);
 
-			return JsonSerializer.Deserialize<ApplicationConfiguration>(json);
+			return JsonSerializer.Deserialize<ApplicationConfiguration>(json)
+				?? throw new InvalidOperationException($"Failed to deserialize configuration from '{path}'.");
 		}
 		catch(Exception)
 		{
@@ -43,8 +44,8 @@ public record ApplicationConfiguration
 		}
 	}
 
-	/// <summary>РЎРѕС…СЂР°РЅСЏРµС‚ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ РїРѕ РїСѓС‚Рё.</summary>
-	/// <param name="path">РџСѓС‚СЊ, РєСѓРґР° СЃРѕС…СЂР°РЅРёС‚СЃСЏ РєРѕРЅС„РёРіСѓСЂР°С†РёСЏ.</param>
+	/// <summary>Сохраняет конфигурацию по пути.</summary>
+	/// <param name="path">Путь, куда сохранится конфигурация.</param>
 	public void Save(string path)
 	{
 		var json = JsonSerializer.Serialize(this, new JsonSerializerOptions

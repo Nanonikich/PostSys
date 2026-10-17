@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,7 +13,7 @@ using PostSys.Client.Data;
 
 namespace PostSys.Client;
 
-/// <summary>РљР»РёРµРЅС‚ GraphQL РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РџРѕС‡С‚Р°Р»СЊРѕРЅ".</summary>
+/// <summary>Клиент GraphQL для сущности "Почтальон".</summary>
 public class PostmanGraphQlClient : IPostmanGraphQlClient
 {
 	#region Data
@@ -25,8 +25,8 @@ public class PostmanGraphQlClient : IPostmanGraphQlClient
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="PostmanGraphQlClient"/>.</summary>
-	/// <param name="endpoint">РђРґСЂРµСЃ.</param>
+	/// <summary>Создаёт экземпляр класса <see cref="PostmanGraphQlClient"/>.</summary>
+	/// <param name="endpoint">Адрес.</param>
 	public PostmanGraphQlClient(string endpoint = "http://localhost:5000")
 	{
 		_url = endpoint + "/graphql";
@@ -78,15 +78,15 @@ public class PostmanGraphQlClient : IPostmanGraphQlClient
 
 	private class PostmenByIdsResponseModel
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РґР°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ Р·Р°РїСЂРѕСЃРѕРј Рѕ РїРѕС‡С‚Р°Р»СЊРѕРЅР°С….</summary>
-		/// <value>Р”Р°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ Р·Р°РїСЂРѕСЃРѕРј Рѕ РїРѕС‡С‚Р°Р»СЊРѕРЅР°С….</value>
+		/// <summary>Возвращает или задаёт данные, полученные запросом о почтальонах.</summary>
+		/// <value>Данные, полученные запросом о почтальонах.</value>
 		public PostmenByIdsData Postmen { get; set; }
 	}
 
 	private class PostmenByIdsData
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ СЃРїРёСЃРѕРє РїРѕС‡С‚Р°Р»СЊРѕРЅРѕРІ, РїРѕР»СѓС‡РµРЅРЅС‹С… Р·Р°РїСЂРѕСЃРѕРј.</summary>
-		/// <value>РЎРїРёСЃРѕРє РїРѕС‡С‚Р°Р»СЊРѕРЅРѕРІ, РїРѕР»СѓС‡РµРЅРЅС‹С… Р·Р°РїСЂРѕСЃРѕРј.</value>
+		/// <summary>Возвращает или задаёт список почтальонов, полученных запросом.</summary>
+		/// <value>Список почтальонов, полученных запросом.</value>
 		public List<ReadModels.Postman> Items { get; set; }
 	}
 
@@ -141,22 +141,22 @@ public class PostmanGraphQlClient : IPostmanGraphQlClient
 
 	private class AuthorizationPostmanResponseModel
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РґР°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ Р·Р°РїСЂРѕСЃРѕРј Рѕ РїРѕС‡С‚Р°Р»СЊРѕРЅР°С….</summary>
-		/// <value>Р”Р°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ Р·Р°РїСЂРѕСЃРѕРј Рѕ РїРѕС‡С‚Р°Р»СЊРѕРЅР°С….</value>
+		/// <summary>Возвращает или задаёт данные, полученные запросом о почтальонах.</summary>
+		/// <value>Данные, полученные запросом о почтальонах.</value>
 		public AuthorizationPostmanData Postmen { get; set; }
 	}
 
 	private class AuthorizationPostmanData
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ СЃРїРёСЃРѕРє РїРѕС‡С‚Р°Р»СЊРѕРЅРѕРІ, РїРѕР»СѓС‡РµРЅРЅС‹С… Р·Р°РїСЂРѕСЃРѕРј.</summary>
-		/// <value>РЎРїРёСЃРѕРє РїРѕС‡С‚Р°Р»СЊРѕРЅРѕРј, РїРѕР»СѓС‡РµРЅРЅС‹С… Р·Р°РїСЂРѕСЃРѕРј.</value>
+		/// <summary>Возвращает или задаёт список почтальонов, полученных запросом.</summary>
+		/// <value>Список почтальоном, полученных запросом.</value>
 		public List<AuthorizationPostman> Items { get; set; }
 	}
 
 	private class AuthorizationPostman
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-		/// <value>РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</value>
+		/// <summary>Возвращает или задаёт идентификатор почтальона.</summary>
+		/// <value>Идентификатор почтальона.</value>
 		public Guid Id { get; set; }
 	}
 
@@ -196,15 +196,15 @@ public class PostmanGraphQlClient : IPostmanGraphQlClient
 
 	private class ChangePostmanResponse
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РґР°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ Р·Р°РїСЂРѕСЃРѕРј Р·Р°РјРµРЅС‹ РїРѕСЃС‹Р»РєРё Сѓ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-		/// <value>Р”Р°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ Р·Р°РїСЂРѕСЃРѕРј Р·Р°РјРµРЅС‹ РїРѕСЃС‹Р»РєРё Сѓ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</value>
+		/// <summary>Возвращает или задаёт данные, полученные запросом замены посылки у почтальона.</summary>
+		/// <value>Данные, полученные запросом замены посылки у почтальона.</value>
 		public ChangePostmanData ChangePostman { get; set; }
 	}
 
 	private class ChangePostmanData
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ СѓРґР°Р»РѕСЃСЊ Р»Рё Р·Р°РјРµРЅРёС‚СЊ РІ СЃРёСЃС‚РµРјРµ РїРѕСЃС‹Р»РєСѓ Сѓ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-		/// <value>РЈРґР°Р»РѕСЃСЊ Р»Рё Р·Р°РјРµРЅРёС‚СЊ РІ СЃРёСЃС‚РµРјРµ РїРѕСЃС‹Р»РєСѓ Сѓ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</value>
+		/// <summary>Возвращает или задаёт удалось ли заменить в системе посылку у почтальона.</summary>
+		/// <value>Удалось ли заменить в системе посылку у почтальона.</value>
 		public bool IsSuccess { get; set; }
 	}
 

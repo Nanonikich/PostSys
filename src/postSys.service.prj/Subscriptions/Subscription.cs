@@ -1,34 +1,34 @@
-п»їusing HotChocolate;
+using HotChocolate;
 using HotChocolate.Types;
 
 using PostSys.ReadModels.Contracts;
 
 namespace PostSys.Service.Subscriptions;
 
-/// <summary>РњРµРЅРµРґР¶РµСЂ РїРѕРґРїРёСЃРѕРє HotChocolate.</summary>
+/// <summary>Менеджер подписок HotChocolate.</summary>
 public class Subscription
 {
-	/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕР·РґР°РЅРёСЏ СЃСѓС‰РЅРѕСЃС‚Рё.</summary>
-	/// <param name="payload">РњРѕРґРµР»СЊ СЃРѕРѕР±С‰РµРЅРёСЏ, РѕС‚РїСЂР°РІР»СЏРµРјРѕРіРѕ РїРѕРґРїРёСЃС‡РёРєР°Рј.</param>
-	/// <returns>РњРѕРґРµР»СЊ СЃРѕРѕР±С‰РµРЅРёСЏ, РѕС‚РїСЂР°РІР»СЏРµРјРѕРіРѕ РїРѕРґРїРёСЃС‡РёРєР°Рј.</returns>
+	/// <summary>Обработчик создания сущности.</summary>
+	/// <param name="payload">Модель сообщения, отправляемого подписчикам.</param>
+	/// <returns>Модель сообщения, отправляемого подписчикам.</returns>
 	[Subscribe]
 	public EntityCreationMessageModel OnEntityCreated([EventMessage] EntityCreationMessageModel payload) => payload;
 
-	/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє РёР·РјРµРЅРµРЅРёСЏ СЃСѓС‰РЅРѕСЃС‚Рё.</summary>
-	/// <param name="payload">РњРѕРґРµР»СЊ СЃРѕРѕР±С‰РµРЅРёСЏ, РѕС‚РїСЂР°РІР»СЏРµРјРѕРіРѕ РїРѕРґРїРёСЃС‡РёРєР°Рј.</param>
-	/// <returns>РњРѕРґРµР»СЊ СЃРѕРѕР±С‰РµРЅРёСЏ, РѕС‚РїСЂР°РІР»СЏРµРјРѕРіРѕ РїРѕРґРїРёСЃС‡РёРєР°Рј.</returns>
+	/// <summary>Обработчик изменения сущности.</summary>
+	/// <param name="payload">Модель сообщения, отправляемого подписчикам.</param>
+	/// <returns>Модель сообщения, отправляемого подписчикам.</returns>
 	[Subscribe]
 	public EntityChangeMessageModel OnEntityChanged([EventMessage] EntityChangeMessageModel payload) => payload;
 
-	/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє РёР·РјРµРЅРµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР° СЃСѓС‰РЅРѕСЃС‚Рё.</summary>
-	/// <param name="payload">РњРѕРґРµР»СЊ СЃРѕРѕР±С‰РµРЅРёСЏ, РѕС‚РїСЂР°РІР»СЏРµРјРѕРіРѕ РїРѕРґРїРёСЃС‡РёРєР°Рј.</param>
-	/// <returns>РњРѕРґРµР»СЊ СЃРѕРѕР±С‰РµРЅРёСЏ, РѕС‚РїСЂР°РІР»СЏРµРјРѕРіРѕ РїРѕРґРїРёСЃС‡РёРєР°Рј.</returns>
+	/// <summary>Обработчик изменения параметра сущности.</summary>
+	/// <param name="payload">Модель сообщения, отправляемого подписчикам.</param>
+	/// <returns>Модель сообщения, отправляемого подписчикам.</returns>
 	[Subscribe]
 	public EntityParameterChangeMessageModel OnEntityParameterChanged([EventMessage] EntityParameterChangeMessageModel payload) => payload;
 
-	/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕР·РґР°РЅРёСЏ СЃСѓС‰РЅРѕСЃС‚Рё.</summary>
-	/// <param name="payload">РњРѕРґРµР»СЊ СЃРѕРѕР±С‰РµРЅРёСЏ, РѕС‚РїСЂР°РІР»СЏРµРјРѕРіРѕ РїРѕРґРїРёСЃС‡РёРєР°Рј.</param>
-	/// <returns>РњРѕРґРµР»СЊ СЃРѕРѕР±С‰РµРЅРёСЏ, РѕС‚РїСЂР°РІР»СЏРµРјРѕРіРѕ РїРѕРґРїРёСЃС‡РёРєР°Рј.</returns>
+	/// <summary>Обработчик создания сущности.</summary>
+	/// <param name="payload">Модель сообщения, отправляемого подписчикам.</param>
+	/// <returns>Модель сообщения, отправляемого подписчикам.</returns>
 	[Subscribe]
 	public EntityDeletionMessageModel OnEntityDeleted([EventMessage] EntityDeletionMessageModel payload) => payload;
 }

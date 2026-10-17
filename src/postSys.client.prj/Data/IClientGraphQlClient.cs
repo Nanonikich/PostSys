@@ -1,19 +1,19 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PostSys.Client.Data;
 
-/// <summary>РљР»РёРµРЅС‚ GraphQL РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РљР»РёРµРЅС‚".</summary>
+/// <summary>Клиент GraphQL для сущности "Клиент".</summary>
 public interface IClientGraphQlClient
 {
 	#region Methods
 
-	/// <summary>РџРѕР»СѓС‡Р°РµС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РєР»РёРµРЅС‚Р°С… РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР°Рј.</summary>
-	/// <param name="clientIds">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ РєР»РёРµРЅС‚РѕРІ.</param>
-	/// <param name="cancellationToken">РўРѕРєРµРЅ РѕС‚РјРµРЅС‹.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ, РІРѕР·РІСЂР°С‰Р°СЋС‰Р°СЏ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РєР»РёРµРЅС‚Р°С… РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР°Рј.</returns>
+	/// <summary>Получает информацию о клиентах по идентификаторам.</summary>
+	/// <param name="clientIds">Идентификаторы клиентов.</param>
+	/// <param name="cancellationToken">Токен отмены.</param>
+	/// <returns>Асинхронная операция, возвращающая информацию о клиентах по идентификаторам.</returns>
 	Task<IReadOnlyList<ReadModels.Client>> GetClientsByIdsAsync(Guid[] clientIds, CancellationToken cancellationToken = default);
 
 	#endregion

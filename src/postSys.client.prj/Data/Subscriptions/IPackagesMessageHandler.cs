@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,36 +8,36 @@ using PostSys.ReadModels.Helpers;
 
 namespace PostSys.Client.Data.Subscriptions;
 
-/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёР№, РїРѕР»СѓС‡РµРЅРЅС‹С… РѕС‚ РїРѕРґРїРёСЃРѕРє HotChocolate РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РџРѕСЃС‹Р»РєР°".</summary>
+/// <summary>Обработчик сообщений, полученных от подписок HotChocolate для сущности "Посылка".</summary>
 public interface IPackagesMessageHandler : IMessageHandler
 {
 	#region Events
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ Рѕ СЃРѕР·РґР°РЅРёРё РїРѕСЃС‹Р»РєРё.</summary>
-	event EventHandler<Package> CreatedPackageEvent;
+	/// <summary>Событие, уведомляющее о создании посылки.</summary>
+	event EventHandler<Package>? CreatedPackageEvent;
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ РѕР± РёР·РјРµРЅРµРЅРёРё РґР°РЅРЅС‹С… РїРѕСЃС‹Р»РєРё.</summary>
-	event EventHandler<Package> ChangedPackageEvent;
+	/// <summary>Событие, уведомляющее об изменении данных посылки.</summary>
+	event EventHandler<Package>? ChangedPackageEvent;
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ РѕР± СѓРґР°Р»РµРЅРёРё РїРѕСЃС‹Р»РєРё.</summary>
-	event EventHandler<Guid> DeletedPackageEvent;
+	/// <summary>Событие, уведомляющее об удалении посылки.</summary>
+	event EventHandler<Guid>? DeletedPackageEvent;
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ РѕР± РёР·РјРµРЅРµРЅРёРё Р°РґСЂРµСЃР° РїРѕСЃС‹Р»РєРё.</summary>
-	event EventHandler<KeyValuePair<Guid, Address>> ChangedPackageAddressEvent;
+	/// <summary>Событие, уведомляющее об изменении адреса посылки.</summary>
+	event EventHandler<KeyValuePair<Guid, Address>>? ChangedPackageAddressEvent;
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ РѕР± РёР·РјРµРЅРµРЅРёРё РїР°СЂР°РјРµС‚СЂРѕРІ РїРѕСЃС‹Р»РєРё.</summary>
-	event EventHandler<KeyValuePair<Guid, Dimensions>> ChangedPackageDimensionsEvent;
+	/// <summary>Событие, уведомляющее об изменении параметров посылки.</summary>
+	event EventHandler<KeyValuePair<Guid, Dimensions>>? ChangedPackageDimensionsEvent;
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ РѕР± РёР·РјРµРЅРµРЅРёРё СЃС‚Р°С‚СѓСЃР° РїРѕСЃС‹Р»РєРё.</summary>
-	event EventHandler<KeyValuePair<Guid, PackageStatus>> ChangedPackageStatusEvent;
+	/// <summary>Событие, уведомляющее об изменении статуса посылки.</summary>
+	event EventHandler<KeyValuePair<Guid, PackageStatus>>? ChangedPackageStatusEvent;
 
 	#endregion
 
 	#region Handlers
 
-	/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёСЏ РѕР± РёР·РјРµРЅРµРЅРёРё СЃСѓС‰РЅРѕСЃС‚Рё, РїРѕР»СѓС‡РµРЅРЅРѕРіРѕ РїРѕ РїРѕРґРїРёСЃРєРµ.</summary>
-	/// <param name="message">РЎРѕРѕР±С‰РµРЅРёРµ РѕР± РёР·РјРµРЅРµРЅРёРё СЃСѓС‰РЅРѕСЃС‚Рё, РїРѕР»СѓС‡РµРЅРЅРѕРµ РїРѕ РїРѕРґРїРёСЃРєРµ.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ.</returns>
+	/// <summary>Обработчик сообщения об изменении сущности, полученного по подписке.</summary>
+	/// <param name="message">Сообщение об изменении сущности, полученное по подписке.</param>
+	/// <returns>Асинхронная операция.</returns>
 	Task HandleMessageAboutChangeAsync(EntityChangeMessageModel message);
 
 	#endregion

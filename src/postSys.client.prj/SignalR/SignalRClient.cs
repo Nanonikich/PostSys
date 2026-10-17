@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,7 +10,7 @@ using PostSys.Client.Data.SignalR;
 
 namespace PostSys.Client.SignalR;
 
-/// <summary>РљР»РёРµРЅС‚ SignalR.</summary>
+/// <summary>Клиент SignalR.</summary>
 public class SignalRClient : ISignalRClient
 {
 	#region Static
@@ -21,15 +21,15 @@ public class SignalRClient : ISignalRClient
 
 	#region Data
 
-	private HubConnection _hubConnection;
-	private IDisposable _subscription;
+	private HubConnection? _hubConnection;
+	private IDisposable? _subscription;
 
 	#endregion
 
 	#region Events
 
 	/// <inheritdoc/>
-	public event EventHandler<bool> ChangeServiceStatusEvent;
+	public event EventHandler<bool>? ChangeServiceStatusEvent;
 
 	#endregion
 
@@ -50,14 +50,14 @@ public class SignalRClient : ISignalRClient
 
 		IsDisposed = false;
 
-		ConnectWithRetryAsync(_hubConnection, cancellationToken);
+		_ = ConnectWithRetryAsync(_hubConnection, cancellationToken);
 		return Task.CompletedTask;
 	}
 
-	/// <summary>РџРѕРґРєР»СЋС‡Р°РµС‚СЃСЏ Рє С…Р°Р±Сѓ SignalR СЃ РїРµСЂРµРїРѕРґРєР»СЋС‡РµРЅРёРµРј РІ СЃР»СѓС‡Р°Рµ РЅРµСѓРґР°С‡Рё.</summary>
-	/// <param name="connection">РџРѕРґРєР»СЋС‡РµРЅРёРµ Рє С…Р°Р±Сѓ.</param>
-	/// <param name="cancellationToken">РўРѕРєРµРЅ РѕС‚РјРµРЅС‹.</param>
-	/// <returns>Р—Р°РґР°С‡Р° РїРѕ РїРѕРґРєР»СЋС‡РµРЅРёСЋ.</returns>
+	/// <summary>Подключается к хабу SignalR с переподключением в случае неудачи.</summary>
+	/// <param name="connection">Подключение к хабу.</param>
+	/// <param name="cancellationToken">Токен отмены.</param>
+	/// <returns>Задача по подключению.</returns>
 	private async Task<bool> ConnectWithRetryAsync(HubConnection connection, CancellationToken cancellationToken)
 	{
 		while(true)
@@ -95,14 +95,14 @@ public class SignalRClient : ISignalRClient
 
 	#region IDisposable
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ С„Р»Р°Рі СѓРЅРёС‡С‚РѕР¶РµРЅС‹ Р»Рё Р·Р°РІРёСЃРёРјРѕСЃС‚Рё.</summary>
-	/// <value>Р¤Р»Р°Рі СѓРЅРёС‡С‚РѕР¶РµРЅС‹ Р»Рё Р·Р°РІРёСЃРёРјРѕСЃС‚Рё.</value>
+	/// <summary>Возвращает или задаёт флаг уничтожены ли зависимости.</summary>
+	/// <value>Флаг уничтожены ли зависимости.</value>
 	public bool IsDisposed { get; private set; }
 
 	/// <inheritdoc/>
 	public async ValueTask DisposeAsync()
 	{
-		if(IsDisposed) return;
+		if(IsDisposed || _hubConnection is null) return;
 
 		await _hubConnection.StopAsync();
 		_hubConnection.Closed -= OnConnectionClosedAsync;

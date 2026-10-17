@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -11,29 +11,29 @@ using PostSys.ReadModels.Helpers;
 
 namespace PostSys.Client.Subscriptions;
 
-/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёР№, РїРѕР»СѓС‡РµРЅРЅС‹С… РѕС‚ РїРѕРґРїРёСЃРѕРє HotChocolate РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РџРѕС‡С‚Р°Р»СЊРѕРЅ".</summary>
-/// <param name="postmanGraphQlClient">РљР»РёРµРЅС‚ GraphQL РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РџРѕС‡С‚Р°Р»СЊРѕРЅ".</param>
+/// <summary>Обработчик сообщений, полученных от подписок HotChocolate для сущности "Почтальон".</summary>
+/// <param name="postmanGraphQlClient">Клиент GraphQL для сущности "Почтальон".</param>
 public class PostmenMessageHandler(IPostmanGraphQlClient postmanGraphQlClient) : IPostmenMessageHandler
 {
 	#region Events
 
 	/// <inheritdoc/>
-	public event EventHandler<Postman> CreatedPostmanEvent;
+	public event EventHandler<Postman>? CreatedPostmanEvent;
 
 	/// <inheritdoc/>
-	public event EventHandler<Postman> ChangedPostmanEvent;
+	public event EventHandler<Postman>? ChangedPostmanEvent;
 
 	/// <inheritdoc/>
-	public event EventHandler<Guid> DeletedPostmanEvent;
+	public event EventHandler<Guid>? DeletedPostmanEvent;
 
 	/// <inheritdoc/>
-	public event EventHandler<KeyValuePair<Guid, string>> ChangedEmailPostmanEvent;
+	public event EventHandler<KeyValuePair<Guid, string>>? ChangedEmailPostmanEvent;
 
 	/// <inheritdoc/>
-	public event EventHandler<KeyValuePair<Guid, Fullname>> ChangedFullnamePostmanEvent;
+	public event EventHandler<KeyValuePair<Guid, Fullname>>? ChangedFullnamePostmanEvent;
 
 	/// <inheritdoc/>
-	public event EventHandler<KeyValuePair<Guid, string>> ChangedPasswordPostmanEvent;
+	public event EventHandler<KeyValuePair<Guid, string>>? ChangedPasswordPostmanEvent;
 
 	#endregion
 

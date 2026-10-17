@@ -114,9 +114,8 @@ public abstract class PostgreSqlContainerSetup<TEntryPoint, TDbContext>
 		}
 	}
 
-	private static PostgreSqlContainer BuildContainer(ContainerConfiguration configuration) => new PostgreSqlBuilder()
-		.WithImage(configuration.ImageName)
-		.Build();
+	private static PostgreSqlContainer BuildContainer(ContainerConfiguration configuration) =>
+		new PostgreSqlBuilder(configuration.ImageName).Build();
 
 	private static (string?, ContainerConfiguration? containerConfiguration) LoadConfiguration()
 	{

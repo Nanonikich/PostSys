@@ -1,4 +1,4 @@
-п»їusing System.Reactive;
+using System.Reactive;
 using System.Threading.Tasks;
 
 using Avalonia.Controls;
@@ -13,25 +13,25 @@ using PostSys.Gui.Common.ViewModels;
 
 namespace PostSys.Gui.Common.Services.Dialogs;
 
-/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє РїРѕРєР°Р·Р° СЃРѕРѕР±С‰РµРЅРёР№.</summary>
-/// <param name="window">РћРєРЅРѕ-СЂРѕРґРёС‚РµР»СЊ.</param>
+/// <summary>Обработчик показа сообщений.</summary>
+/// <param name="window">Окно-родитель.</param>
 public class DialogReactiveWindow(Window window)
 {
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РїСЂРѕРІР°Р№РґРµСЂ РёРєРѕРЅРєРё РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
-	/// <value>РџСЂРѕРІР°Р№РґРµСЂ РёРєРѕРЅРєРё РїСЂРёР»РѕР¶РµРЅРёСЏ.</value>
+	/// <summary>Возвращает или задаёт провайдер иконки приложения.</summary>
+	/// <value>Провайдер иконки приложения.</value>
 	public IApplicationIconProvider IconProvider { get; set; }
 
 	#endregion
 
 	#region Methods
 
-	/// <summary>РџРѕРєР°Р·С‹РІР°РµС‚ РґРёР°Р»РѕРіРѕРІРѕРµ РѕРєРЅРѕ.</summary>
-	/// <typeparam name="TViewModel">РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РІС‹Р·С‹РІР°РµРјРѕРіРѕ РѕРєРЅР°.</typeparam>
-	/// <typeparam name="TDialogWindow">РћРєРЅРѕ РјРѕРґРµР»Рё РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ.</typeparam>
-	/// <param name="interaction">РЎРІСЏР·СЊ РґР»СЏ РІС‹Р·РѕРІР°.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ.</returns>
+	/// <summary>Показывает диалоговое окно.</summary>
+	/// <typeparam name="TViewModel">Модель представления вызываемого окна.</typeparam>
+	/// <typeparam name="TDialogWindow">Окно модели представления.</typeparam>
+	/// <param name="interaction">Связь для вызова.</param>
+	/// <returns>Асинхронная операция.</returns>
 	public async Task ShowDialogWindowAsync<TViewModel, TDialogWindow>(IInteractionContext<TViewModel, Unit?> interaction)
 		where TViewModel : ViewModelBase
 		where TDialogWindow : Window, new()
@@ -45,9 +45,9 @@ public class DialogReactiveWindow(Window window)
 		interaction.SetOutput(result);
 	}
 
-	/// <summary>РџРѕРєР°Р·С‹РІР°РµС‚ СЃРѕРѕР±С‰РµРЅРёРµ СЃ РѕРїРёСЃР°РЅРёРµРј РѕС€РёР±РєРё.</summary>
-	/// <param name="interaction">РЎРІСЏР·СЊ РґР»СЏ РІС‹Р·РѕРІР°.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ.</returns>
+	/// <summary>Показывает сообщение с описанием ошибки.</summary>
+	/// <param name="interaction">Связь для вызова.</param>
+	/// <returns>Асинхронная операция.</returns>
 	public async Task ShowErrorMessageAsync(IInteractionContext<MessageContent, bool> interaction)
 	{
 		var msBoxStandardWindow = MsBox.Avalonia.MessageBoxManager.GetMessageBoxStandard(
@@ -64,9 +64,9 @@ public class DialogReactiveWindow(Window window)
 		interaction.SetOutput(await msBoxStandardWindow.ShowWindowDialogAsync(window) == ButtonResult.Ok);
 	}
 
-	/// <summary>РџРѕРєР°Р·С‹РІР°РµС‚ СЃРѕРѕР±С‰РµРЅРёРµ СЃ РІРѕРїСЂРѕСЃРѕРј.</summary>
-	/// <param name="interaction">РЎРІСЏР·СЊ РґР»СЏ РІС‹Р·РѕРІР°.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ.</returns>
+	/// <summary>Показывает сообщение с вопросом.</summary>
+	/// <param name="interaction">Связь для вызова.</param>
+	/// <returns>Асинхронная операция.</returns>
 	public async Task ShowQuestionMessageAsync(IInteractionContext<MessageContent, bool> interaction)
 	{
 		var msBoxStandardWindow = MsBox.Avalonia.MessageBoxManager.GetMessageBoxStandard(
@@ -83,8 +83,8 @@ public class DialogReactiveWindow(Window window)
 		interaction.SetOutput(await msBoxStandardWindow.ShowWindowDialogAsync(window) == ButtonResult.Yes);
 	}
 
-	/// <summary>Р—Р°РєСЂС‹С‚РёРµ РѕРєРЅР°.</summary>
-	/// <param name="interaction">РЈСЃС‚Р°РЅРѕРІРєР° РІС‹РІРѕРґР°.</param>
+	/// <summary>Закрытие окна.</summary>
+	/// <param name="interaction">Установка вывода.</param>
 	public void CloseWindow(IInteractionContext<bool, bool> interaction)
 	{
 		window?.Close();

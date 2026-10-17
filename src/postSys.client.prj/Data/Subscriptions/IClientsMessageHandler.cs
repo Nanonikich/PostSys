@@ -1,26 +1,26 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 
 using PostSys.ReadModels.Helpers;
 
 namespace PostSys.Client.Data.Subscriptions;
 
-/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёР№, РїРѕР»СѓС‡РµРЅРЅС‹С… РѕС‚ РїРѕРґРїРёСЃРѕРє HotChocolate РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РљР»РёРµРЅС‚".</summary>
+/// <summary>Обработчик сообщений, полученных от подписок HotChocolate для сущности "Клиент".</summary>
 public interface IClientsMessageHandler : IMessageHandler
 {
 	#region Events
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ Рѕ СЃРѕР·РґР°РЅРёРё РєР»РёРµРЅС‚Р°.</summary>
-	event EventHandler<ReadModels.Client> CreatedClientEvent;
+	/// <summary>Событие, уведомляющее о создании клиента.</summary>
+	event EventHandler<ReadModels.Client>? CreatedClientEvent;
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ РѕР± СѓРґР°Р»РµРЅРёРё РєР»РёРµРЅС‚Р°.</summary>
-	event EventHandler<Guid> DeletedClientEvent;
+	/// <summary>Событие, уведомляющее об удалении клиента.</summary>
+	event EventHandler<Guid>? DeletedClientEvent;
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ РѕР± РёР·РјРµРЅРµРЅРёРё РїРѕР»РЅРѕРіРѕ РёРјРµРЅРё РєР»РёРµРЅС‚Р°.</summary>
-	event EventHandler<KeyValuePair<Guid, Fullname>> ChangedClientFullnameEvent;
+	/// <summary>Событие, уведомляющее об изменении полного имени клиента.</summary>
+	event EventHandler<KeyValuePair<Guid, Fullname>>? ChangedClientFullnameEvent;
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ РѕР± РёР·РјРµРЅРµРЅРёРё РЅРѕРјРµСЂР° С‚РµР»РµС„РѕРЅР° РєР»РёРµРЅС‚Р°.</summary>
-	event EventHandler<KeyValuePair<Guid, string>> ChangedClientPhoneNumberEvent;
+	/// <summary>Событие, уведомляющее об изменении номера телефона клиента.</summary>
+	event EventHandler<KeyValuePair<Guid, string>>? ChangedClientPhoneNumberEvent;
 
 	#endregion
 }

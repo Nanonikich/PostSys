@@ -19,7 +19,7 @@ public class PostmanMutationsTestFixture
 {
 	[Test]
 	[Description("Проверяет создание почтальона без имени.")]
-	public void Create_postman_without_name_impossible()
+	public async Task Create_postman_without_name_impossible()
 	{
 		// Arrange
 		var email = Email.Create("ivanov@gmail.com");
@@ -27,7 +27,7 @@ public class PostmanMutationsTestFixture
 		var mockPostmanParametersChecker = PostmanTestHelper.GetPostmanParametersCheckerMock().Object;
 
 		// Act & Assert
-		Assert.ThrowsAsync<ArgumentException>(() => Postman.CreateAsync(
+		await Assert.ThrowsAsync<ArgumentException>(() => Postman.CreateAsync(
 			Fullname.Create("Филатов", string.Empty, string.Empty).Value,
 			Guid.NewGuid(),
 			email.Value,
@@ -57,7 +57,7 @@ public class PostmanMutationsTestFixture
 		var newEmail = Email.Create("newIvanov@gmail.com");
 
 		// Act & Assert
-		Assert.DoesNotThrowAsync(() => postman.ChangeEmailAsync(newEmail.Value, mockPostmanParametersChecker));
+		await Assert.DoesNotThrowAsync(() => postman.ChangeEmailAsync(newEmail.Value, mockPostmanParametersChecker));
 	}
 
 	[Test]
@@ -73,7 +73,7 @@ public class PostmanMutationsTestFixture
 		var newEmail = Email.Create("ivanov@gmail.com");
 
 		// Act & Assert
-		Assert.ThrowsAsync<ArgumentException>(
+		await Assert.ThrowsAsync<ArgumentException>(
 			() => postman.ChangeEmailAsync(newEmail.Value, mockPostmanParametersChecker.Object));
 	}
 
@@ -87,7 +87,7 @@ public class PostmanMutationsTestFixture
 		var newEmail = Email.Create("111");
 
 		// Act & Assert
-		Assert.ThrowsAsync<ResultFailureException>(
+		await Assert.ThrowsAsync<ResultFailureException>(
 			() => postman.ChangeEmailAsync(newEmail.Value, mockPostmanParametersChecker));
 	}
 

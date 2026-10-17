@@ -1,22 +1,22 @@
-п»їusing PostSys.Gui.Common.ViewModels;
+using PostSys.Gui.Common.ViewModels;
 using PostSys.Gui.Common.Services.Dialogs;
 
 namespace PostSys.Gui.ViewModels;
 
-/// <summary>РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ С‚РµРєСѓС‰РµРіРѕ Р·Р°РєР°Р·Р°.</summary>
+/// <summary>Модель представления текущего заказа.</summary>
 public class CurrentOrderViewModel : ViewModelBase
 {
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РґРёР°Р»РѕРіРѕРІС‹РјРё РѕРєРЅР°РјРё.</summary>
-	/// <value>Р’Р·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РґРёР°Р»РѕРіРѕРІС‹РјРё РѕРєРЅР°РјРё.</value>
+	/// <summary>Возвращает взаимодействие с диалоговыми окнами.</summary>
+	/// <value>Взаимодействие с диалоговыми окнами.</value>
 	public DialogServiceInteractions DialogServiceInteractions { get; init; } = new();
 
 	#endregion
 
 	#region Methods
 
-	/// <summary>РћС‡РёСЃС‚РєР° РґР°РЅРЅС‹С… РІС‹Р±СЂР°РЅРЅРѕРіРѕ Р·Р°РєР°Р·Р°.</summary>
+	/// <summary>Очистка данных выбранного заказа.</summary>
 	public void Clear()
 	{
 

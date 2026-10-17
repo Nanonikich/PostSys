@@ -1,42 +1,42 @@
-п»їusing System;
+using System;
 using System.IO;
 using System.Diagnostics;
 using System.Reflection;
 
 namespace PostSys.Framework.Common;
 
-/// <summary>РљРѕРЅСЃС‚Р°РЅС‚С‹ РїСѓС‚РµР№ С„Р°Р№Р»РѕРІ.</summary>
+/// <summary>Константы путей файлов.</summary>
 public static class PathConstants
 {
 	#region Data
 
-	/// <summary>РЎР±РѕСЂРєР°, РєРѕС‚РѕСЂР°СЏ РЅР°С‡Р°Р»Р° РёСЃРїРѕР»РЅРµРЅРёРµ РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
+	/// <summary>Сборка, которая начала исполнение приложения.</summary>
 	private static readonly Assembly CallingAssembly = Assembly.GetEntryAssembly()!;
 
-	/// <summary>РРЅС„РѕСЂРјР°С†РёСЏ Рѕ С„Р°Р№Р»Р° СЃР±РѕСЂРєРё, РєРѕС‚РѕСЂР°СЏ РЅР°С‡Р°Р»Р° РёСЃРїРѕР»РЅРµРЅРёРµ РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
+	/// <summary>Информация о файла сборки, которая начала исполнение приложения.</summary>
 	private static readonly FileVersionInfo VersionInfo = FileVersionInfo.GetVersionInfo(
 		CallingAssembly.Location);
 
-	/// <summary>РџСѓС‚СЊ Рє РѕР±С‰РµР№ РґР»СЏ РІСЃРµС… РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ РІ СЃРёСЃС‚РµРјРµ РїР°РїРєРµ, РіРґРµ С…СЂР°РЅСЏС‚СЃСЏ РґР°РЅРЅС‹Рµ РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
+	/// <summary>Путь к общей для всех пользователей в системе папке, где хранятся данные приложения.</summary>
 	private static readonly string ProgramDataPath = Environment.GetFolderPath(
 		Environment.SpecialFolder.CommonApplicationData);
 
-	/// <summary>РџСѓС‚СЊ Рє С‚РµРєСѓС‰РµР№ РґРёСЂРµРєС‚РѕСЂРёРё РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
+	/// <summary>Путь к текущей директории приложения.</summary>
 	private static readonly string CurrentDirectoryPath = Environment.CurrentDirectory;
 
 	#endregion
 
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РїСѓС‚СЊ, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ Р±СѓРґСѓС‚ СЃРѕС…СЂР°РЅСЏС‚СЊСЃСЏ РґР°РЅРЅС‹Рµ РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
-	/// <value>РџСѓС‚СЊ, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ Р±СѓРґСѓС‚ СЃРѕС…СЂР°РЅСЏС‚СЊСЃСЏ РґР°РЅРЅС‹Рµ РїСЂРёР»РѕР¶РµРЅРёСЏ.</value>
+	/// <summary>Возвращает путь, по которому будут сохраняться данные приложения.</summary>
+	/// <value>Путь, по которому будут сохраняться данные приложения.</value>
 	public static string AppProgramDataPath => Path.Combine(
 		ProgramDataPath,
 		"PostSys",
 		Path.GetFileNameWithoutExtension(VersionInfo?.InternalName) ?? "Untitled");
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РїСѓС‚СЊ Рє С‚РµРєСѓС‰РµР№ РґРёСЂРµРєС‚РѕСЂРёРё РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
-	/// <value>РџСѓС‚СЊ Рє С‚РµРєСѓС‰РµР№ РґРёСЂРµРєС‚РѕСЂРёРё РїСЂРёР»РѕР¶РµРЅРёСЏ.</value>
+	/// <summary>Возвращает путь к текущей директории приложения.</summary>
+	/// <value>Путь к текущей директории приложения.</value>
 	public static string AppCurrentDirectoryPath => Path.Combine(
 		CurrentDirectoryPath,
 		Path.GetFileNameWithoutExtension(VersionInfo?.InternalName) ?? "Untitled");

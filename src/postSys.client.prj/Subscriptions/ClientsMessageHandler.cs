@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -10,23 +10,23 @@ using PostSys.ReadModels.Helpers;
 
 namespace PostSys.Client.Subscriptions;
 
-/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёР№, РїРѕР»СѓС‡РµРЅРЅС‹С… РѕС‚ РїРѕРґРїРёСЃРѕРє HotChocolate РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РљР»РёРµРЅС‚".</summary>
-/// <param name="clientGraphQlClient">РљР»РёРµРЅС‚ GraphQL РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РљР»РёРµРЅС‚".</param>
+/// <summary>Обработчик сообщений, полученных от подписок HotChocolate для сущности "Клиент".</summary>
+/// <param name="clientGraphQlClient">Клиент GraphQL для сущности "Клиент".</param>
 public class ClientsMessageHandler(IClientGraphQlClient clientGraphQlClient) : IClientsMessageHandler
 {
 	#region Events
 
 	/// <inheritdoc/>
-	public event EventHandler<ReadModels.Client> CreatedClientEvent;
+	public event EventHandler<ReadModels.Client>? CreatedClientEvent;
 
 	/// <inheritdoc/>
-	public event EventHandler<Guid> DeletedClientEvent;
+	public event EventHandler<Guid>? DeletedClientEvent;
 
 	/// <inheritdoc/>
-	public event EventHandler<KeyValuePair<Guid, Fullname>> ChangedClientFullnameEvent;
+	public event EventHandler<KeyValuePair<Guid, Fullname>>? ChangedClientFullnameEvent;
 
 	/// <inheritdoc/>
-	public event EventHandler<KeyValuePair<Guid, string>> ChangedClientPhoneNumberEvent;
+	public event EventHandler<KeyValuePair<Guid, string>>? ChangedClientPhoneNumberEvent;
 
 	#endregion
 

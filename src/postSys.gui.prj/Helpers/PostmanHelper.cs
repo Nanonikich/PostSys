@@ -1,14 +1,14 @@
-п»їusing System;
+using System;
 
 namespace PostSys.Gui.Helpers;
 
-/// <summary>Р”Р°РЅРЅС‹Рµ РѕР± Р°РІС‚РѕСЂРёР·РѕРІР°РЅРЅРѕРј РїРѕС‡С‚Р°Р»СЊРѕРЅРµ.</summary>
+/// <summary>Данные об авторизованном почтальоне.</summary>
 public class PostmanHelper
 {
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-	/// <value>РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</value>
+	/// <summary>Возвращает или задаёт идентификатор почтальона.</summary>
+	/// <value>Идентификатор почтальона.</value>
 	public Guid PostmanId { get; set; }
 
 	#endregion

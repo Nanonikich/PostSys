@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,28 +8,28 @@ using PostSys.ReadModels.Contracts;
 
 namespace PostSys.Client.Data;
 
-/// <summary>РљР»РёРµРЅС‚ GraphQL РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РџРѕСЃС‹Р»РєР°".</summary>
+/// <summary>Клиент GraphQL для сущности "Посылка".</summary>
 public interface IPackageGraphQlClient
 {
 	#region Methods
 
-	/// <summary>РџРѕР»СѓС‡Р°РµС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїРѕСЃС‹Р»РєР°С… РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР°Рј.</summary>
-	/// <param name="packageIds">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ РїРѕСЃС‹Р»РѕРє.</param>
-	/// <param name="cancellationToken">РўРѕРєРµРЅ РѕС‚РјРµРЅС‹.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ, РІРѕР·РІСЂР°С‰Р°СЋС‰Р°СЏ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїРѕСЃС‹Р»РєР°С… РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР°Рј.</returns>
+	/// <summary>Получает информацию о посылках по идентификаторам.</summary>
+	/// <param name="packageIds">Идентификаторы посылок.</param>
+	/// <param name="cancellationToken">Токен отмены.</param>
+	/// <returns>Асинхронная операция, возвращающая информацию о посылках по идентификаторам.</returns>
 	Task<IReadOnlyList<Package>> GetPackagesByIdsAsync(Guid[] packageIds, CancellationToken cancellationToken = default);
 
-	/// <summary>РџРѕР»СѓС‡Р°РµС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїРѕСЃС‹Р»РєР°С…, РЅР°Р·РЅР°С‡РµРЅРЅС‹С… РЅР° РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-	/// <param name="postmanId">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</param>
-	/// <param name="cancellationToken">РўРѕРєРµРЅ РѕС‚РјРµРЅС‹.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ, РІРѕР·РІСЂР°С‰Р°СЋС‰Р°СЏ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїРѕСЃС‹Р»РєР°С…, РЅР°Р·РЅР°С‡РµРЅРЅС‹С… РЅР° РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</returns>
+	/// <summary>Получает информацию о посылках, назначенных на почтальона.</summary>
+	/// <param name="postmanId">Идентификатор почтальона.</param>
+	/// <param name="cancellationToken">Токен отмены.</param>
+	/// <returns>Асинхронная операция, возвращающая информацию о посылках, назначенных на почтальона.</returns>
 	Task<IReadOnlyList<Package>> GetPackagesByPostmanIdAsync(Guid postmanId, CancellationToken cancellationToken = default);
 
-	/// <summary>РР·РјРµРЅСЏРµС‚ СЃС‚Р°С‚СѓСЃ РїРѕСЃС‹Р»РєРё.</summary>
-	/// <param name="packageId">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕСЃС‹Р»РєРё.</param>
-	/// <param name="newStatus">РЎС‚Р°С‚СѓСЃ РїРѕСЃС‹Р»РєРё РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ.</param>
-	/// <param name="cancellationToken">РўРѕРєРµРЅ РѕС‚РјРµРЅС‹.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ, РІРѕР·РІСЂР°С‰Р°СЋС‰Р°СЏ СѓСЃРїРµС€РЅРѕСЃС‚СЊ РІС‹РїРѕР»РЅРµРЅРёСЏ Р·Р°РїСЂРѕСЃР°.</returns>
+	/// <summary>Изменяет статус посылки.</summary>
+	/// <param name="packageId">Идентификатор посылки.</param>
+	/// <param name="newStatus">Статус посылки для обновления.</param>
+	/// <param name="cancellationToken">Токен отмены.</param>
+	/// <returns>Асинхронная операция, возвращающая успешность выполнения запроса.</returns>
 	Task<bool> ChangePackageStatusAsync(Guid packageId, PackageStatus newStatus, CancellationToken cancellationToken = default);
 
 	#endregion

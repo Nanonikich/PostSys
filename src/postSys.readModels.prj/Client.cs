@@ -22,7 +22,7 @@ public class Client : ISoftDelete
 
 	/// <summary>Возвращает номер телефона клиента.</summary>
 	/// <value>Номер телефона клиента.</value>
-	public string PhoneNumber { get; init; }
+	public string PhoneNumber { get; init; } = null!;
 
 	/// <inheritdoc/>
 	[GraphQLIgnore]

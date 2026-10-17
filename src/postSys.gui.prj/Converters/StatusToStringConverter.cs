@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Globalization;
 
 using Avalonia;
@@ -9,7 +9,7 @@ using PostSys.ReadModels.Contracts;
 
 namespace PostSys.Gui.Converters;
 
-/// <summary>РљРѕРЅРІРµСЂС‚РµСЂ РїРµСЂРµРІРѕРґР° Р·РЅР°С‡РµРЅРёСЏ enum РІ string РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ.</summary>
+/// <summary>Конвертер перевода значения enum в string для отображения.</summary>
 public sealed class StatusToStringConverter : IValueConverter
 {
 	#region Methods
@@ -38,7 +38,7 @@ public sealed class StatusToStringConverter : IValueConverter
 					}
 				}
 
-				return enumName ?? "РќРµРёР·РІРµСЃС‚РЅС‹Р№ СЃС‚Р°С‚СѓСЃ";
+				return enumName ?? "Неизвестный статус";
 			}
 			catch(Exception ex)
 			{

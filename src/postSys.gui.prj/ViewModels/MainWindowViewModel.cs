@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -20,7 +20,7 @@ using PostSys.Gui.Helpers;
 
 namespace PostSys.Gui.ViewModels;
 
-/// <summary>РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
+/// <summary>Модель представления главного окна приложения.</summary>
 public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 {
 	#region Statics
@@ -33,7 +33,7 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 
 	private bool _firstSignalRState = true;
 	private bool _isEnabledComponents;
-	private object _currentView;
+	private object _currentView = null!;
 	private AuthorizationViewModel _authorizationViewModel;
 	private OrdersViewModel _ordersViewModel;
 	private CurrentOrderViewModel _currentOrderViewModel;
@@ -48,12 +48,12 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 
 	#region Commands
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕРјР°РЅРґСѓ РѕС‚РєСЂС‹С‚РёСЏ РѕРєРЅР° РЅР°СЃС‚СЂРѕРµРє РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
-	/// <value>РљРѕРјР°РЅРґР° РѕС‚РєСЂС‹С‚РёСЏ РѕРєРЅР° РЅР°СЃС‚СЂРѕРµРє РїСЂРёР»РѕР¶РµРЅРёСЏ.</value>
+	/// <summary>Возвращает команду открытия окна настроек приложения.</summary>
+	/// <value>Команда открытия окна настроек приложения.</value>
 	public ICommand SettingsCommand { get; }
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕРјР°РЅРґСѓ РєРЅРѕРїРєРё, РєРѕС‚РѕСЂР°СЏ РѕС‚РєСЂС‹РІР°РµС‚ РѕРєРЅРѕ "Рћ РїСЂРѕРіСЂР°РјРјРµ".</summary>
-	/// <value>РљРѕРјР°РЅРґР° РєРЅРѕРїРєРё, РєРѕС‚РѕСЂР°СЏ РѕС‚РєСЂС‹РІР°РµС‚ РѕРєРЅРѕ "Рћ РїСЂРѕРіСЂР°РјРјРµ".</value>
+	/// <summary>Возвращает команду кнопки, которая открывает окно "О программе".</summary>
+	/// <value>Команда кнопки, которая открывает окно "О программе".</value>
 	public ICommand InfoCommand { get; }
 
 	#endregion
@@ -61,82 +61,86 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 	/// <inheritdoc/>
 	public ViewModelActivator Activator { get; }
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ СЃРѕСЃС‚РѕСЏРЅРёРµ РєРѕРјРїРѕРЅРµРЅС‚РѕРІ РѕРєРЅР°.</summary>
-	/// <value>РЎРѕСЃС‚РѕСЏРЅРёРµ РєРѕРјРїРѕРЅРµРЅС‚РѕРІ РѕРєРЅР°.</value>
+	/// <summary>Возвращает или задаёт состояние компонентов окна.</summary>
+	/// <value>Состояние компонентов окна.</value>
 	public bool IsEnabledComponents
 	{
 		get => _isEnabledComponents;
 		set => this.RaiseAndSetIfChanged(ref _isEnabledComponents, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РІС‹Р±СЂР°РЅРЅРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ.</summary>
-	/// <value>Р’С‹Р±СЂР°РЅРЅРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ.</value>
+	/// <summary>Возвращает или задаёт выбранное представление.</summary>
+	/// <value>Выбранное представление.</value>
 	public object CurrentView
 	{
 		get => _currentView;
 		set
 		{
-			if(_currentView == null || _currentView.GetType() != value.GetType())
-				this.RaiseAndSetIfChanged(ref _currentView, value);
+			ArgumentNullException.ThrowIfNull(value);
+			if(_currentView is null || _currentView.GetType() != value.GetType())
+			{
+				_currentView = value;
+				this.RaisePropertyChanged();
+			}
 		}
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РјРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ Р°РІС‚РѕСЂРёР·Р°С†РёРё.</summary>
-	/// <value>РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ Р°РІС‚РѕСЂРёР·Р°С†РёРё.</value>
+	/// <summary>Возвращает или задаёт модель представления авторизации.</summary>
+	/// <value>Модель представления авторизации.</value>
 	public AuthorizationViewModel AuthorizationViewModel
 	{
 		get => _authorizationViewModel;
 		set => this.RaiseAndSetIfChanged(ref _authorizationViewModel, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РјРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ СЃРїРёСЃРєР° Р·Р°РєР°Р·РѕРІ.</summary>
-	/// <value>РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ СЃРїРёСЃРєР° Р·Р°РєР°Р·РѕРІ.</value>
+	/// <summary>Возвращает или задаёт модель представления списка заказов.</summary>
+	/// <value>Модель представления списка заказов.</value>
 	public OrdersViewModel OrdersViewModel
 	{
 		get => _ordersViewModel;
 		set => this.RaiseAndSetIfChanged(ref _ordersViewModel, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РјРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ С‚РµРєСѓС‰РµРіРѕ Р·Р°РєР°Р·Р°.</summary>
-	/// <value>РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ С‚РµРєСѓС‰РµРіРѕ Р·Р°РєР°Р·Р°.</value>
+	/// <summary>Возвращает или задаёт модель представления текущего заказа.</summary>
+	/// <value>Модель представления текущего заказа.</value>
 	public CurrentOrderViewModel CurrentOrderViewModel
 	{
 		get => _currentOrderViewModel;
 		set => this.RaiseAndSetIfChanged(ref _currentOrderViewModel, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РјРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РѕСЃРЅРѕРІРЅС‹С… РєРЅРѕРїРѕРє.</summary>
-	/// <value>РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РѕСЃРЅРѕРІРЅС‹С… РєРЅРѕРїРѕРє.</value>
+	/// <summary>Возвращает или задаёт модель представления основных кнопок.</summary>
+	/// <value>Модель представления основных кнопок.</value>
 	public ButtonsViewModel ButtonsViewModel
 	{
 		get => _buttonsViewModel;
 		set => this.RaiseAndSetIfChanged(ref _buttonsViewModel, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РѕРєРЅРѕРј РЅР°СЃС‚СЂРѕРµРє.</summary>
-	/// <value>Р’Р·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РѕРєРЅРѕРј РЅР°СЃС‚СЂРѕРµРє.</value>
+	/// <summary>Возвращает взаимодействие с окном настроек.</summary>
+	/// <value>Взаимодействие с окном настроек.</value>
 	public Interaction<SettingsWindowViewModel, Unit?> ShowSettingsWindow { get; } = new();
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РѕРєРЅРѕРј "Рћ РїСЂРѕРіСЂР°РјРјРµ".</summary>
-	/// <value>Р’Р·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РѕРєРЅРѕРј "Рћ РїСЂРѕРіСЂР°РјРјРµ".</value>
+	/// <summary>Возвращает взаимодействие с окном "О программе".</summary>
+	/// <value>Взаимодействие с окном "О программе".</value>
 	public Interaction<InfoWindowViewModel, Unit?> ShowInfoWindow { get; } = new();
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РґРёР°Р»РѕРіРѕРІС‹РјРё РѕРєРЅР°РјРё.</summary>
-	/// <value>Р’Р·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РґРёР°Р»РѕРіРѕРІС‹РјРё РѕРєРЅР°РјРё.</value>
+	/// <summary>Возвращает взаимодействие с диалоговыми окнами.</summary>
+	/// <value>Взаимодействие с диалоговыми окнами.</value>
 	public DialogServiceInteractions DialogServiceInteractions { get; init; } = new();
 
 	#endregion
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="MainWindowViewModel"/>.</summary>
+	/// <summary>Создаёт экземпляр класса <see cref="MainWindowViewModel"/>.</summary>
 	/// <param name="signalRClient"><see cref="ISignalRClient"/>.</param>
 	/// <param name="subscriptionClient"><see cref="ISubscriptionClient"/>.</param>
 	/// <param name="postmenMessageHandler"><see cref="IPostmenMessageHandler"/>.</param>
-	/// <param name="serviceAddress">РђРґСЂРµСЃ СЃРµСЂРІРёСЃР°.</param>
-	/// <param name="postmanHelper">Р”Р°РЅРЅС‹Рµ РѕР± Р°РІС‚РѕСЂРёР·РѕРІР°РЅРЅРѕРј РїРѕС‡С‚Р°Р»СЊРѕРЅРµ.</param>
-	/// <param name="settingsWindowViewModel">РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РѕРєРЅР° РЅР°СЃС‚СЂРѕРµРє.</param>
-	/// <param name="infoWindowViewModel">РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РѕРєРЅР° "Рћ РїСЂРѕРіСЂР°РјРјРµ".</param>
+	/// <param name="serviceAddress">Адрес сервиса.</param>
+	/// <param name="postmanHelper">Данные об авторизованном почтальоне.</param>
+	/// <param name="settingsWindowViewModel">Модель представления окна настроек.</param>
+	/// <param name="infoWindowViewModel">Модель представления окна "О программе".</param>
 	public MainWindowViewModel(
 		ISignalRClient signalRClient,
 		ISubscriptionClient subscriptionClient,
@@ -159,35 +163,51 @@ public class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 		InfoCommand = ReactiveCommand.CreateFromTask(async () => 
 			await ShowWindowAboutProgramAsync(infoWindowViewModel));
 
-		this.WhenActivated(async disposables =>
+		this.WhenActivated(d =>
 		{
-			CurrentView = AuthorizationViewModel;
-			AuthorizationViewModel.SuccessfulAuthorizationEvent += OnSuccessfulAuthorization;
-			OrdersViewModel.ClearCurrentOrderEvent += OnClearingCurrentOrder;
-			ButtonsViewModel.ButtonClickedEvent += OnClickedButton;
-			settingsWindowViewModel.ChangeConfigurationEvent += OnChangeConfigurationAsync;
-			postmenMessageHandler.DeletedPostmanEvent += OnDeletedPostman;
-
-			await subscriptionClient.StartConsuming();
-
-			Disposable
-				.Create(async () =>
-				{
-					AuthorizationViewModel.SuccessfulAuthorizationEvent -= OnSuccessfulAuthorization;
-					OrdersViewModel.ClearCurrentOrderEvent -= OnClearingCurrentOrder;
-					ButtonsViewModel.ButtonClickedEvent -= OnClickedButton;
-					settingsWindowViewModel.ChangeConfigurationEvent -= OnChangeConfigurationAsync;
-					postmenMessageHandler.DeletedPostmanEvent -= OnDeletedPostman;
-
-					subscriptionClient.StopConsuming();
-
-					_signalRClient.ChangeServiceStatusEvent -= OnChangeServiceStatusAsync;
-					await _cancellationTokenSource.CancelAsync();
-					_cancellationTokenSource?.Dispose();
-					await _signalRClient.DisposeAsync();
-				})
-				.DisposeWith(disposables);
+			_ = ActivateAsync(
+				d,
+				subscriptionClient,
+				postmenMessageHandler,
+				settingsWindowViewModel);
 		});
+	}
+
+	private async Task ActivateAsync(
+		Action<IDisposable> d,
+		ISubscriptionClient subscriptionClient,
+		IPostmenMessageHandler postmenMessageHandler,
+		SettingsWindowViewModel settingsWindowViewModel)
+	{
+		CurrentView = AuthorizationViewModel;
+		AuthorizationViewModel.SuccessfulAuthorizationEvent += OnSuccessfulAuthorization;
+		OrdersViewModel.ClearCurrentOrderEvent += OnClearingCurrentOrder;
+		ButtonsViewModel.ButtonClickedEvent += OnClickedButton;
+		settingsWindowViewModel.ChangeConfigurationEvent += OnChangeConfigurationAsync;
+		postmenMessageHandler.DeletedPostmanEvent += OnDeletedPostman;
+
+		await subscriptionClient.StartConsuming();
+
+		d(Disposable.Create(() =>
+		{
+			AuthorizationViewModel.SuccessfulAuthorizationEvent -= OnSuccessfulAuthorization;
+			OrdersViewModel.ClearCurrentOrderEvent -= OnClearingCurrentOrder;
+			ButtonsViewModel.ButtonClickedEvent -= OnClickedButton;
+			settingsWindowViewModel.ChangeConfigurationEvent -= OnChangeConfigurationAsync;
+			postmenMessageHandler.DeletedPostmanEvent -= OnDeletedPostman;
+
+			subscriptionClient.StopConsuming();
+
+			_signalRClient.ChangeServiceStatusEvent -= OnChangeServiceStatusAsync;
+			_ = CleanupAsync();
+		}));
+	}
+
+	private async Task CleanupAsync()
+	{
+		await _cancellationTokenSource.CancelAsync();
+		_cancellationTokenSource.Dispose();
+		await _signalRClient.DisposeAsync();
 	}
 
 	#endregion

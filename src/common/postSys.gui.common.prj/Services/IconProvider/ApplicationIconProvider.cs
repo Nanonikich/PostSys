@@ -1,12 +1,12 @@
-п»їusing System;
+using System;
 
 using Avalonia.Controls;
 using Avalonia.Platform;
 
 namespace PostSys.Gui.Common.Services.IconProvider;
 
-/// <summary>РџСЂРѕРІР°Р№РґРµСЂ РёРєРѕРЅРєРё РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
-/// <param name="iconPath">РџСѓС‚СЊ Рє РёРєРѕРЅРєРµ.</param>
+/// <summary>Провайдер иконки приложения.</summary>
+/// <param name="iconPath">Путь к иконке.</param>
 public class ApplicationIconProvider(string iconPath) : IApplicationIconProvider
 {
 	#region Properties

@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 
 using NLog;
 
@@ -10,7 +10,7 @@ using PostSys.Gui.Common.ViewModels;
 
 namespace PostSys.Gui.ViewModels;
 
-/// <summary>РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РѕРєРЅР° "Рћ РїСЂРѕРіСЂР°РјРјРµ".</summary>
+/// <summary>Модель представления окна "О программе".</summary>
 public class InfoWindowViewModel : ViewModelBase
 {
 	#region Statics
@@ -28,16 +28,16 @@ public class InfoWindowViewModel : ViewModelBase
 
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РІРµСЂСЃРёСЋ РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
-	/// <value>Р’РµСЂСЃРёСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ.</value>
+	/// <summary>Возвращает или задаёт версию приложения.</summary>
+	/// <value>Версия приложения.</value>
 	public string VersionGui
 	{
 		get => _versionGui;
 		set => this.RaiseAndSetIfChanged(ref _versionGui, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РІРµСЂСЃРёСЋ СЃРµСЂРІРёСЃР°.</summary>
-	/// <value>Р’РµСЂСЃРёСЏ СЃРµСЂРІРёСЃР°.</value>
+	/// <summary>Возвращает или задаёт версию сервиса.</summary>
+	/// <value>Версия сервиса.</value>
 	public string VersionApi
 	{
 		get => _versionApi;
@@ -48,7 +48,7 @@ public class InfoWindowViewModel : ViewModelBase
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="InfoWindowViewModel"/>.</summary>
+	/// <summary>Создаёт экземпляр класса <see cref="InfoWindowViewModel"/>.</summary>
 	/// <param name="infoGraphQlClient"><see cref="IInfoGraphQlClient"/>.</param>
 	public InfoWindowViewModel(IInfoGraphQlClient infoGraphQlClient)
 	{

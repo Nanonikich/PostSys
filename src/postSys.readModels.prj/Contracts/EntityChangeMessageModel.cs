@@ -1,22 +1,22 @@
-п»їusing System;
+using System;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
 namespace PostSys.ReadModels.Contracts;
 
-/// <summary>РњРѕРґРµР»СЊ СЃРѕРѕР±С‰РµРЅРёСЏ, РѕС‚РїСЂР°РІР»СЏРµРјРѕРіРѕ РїРѕРґРїРёСЃС‡РёРєР°Рј, РѕР± РёР·РјРµРЅРµРЅРёРё СЃСѓС‰РЅРѕСЃС‚Рё.</summary>
+/// <summary>Модель сообщения, отправляемого подписчикам, об изменении сущности.</summary>
 [DataContract]
 public class EntityChangeMessageModel
 {
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃСѓС‰РЅРѕСЃС‚СЊ, РЅР°Рґ РєРѕС‚РѕСЂРѕР№ Р±С‹Р»Р° РІС‹РїРѕР»РЅРµРЅР° РѕРїРµСЂР°С†РёСЏ.</summary>
-	/// <value>РЎСѓС‰РЅРѕСЃС‚СЊ, РЅР°Рґ РєРѕС‚РѕСЂРѕР№ Р±С‹Р»Р° РІС‹РїРѕР»РЅРµРЅР° РѕРїРµСЂР°С†РёСЏ.</value>
+	/// <summary>Возвращает сущность, над которой была выполнена операция.</summary>
+	/// <value>Сущность, над которой была выполнена операция.</value>
 	[JsonPropertyName("entity")]
 	public string Entity { get; }
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃСѓС‰РЅРѕСЃС‚Рё.</summary>
-	/// <value>РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃСѓС‰РЅРѕСЃС‚Рё.</value>
+	/// <summary>Возвращает идентификатор сущности.</summary>
+	/// <value>Идентификатор сущности.</value>
 	[JsonPropertyName("id")]
 	public Guid Id { get; }
 
@@ -24,9 +24,9 @@ public class EntityChangeMessageModel
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="EntityChangeMessageModel"/>.</summary>
-	/// <param name="entity">РЎСѓС‰РЅРѕСЃС‚СЊ, РЅР°Рґ РєРѕС‚РѕСЂРѕР№ Р±С‹Р»Р° РІС‹РїРѕР»РЅРµРЅР° РѕРїРµСЂР°С†РёСЏ.</param>
-	/// <param name="id">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃСѓС‰РЅРѕСЃС‚Рё.</param>
+	/// <summary>Создаёт экземпляр класса <see cref="EntityChangeMessageModel"/>.</summary>
+	/// <param name="entity">Сущность, над которой была выполнена операция.</param>
+	/// <param name="id">Идентификатор сущности.</param>
 	public EntityChangeMessageModel(string entity, Guid id)
 	{
 		Entity = entity;

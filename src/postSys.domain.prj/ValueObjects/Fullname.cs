@@ -58,7 +58,7 @@ public class Fullname : ValueObject
 	{
 		yield return Surname;
 		yield return Name;
-		yield return Patronymic;
+		yield return Patronymic ?? string.Empty;
 	}
 
 	#endregion

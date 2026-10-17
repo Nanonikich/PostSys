@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Description>Общие настройки моделей чтения для сервиса PostSys.</Description>
     <RootNamespace>PostSys.Common</RootNamespace>
   </PropertyGroup>

@@ -1,27 +1,27 @@
-п»їusing System.Threading.Tasks;
+using System.Threading.Tasks;
 
 using PostSys.ReadModels.Contracts;
 
 namespace PostSys.Client.Data.Subscriptions;
 
-/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёР№, РїРѕР»СѓС‡РµРЅРЅС‹С… РїРѕ РїРѕРґРїРёСЃРєР°Рј HotChocolate.</summary>
+/// <summary>Обработчик сообщений, полученных по подпискам HotChocolate.</summary>
 public interface IMessageHandler
 {
 	#region Handlers
 
-	/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёСЏ Рѕ СЃРѕР·РґР°РЅРёРё СЃСѓС‰РЅРѕСЃС‚Рё, РїРѕР»СѓС‡РµРЅРЅРѕРіРѕ РїРѕ РїРѕРґРїРёСЃРєРµ.</summary>
-	/// <param name="message">РЎРѕРѕР±С‰РµРЅРёРµ Рѕ СЃРѕР·РґР°РЅРёРё СЃСѓС‰РЅРѕСЃС‚Рё, РїРѕР»СѓС‡РµРЅРЅРѕРµ РїРѕ РїРѕРґРїРёСЃРєРµ.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ.</returns>
+	/// <summary>Обработчик сообщения о создании сущности, полученного по подписке.</summary>
+	/// <param name="message">Сообщение о создании сущности, полученное по подписке.</param>
+	/// <returns>Асинхронная операция.</returns>
 	Task HandleMessageAboutCreationAsync(EntityCreationMessageModel message);
 
-	/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёСЏ РѕР± РёР·РјРµРЅРµРЅРёРё РїР°СЂР°РјРµС‚СЂР° СЃСѓС‰РЅРѕСЃС‚Рё, РїРѕР»СѓС‡РµРЅРЅРѕРіРѕ РїРѕ РїРѕРґРїРёСЃРєРµ.</summary>
-	/// <param name="message">РЎРѕРѕР±С‰РµРЅРёРµ РѕР± РёР·РјРµРЅРµРЅРёРё РїР°СЂР°РјРµС‚СЂР° СЃСѓС‰РЅРѕСЃС‚Рё, РїРѕР»СѓС‡РµРЅРЅРѕРµ РїРѕ РїРѕРґРїРёСЃРєРµ.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ.</returns>
+	/// <summary>Обработчик сообщения об изменении параметра сущности, полученного по подписке.</summary>
+	/// <param name="message">Сообщение об изменении параметра сущности, полученное по подписке.</param>
+	/// <returns>Асинхронная операция.</returns>
 	void HandleMessageAboutChangingParameterAsync(EntityParameterChangeMessageModel message);
 
-	/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёСЏ РѕР± СѓРґР°Р»РµРЅРёРё СЃСѓС‰РЅРѕСЃС‚Рё, РїРѕР»СѓС‡РµРЅРЅРѕРіРѕ РїРѕ РїРѕРґРїРёСЃРєРµ.</summary>
-	/// <param name="message">РЎРѕРѕР±С‰РµРЅРёРµ РѕР± СѓРґР°Р»РµРЅРёРё СЃСѓС‰РЅРѕСЃС‚Рё, РїРѕР»СѓС‡РµРЅРЅРѕРµ РїРѕ РїРѕРґРїРёСЃРєРµ.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ.</returns>
+	/// <summary>Обработчик сообщения об удалении сущности, полученного по подписке.</summary>
+	/// <param name="message">Сообщение об удалении сущности, полученное по подписке.</param>
+	/// <returns>Асинхронная операция.</returns>
 	void HandleMessageAboutDeletionAsync(EntityDeletionMessageModel message);
 
 	#endregion

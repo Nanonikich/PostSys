@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 
 using Avalonia.Controls;
@@ -10,8 +10,8 @@ using System.Net.Http;
 
 namespace PostSys.Gui.Common.Services.Dialogs;
 
-/// <summary>РЎРѕР·РґР°С‘С‚ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёСЏ РѕС‚РєСЂС‹С‚РёСЏ РґР»СЏ РѕРєРѕРЅ.</summary>
-/// <typeparam name="TViewModel">РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РѕРєРЅР° РґР»СЏ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёР№.</typeparam>
+/// <summary>Создаёт взаимодействия открытия для окон.</summary>
+/// <typeparam name="TViewModel">Модель представления окна для взаимодействий.</typeparam>
 public class DialogServiceInteractionSource<TViewModel> : IDisposable
 	where TViewModel : Window
 {
@@ -24,8 +24,8 @@ public class DialogServiceInteractionSource<TViewModel> : IDisposable
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="DialogServiceInteractionSource{TViewModel}"/>.</summary>
-	/// <param name="viewModel">РћРєРЅРѕ РґР»СЏ РїРѕСЃС‚СЂРѕРµРЅРёСЏ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёР№.</param>
+	/// <summary>Создаёт экземпляр класса <see cref="DialogServiceInteractionSource{TViewModel}"/>.</summary>
+	/// <param name="viewModel">Окно для построения взаимодействий.</param>
 	public DialogServiceInteractionSource(TViewModel viewModel)
 	{
 		_dialogReactiveWindow = new(viewModel)
@@ -39,8 +39,8 @@ public class DialogServiceInteractionSource<TViewModel> : IDisposable
 
 	#region Methods
 
-	/// <summary>Р РµРіРёСЃС‚СЂР°С†РёСЏ РѕР±СЂР°Р±РѕС‚С‡РёРєРѕРІ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёР№.</summary>
-	/// <param name="dialogServiceInteractions">РЎРµСЂРІРёСЃ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёР№.</param>
+	/// <summary>Регистрация обработчиков взаимодействий.</summary>
+	/// <param name="dialogServiceInteractions">Сервис взаимодействий.</param>
 	public void Register(DialogServiceInteractions dialogServiceInteractions)
 	{
 		_disposeInteractions =
@@ -55,8 +55,8 @@ public class DialogServiceInteractionSource<TViewModel> : IDisposable
 
 	#region IDisposable
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С„Р»Р°Рі СѓРЅРёС‡С‚РѕР¶РµРЅС‹ Р»Рё Р·Р°РІРёСЃРёРјРѕСЃС‚Рё.</summary>
-	/// <value>Р¤Р»Р°Рі СѓРЅРёС‡С‚РѕР¶РµРЅС‹ Р»Рё Р·Р°РІРёСЃРёРјРѕСЃС‚Рё.</value>
+	/// <summary>Возвращает или устанавливает флаг уничтожены ли зависимости.</summary>
+	/// <value>Флаг уничтожены ли зависимости.</value>
 	public bool IsDisposed { get; private set; }
 
 	/// <inheritdoc/>

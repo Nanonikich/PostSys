@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,36 +8,36 @@ using PostSys.ReadModels.Helpers;
 
 namespace PostSys.Client.Data.Subscriptions;
 
-/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёР№, РїРѕР»СѓС‡РµРЅРЅС‹С… РѕС‚ РїРѕРґРїРёСЃРѕРє HotChocolate РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РџРѕС‡С‚Р°Р»СЊРѕРЅ".</summary>
+/// <summary>Обработчик сообщений, полученных от подписок HotChocolate для сущности "Почтальон".</summary>
 public interface IPostmenMessageHandler : IMessageHandler
 {
 	#region Events
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ Рѕ СЃРѕР·РґР°РЅРёРё РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-	event EventHandler<Postman> CreatedPostmanEvent;
+	/// <summary>Событие, уведомляющее о создании почтальона.</summary>
+	event EventHandler<Postman>? CreatedPostmanEvent;
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ РѕР± РёР·РјРµРЅРµРЅРёРё РґР°РЅРЅС‹С… РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-	event EventHandler<Postman> ChangedPostmanEvent;
+	/// <summary>Событие, уведомляющее об изменении данных почтальона.</summary>
+	event EventHandler<Postman>? ChangedPostmanEvent;
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ РѕР± СѓРґР°Р»РµРЅРёРё РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-	event EventHandler<Guid> DeletedPostmanEvent;
+	/// <summary>Событие, уведомляющее об удалении почтальона.</summary>
+	event EventHandler<Guid>? DeletedPostmanEvent;
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ РѕР± РёР·РјРµРЅРµРЅРёРё email РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-	event EventHandler<KeyValuePair<Guid, string>> ChangedEmailPostmanEvent;
+	/// <summary>Событие, уведомляющее об изменении email почтальона.</summary>
+	event EventHandler<KeyValuePair<Guid, string>>? ChangedEmailPostmanEvent;
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ РѕР± РёР·РјРµРЅРµРЅРёРё РїРѕР»РЅРѕРіРѕ РёРјРµРЅРё РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-	event EventHandler<KeyValuePair<Guid, Fullname>> ChangedFullnamePostmanEvent;
+	/// <summary>Событие, уведомляющее об изменении полного имени почтальона.</summary>
+	event EventHandler<KeyValuePair<Guid, Fullname>>? ChangedFullnamePostmanEvent;
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ, СѓРІРµРґРѕРјР»СЏСЋС‰РµРµ РѕР± РёР·РјРµРЅРµРЅРёРё РїР°СЂРѕР»СЏ РїРѕС‡С‚Р°Р»СЊРѕРЅР°.</summary>
-	event EventHandler<KeyValuePair<Guid, string>> ChangedPasswordPostmanEvent;
+	/// <summary>Событие, уведомляющее об изменении пароля почтальона.</summary>
+	event EventHandler<KeyValuePair<Guid, string>>? ChangedPasswordPostmanEvent;
 
 	#endregion
 
 	#region Handlers
 
-	/// <summary>РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёСЏ РѕР± РёР·РјРµРЅРµРЅРёРё СЃСѓС‰РЅРѕСЃС‚Рё, РїРѕР»СѓС‡РµРЅРЅРѕРіРѕ РїРѕ РїРѕРґРїРёСЃРєРµ.</summary>
-	/// <param name="message">РЎРѕРѕР±С‰РµРЅРёРµ РѕР± РёР·РјРµРЅРµРЅРёРё СЃСѓС‰РЅРѕСЃС‚Рё, РїРѕР»СѓС‡РµРЅРЅРѕРµ РїРѕ РїРѕРґРїРёСЃРєРµ.</param>
-	/// <returns>РђСЃРёРЅС…СЂРѕРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ.</returns>
+	/// <summary>Обработчик сообщения об изменении сущности, полученного по подписке.</summary>
+	/// <param name="message">Сообщение об изменении сущности, полученное по подписке.</param>
+	/// <returns>Асинхронная операция.</returns>
 	Task HandleMessageAboutChangeAsync(EntityChangeMessageModel message);
 
 	#endregion

@@ -15,15 +15,15 @@ public class Package : Entity<Guid>, ISoftDelete
 
 	/// <summary>Возвращает или задаёт параметры посылки.</summary>
 	/// <value>Параметры посылки.</value>
-	public Dimensions Dimensions { get; private set; }
+	public Dimensions Dimensions { get; private set; } = null!;
 
 	/// <summary>Возвращает или задаёт адрес посылки.</summary>
 	/// <value>Адрес посылки.</value>
-	public Address Address { get; private set; }
+	public Address Address { get; private set; } = null!;
 
 	/// <summary>Возвращает или задаёт статус посылки.</summary>
 	/// <value>Статус посылки.</value>
-	public PackageStatus Status { get; private set; }
+	public PackageStatus Status { get; private set; } = null!;
 
 	/// <summary>Возвращает или задаёт идентификатор клиента, отправившего посылку.</summary>
 	/// <value>Идентификатор клиента, отправившего посылку.</value>
@@ -39,11 +39,11 @@ public class Package : Entity<Guid>, ISoftDelete
 
 	/// <summary>Возвращает или задаёт навигационное свойство связи с клиентом.</summary>
 	/// <value>Навигационное свойство связи с клиентом.</value>
-	public Client Client { get; }
+	public Client Client { get; } = null!;
 
 	/// <summary>Возвращает или задаёт навигационное свойство связи с почтальоном.</summary>
 	/// <value>Навигационное свойство связи с почтальоном.</value>
-	public Postman Postman { get; }
+	public Postman Postman { get; } = null!;
 
 	#endregion
 

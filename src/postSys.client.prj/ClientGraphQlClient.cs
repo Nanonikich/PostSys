@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -12,7 +12,7 @@ using PostSys.Client.Data;
 
 namespace PostSys.Client;
 
-/// <summary>РљР»РёРµРЅС‚ GraphQL РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РљР»РёРµРЅС‚".</summary>
+/// <summary>Клиент GraphQL для сущности "Клиент".</summary>
 public class ClientGraphQlClient : IClientGraphQlClient
 {
 	#region Data
@@ -24,8 +24,8 @@ public class ClientGraphQlClient : IClientGraphQlClient
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="ClientGraphQlClient"/>.</summary>
-	/// <param name="endpoint">РђРґСЂРµСЃ.</param>
+	/// <summary>Создаёт экземпляр класса <see cref="ClientGraphQlClient"/>.</summary>
+	/// <param name="endpoint">Адрес.</param>
 	public ClientGraphQlClient(string endpoint = "http://localhost:5000")
 	{
 		_url = endpoint + "/graphql";
@@ -75,15 +75,15 @@ public class ClientGraphQlClient : IClientGraphQlClient
 
 	private class ClientsByIdsResponseModel
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РґР°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ Р·Р°РїСЂРѕСЃРѕРј Рѕ РєР»РёРµРЅС‚Р°С….</summary>
-		/// <value>Р”Р°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ Р·Р°РїСЂРѕСЃРѕРј Рѕ РєР»РёРµРЅС‚Р°С….</value>
+		/// <summary>Возвращает или задаёт данные, полученные запросом о клиентах.</summary>
+		/// <value>Данные, полученные запросом о клиентах.</value>
 		public ClientsByIdsData Clients { get; set; }
 	}
 
 	private class ClientsByIdsData
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ СЃРїРёСЃРѕРє РєР»РёРµРЅС‚РѕРІ, РїРѕР»СѓС‡РµРЅРЅС‹С… Р·Р°РїСЂРѕСЃРѕРј.</summary>
-		/// <value>РЎРїРёСЃРѕРє РєР»РёРµРЅС‚РѕРІ, РїРѕР»СѓС‡РµРЅРЅС‹С… Р·Р°РїСЂРѕСЃРѕРј.</value>
+		/// <summary>Возвращает или задаёт список клиентов, полученных запросом.</summary>
+		/// <value>Список клиентов, полученных запросом.</value>
 		public List<ReadModels.Client> Items { get; set; }
 	}
 

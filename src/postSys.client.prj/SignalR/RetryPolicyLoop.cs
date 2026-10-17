@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -6,7 +6,7 @@ using NLog;
 
 namespace PostSys.Client.SignalR;
 
-/// <summary>РџРѕР»РёС‚РёРєР° Р±РµСЃРєРѕРЅРµС‡РЅРѕРіРѕ РїРµСЂРµРїРѕРґРєР»СЋС‡РµРЅРёСЏ РґР»СЏ С‚РµС…РЅРѕР»РѕРіРёРё SignalR.</summary>
+/// <summary>Политика бесконечного переподключения для технологии SignalR.</summary>
 public class RetryPolicyLoop : IRetryPolicy
 {
 	#region Constants
@@ -17,7 +17,7 @@ public class RetryPolicyLoop : IRetryPolicy
 
 	#region Static
 
-	/// <summary>РџСЂРѕС‚РѕРєРѕР» СЂР°Р±РѕС‚С‹.</summary>
+	/// <summary>Протокол работы.</summary>
 	private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
 	#endregion

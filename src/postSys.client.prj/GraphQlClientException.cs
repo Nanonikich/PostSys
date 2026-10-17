@@ -1,19 +1,19 @@
-п»їusing System;
+using System;
 
 namespace PostSys.Client;
 
-/// <summary>РСЃРєР»СЋС‡РµРЅРёСЏ РґР»СЏ РєР»РёРµРЅС‚Р° GraphQL.</summary>
+/// <summary>Исключения для клиента GraphQL.</summary>
 public class GraphQlClientException : Exception
 {
 	#region .ctor
 
-	/// <summary>РСЃРєР»СЋС‡РµРЅРёСЏ РґР»СЏ РєР»РёРµРЅС‚Р° GraphQL.</summary>
-	/// <param name="message">РЎРѕРѕР±С‰РµРЅРёРµ РѕР± РёСЃРєР»СЋС‡РµРЅРёРё.</param>
+	/// <summary>Исключения для клиента GraphQL.</summary>
+	/// <param name="message">Сообщение об исключении.</param>
 	public GraphQlClientException(string message) : base(message) { }
 
-	/// <summary>РСЃРєР»СЋС‡РµРЅРёСЏ РґР»СЏ РєР»РёРµРЅС‚Р° GraphQL.</summary>
-	/// <param name="message">РЎРѕРѕР±С‰РµРЅРёРµ РѕР± РёСЃРєР»СЋС‡РµРЅРёРё.</param>
-	/// <param name="innerException">Р’Р»РѕР¶РµРЅРЅРѕРµ РёСЃРєР»СЋС‡РµРЅРёРµ.</param>
+	/// <summary>Исключения для клиента GraphQL.</summary>
+	/// <param name="message">Сообщение об исключении.</param>
+	/// <param name="innerException">Вложенное исключение.</param>
 	public GraphQlClientException(string message, Exception innerException) : base(message, innerException) { }
 
 	#endregion

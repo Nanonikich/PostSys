@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -14,7 +14,7 @@ using PostSys.ReadModels.Contracts;
 
 namespace PostSys.Client;
 
-/// <summary>РљР»РёРµРЅС‚ GraphQL РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё "РџРѕСЃС‹Р»РєР°".</summary>
+/// <summary>Клиент GraphQL для сущности "Посылка".</summary>
 public class PackageGraphQlClient : IPackageGraphQlClient
 {
 	#region Data
@@ -26,8 +26,8 @@ public class PackageGraphQlClient : IPackageGraphQlClient
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="PackageGraphQlClient"/>.</summary>
-	/// <param name="endpoint">РђРґСЂРµСЃ.</param>
+	/// <summary>Создаёт экземпляр класса <see cref="PackageGraphQlClient"/>.</summary>
+	/// <param name="endpoint">Адрес.</param>
 	public PackageGraphQlClient(string endpoint = "http://localhost:5000")
 	{
 		_url = endpoint + "/graphql";
@@ -83,15 +83,15 @@ public class PackageGraphQlClient : IPackageGraphQlClient
 
 	private class PackagesByIdsResponseModel
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РґР°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ Р·Р°РїСЂРѕСЃРѕРј Рѕ РїРѕСЃС‹Р»РєР°С….</summary>
-		/// <value>Р”Р°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ Р·Р°РїСЂРѕСЃРѕРј Рѕ РїРѕСЃС‹Р»РєР°С….</value>
+		/// <summary>Возвращает или задаёт данные, полученные запросом о посылках.</summary>
+		/// <value>Данные, полученные запросом о посылках.</value>
 		public PackagesByIdsData Packages { get; set; }
 	}
 
 	private class PackagesByIdsData
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ СЃРїРёСЃРѕРє РїРѕСЃС‹Р»РѕРє, РїРѕР»СѓС‡РµРЅРЅС‹С… Р·Р°РїСЂРѕСЃРѕРј.</summary>
-		/// <value>РЎРїРёСЃРѕРє РїРѕСЃС‹Р»РѕРє, РїРѕР»СѓС‡РµРЅРЅС‹С… Р·Р°РїСЂРѕСЃРѕРј.</value>
+		/// <summary>Возвращает или задаёт список посылок, полученных запросом.</summary>
+		/// <value>Список посылок, полученных запросом.</value>
 		public List<Package> Items { get; set; }
 	}
 
@@ -146,15 +146,15 @@ public class PackageGraphQlClient : IPackageGraphQlClient
 
 	private class PackagesByPostmanIdResponseModel
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РґР°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ Р·Р°РїСЂРѕСЃРѕРј Рѕ РїРѕСЃС‹Р»РєР°С….</summary>
-		/// <value>Р”Р°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ Р·Р°РїСЂРѕСЃРѕРј Рѕ РїРѕСЃС‹Р»РєР°С….</value>
+		/// <summary>Возвращает или задаёт данные, полученные запросом о посылках.</summary>
+		/// <value>Данные, полученные запросом о посылках.</value>
 		public PackagesByPostmanIdData Packages { get; set; }
 	}
 
 	private class PackagesByPostmanIdData
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ СЃРїРёСЃРѕРє РїРѕСЃС‹Р»РѕРє, РїРѕР»СѓС‡РµРЅРЅС‹С… Р·Р°РїСЂРѕСЃРѕРј.</summary>
-		/// <value>РЎРїРёСЃРѕРє РїРѕСЃС‹Р»РѕРє, РїРѕР»СѓС‡РµРЅРЅС‹С… Р·Р°РїСЂРѕСЃРѕРј.</value>
+		/// <summary>Возвращает или задаёт список посылок, полученных запросом.</summary>
+		/// <value>Список посылок, полученных запросом.</value>
 		public List<Package> Items { get; set; }
 	}
 
@@ -203,15 +203,15 @@ public class PackageGraphQlClient : IPackageGraphQlClient
 
 	private class ChangePackageStatusResponse
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РґР°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ Р·Р°РїСЂРѕСЃРѕРј РѕР± РёР·РјРµРЅРµРЅРёРё СЃС‚Р°С‚СѓСЃР° РїРѕСЃС‹Р»РєРё.</summary>
-		/// <value>Р”Р°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ Р·Р°РїСЂРѕСЃРѕРј РѕР± РёР·РјРµРЅРµРЅРёРё СЃС‚Р°С‚СѓСЃР° РїРѕСЃС‹Р»РєРё.</value>
+		/// <summary>Возвращает или задаёт данные, полученные запросом об изменении статуса посылки.</summary>
+		/// <value>Данные, полученные запросом об изменении статуса посылки.</value>
 		public ChangePackageStatusData ChangePackageStatus { get; set; }
 	}
 
 	private class ChangePackageStatusData
 	{
-		/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ СѓРґР°Р»РѕСЃСЊ Р»Рё РёР·РјРµРЅРёС‚СЊ СЃС‚Р°С‚СѓСЃ Сѓ РїРѕСЃС‹Р»РєРё.</summary>
-		/// <value>РЈРґР°Р»РѕСЃСЊ Р»Рё РёР·РјРµРЅРёС‚СЊ СЃС‚Р°С‚СѓСЃ Сѓ РїРѕСЃС‹Р»РєРё.</value>
+		/// <summary>Возвращает или задаёт удалось ли изменить статус у посылки.</summary>
+		/// <value>Удалось ли изменить статус у посылки.</value>
 		public bool IsSuccess { get; set; }
 	}
 

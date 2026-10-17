@@ -99,8 +99,8 @@ public abstract class ApiHandlerTestFixtureBase : DatabaseTestBase
 			});
 		ServiceProvider = _factory.Services;
 		RequestExecutor = await ServiceProvider
-			.GetRequiredService<IRequestExecutorResolver>()
-			.GetRequestExecutorAsync();
+			.GetRequiredService<IRequestExecutorProvider>()
+			.GetExecutorAsync();
 	}
 
 	#endregion

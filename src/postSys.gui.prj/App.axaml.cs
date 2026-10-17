@@ -1,14 +1,11 @@
-п»їusing System;
+using System;
 
 using Avalonia;
 using Avalonia.Markup.Xaml;
-using Avalonia.ReactiveUI;
 using Avalonia.Controls.ApplicationLifetimes;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-
-using ReactiveUI;
 
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
@@ -30,7 +27,7 @@ using PostSys.Gui.Views.Windows;
 
 namespace PostSys.Gui;
 
-/// <summary>РќР°СЃС‚СЂРѕР№РєРё РїСЂРёР»РѕР¶РµРЅРёСЏ.</summary>
+/// <summary>Настройки приложения.</summary>
 public partial class App : Application
 {
 	public IServiceProvider Container { get; private set; }
@@ -45,7 +42,7 @@ public partial class App : Application
 		AvaloniaXamlLoader.Load(this);
 	}
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="App"/>.</summary>
+	/// <summary>Создаёт экземпляр класса <see cref="App"/>.</summary>
 	public App()
 	{
 		Container = ConfigureServices();
@@ -107,12 +104,6 @@ public partial class App : Application
 					.AddTransient<SettingsWindowViewModel>()
 					.AddSingleton<InfoWindowViewModel>();
 
-				var resolver = Locator.CurrentMutable;
-				resolver.InitializeSplat();
-				resolver.InitializeReactiveUI();
-
-				RxApp.MainThreadScheduler = AvaloniaScheduler.Instance;
-				RxApp.DefaultExceptionHandler = new ExceptionHandler();
 			})
 			.Build();
 
@@ -120,7 +111,7 @@ public partial class App : Application
 		return host.Services;
 	}
 
-	/// <summary>РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ С„СЂРµР№РјРІРѕСЂРє.</summary>
+	/// <summary>Инициализирует фреймворк.</summary>
 	public override void OnFrameworkInitializationCompleted()
 	{
 		if(ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -155,7 +146,8 @@ public partial class App : Application
 	}
 }
 
-class ExceptionHandler : IObserver<Exception>
+/// <summary>?????????? ?????????????? ?????? ReactiveUI.</summary>
+internal sealed class ExceptionHandler : IObserver<Exception>
 {
 	public void OnCompleted() { }
 

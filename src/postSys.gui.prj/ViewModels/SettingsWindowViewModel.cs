@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -14,7 +14,7 @@ using PostSys.Gui.Configuration;
 
 namespace PostSys.Gui.ViewModels;
 
-/// <summary>РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РѕРєРЅР° РЅР°СЃС‚СЂРѕРµРє.</summary>
+/// <summary>Модель представления окна настроек.</summary>
 public class SettingsWindowViewModel : ViewModelBase
 {
 	#region Static
@@ -34,45 +34,45 @@ public class SettingsWindowViewModel : ViewModelBase
 
 	#region Commands
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕРјР°РЅРґСѓ РїСЂРёРјРµРЅРµРЅРёСЏ РЅРѕРІС‹С… РЅР°СЃС‚СЂРѕРµРє.</summary>
-	/// <value>РљРѕРјР°РЅРґР° РїСЂРёРјРµРЅРµРЅРёСЏ РЅРѕРІС‹С… РЅР°СЃС‚СЂРѕРµРє.</value>
+	/// <summary>Возвращает команду применения новых настроек.</summary>
+	/// <value>Команда применения новых настроек.</value>
 	public ICommand ApplySettingsCommand { get; }
 
 	#endregion
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ Р°РґСЂРµСЃ РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє СЃРµСЂРІРёСЃСѓ.</summary>
-	/// <value>РђРґСЂРµСЃ РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє СЃРµСЂРІРёСЃСѓ.</value>
+	/// <summary>Возвращает или задаёт адрес подключения к сервису.</summary>
+	/// <value>Адрес подключения к сервису.</value>
 	public string ServiceAddress
 	{
 		get => _serviceAddress;
 		set => this.RaiseAndSetIfChanged(ref _serviceAddress, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёР»Рё Р·Р°РґР°С‘С‚ РєР»СЋС‡ Рє РЇРЅРґРµРєСЃ.API.</summary>
-	/// <value>РљР»СЋС‡ Рє РЇРЅРґРµРєСЃ.API.</value>
+	/// <summary>Возвращает или задаёт ключ к Яндекс.API.</summary>
+	/// <value>Ключ к Яндекс.API.</value>
 	public string YandexApiKey
 	{
 		get => _yandexApiKey;
 		set => this.RaiseAndSetIfChanged(ref _yandexApiKey, value);
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РґРёР°Р»РѕРіРѕРІС‹РјРё РѕРєРЅР°РјРё.</summary>
-	/// <value>Р’Р·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РґРёР°Р»РѕРіРѕРІС‹РјРё РѕРєРЅР°РјРё.</value>
+	/// <summary>Возвращает взаимодействие с диалоговыми окнами.</summary>
+	/// <value>Взаимодействие с диалоговыми окнами.</value>
 	public DialogServiceInteractions DialogServiceInteractions { get; init; } = new();
 
 	#endregion
 
 	#region Events
 
-	/// <summary>РЎРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ РєРѕРЅС„РёРіСѓСЂР°С†РёРё.</summary>
+	/// <summary>Событие изменения конфигурации.</summary>
 	public event EventHandler<bool> ChangeConfigurationEvent;
 
 	#endregion
 
 	#region .ctor
 
-	/// <summary>РЎРѕР·РґР°С‘С‚ СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° <see cref="SettingsWindowViewModel"/>.</summary>
-	/// <param name="configuration">РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ.</param>
+	/// <summary>Создаёт экземпляр класса <see cref="SettingsWindowViewModel"/>.</summary>
+	/// <param name="configuration">Конфигурация приложения.</param>
 	public SettingsWindowViewModel(ApplicationConfiguration configuration)
 	{
 		ServiceAddress = configuration.ServiceAddress;

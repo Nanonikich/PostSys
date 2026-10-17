@@ -1,33 +1,33 @@
-п»їusing System;
+using System;
 using System.Reflection;
 
 namespace PostSys.Framework.Common;
 
-/// <summary>РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃР±РѕСЂРєРµ.</summary>
-/// <param name="assembly">РЎР±РѕСЂРєР°, РїРѕ РєРѕС‚РѕСЂРѕР№ СЃРѕР±РёСЂР°РµС‚СЃСЏ РёРЅС„РѕСЂРјР°С†РёСЏ.</param>
+/// <summary>Информация о сборке.</summary>
+/// <param name="assembly">Сборка, по которой собирается информация.</param>
 public class AssemblyInfo(Assembly assembly)
 {
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ СЃР±РѕСЂРєРµ, СЃРѕРґРµСЂР¶Р°С‰РµР№ С‚РѕС‡РєСѓ РІС…РѕРґР°.</summary>
-	/// <value>РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃР±РѕСЂРєРµ, СЃРѕРґРµСЂР¶Р°С‰РµР№ С‚РѕС‡РєСѓ РІС…РѕРґР°.</value>
+	/// <summary>Возвращает информацию о сборке, содержащей точку входа.</summary>
+	/// <value>Информация о сборке, содержащей точку входа.</value>
 	public static AssemblyInfo EntryAssembly { get; } = FromEntryAssembly();
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃР±РѕСЂРєСѓ, РїРѕ РєРѕС‚РѕСЂРѕР№ СЃРѕР±РёСЂР°РµС‚СЃСЏ РёРЅС„РѕСЂРјР°С†РёСЏ.</summary>
-	/// <value>РЎР±РѕСЂРєР°, РїРѕ РєРѕС‚РѕСЂРѕР№ СЃРѕР±РёСЂР°РµС‚СЃСЏ РёРЅС„РѕСЂРјР°С†РёСЏ.</value>
+	/// <summary>Возвращает сборку, по которой собирается информация.</summary>
+	/// <value>Сборка, по которой собирается информация.</value>
 	public Assembly Assembly { get; } = assembly;
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РІРµСЂСЃРёСЋ СЃР±РѕСЂРєРё.</summary>
-	/// <value>Р’РµСЂСЃРёСЏ СЃР±РѕСЂРєРё.</value>
+	/// <summary>Возвращает версию сборки.</summary>
+	/// <value>Версия сборки.</value>
 	public Version? Version => Assembly.GetName().Version;
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ СЃР±РѕСЂРєРµ, РёР· РєРѕС‚РѕСЂРѕР№ РІС‹Р·С‹РІР°РµС‚СЃСЏ РґР°РЅРЅС‹Р№ РјРµС‚РѕРґ.</summary>
-	/// <returns>РРЅС„РѕСЂРјР°С†РёСЋ Рѕ СЃР±РѕСЂРєРµ, РёР· РєРѕС‚РѕСЂРѕР№ РІС‹Р·С‹РІР°РµС‚СЃСЏ РґР°РЅРЅС‹Р№ РјРµС‚РѕРґ.</returns>
+	/// <summary>Возвращает информацию о сборке, из которой вызывается данный метод.</summary>
+	/// <returns>Информацию о сборке, из которой вызывается данный метод.</returns>
 	public static AssemblyInfo FromCallingAssembly()
 	{
 		return new AssemblyInfo(Assembly.GetCallingAssembly());
 	}
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ СЃР±РѕСЂРєРµ, СЃРѕРґРµСЂР¶Р°С‰РµР№ С‚РѕС‡РєСѓ РІС…РѕРґР°.</summary>
-	/// <returns>РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃР±РѕСЂРєРµ.</returns>
+	/// <summary>Возвращает информацию о сборке, содержащей точку входа.</summary>
+	/// <returns>Информация о сборке.</returns>
 	public static AssemblyInfo FromEntryAssembly()
 	{
 		return new AssemblyInfo(Assembly.GetEntryAssembly() ?? throw new InvalidOperationException("Entry assembly is not defined."));

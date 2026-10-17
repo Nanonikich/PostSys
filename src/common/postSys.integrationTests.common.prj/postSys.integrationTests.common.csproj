@@ -1,14 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Description>Общие настройки по интеграционным тестам для проектов DDD.</Description>
     <RootNamespace>PostSys.IntegrationTests.Common</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="HotChocolate.Abstractions"/>
-    <PackageReference Include="HotChocolate.Execution"/>
+    <PackageReference Include="HotChocolate.Execution.Abstractions"/>
+    <PackageReference Include="HotChocolate"/>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing"/>
     <PackageReference Include="Microsoft.Build.CopyOnWrite">
       <PrivateAssets>all</PrivateAssets>

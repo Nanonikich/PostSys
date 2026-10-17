@@ -1,14 +1,14 @@
-п»їnamespace PostSys.Domain.Contracts;
+namespace PostSys.Domain.Contracts;
 
-/// <summary>РЎС‚Р°С‚СѓСЃС‹ РїРѕСЃС‹Р»РєРё.</summary>
+/// <summary>Статусы посылки.</summary>
 public enum PackageStatus
 {
-	/// <summary>РџРѕСЃС‹Р»РєР° РЅР° СЃРєР»Р°РґРµ.</summary>
+	/// <summary>Посылка на складе.</summary>
 	OnWarehouse,
 
-	/// <summary>РџРѕСЃС‹Р»РєР° РІ РїСЂРѕС†РµСЃСЃРµ РґРѕСЃС‚Р°РІРєРё.</summary>
+	/// <summary>Посылка в процессе доставки.</summary>
 	InWork,
 
-	/// <summary>РџРѕСЃС‹Р»РєР° РґРѕСЃС‚Р°РІР»РµРЅР°.</summary>
+	/// <summary>Посылка доставлена.</summary>
 	End
 }

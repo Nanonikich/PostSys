@@ -1,16 +1,16 @@
-п»їnamespace PostSys.Gui.Common.Helpers;
+namespace PostSys.Gui.Common.Helpers;
 
-/// <summary>РўРµРєСЃС‚ СЃРѕРѕР±С‰РµРЅРёСЏ.</summary>
+/// <summary>Текст сообщения.</summary>
 public record MessageContent
 {
 	#region Properties
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ Р·Р°РіРѕР»РѕРІРѕРє СЃРѕРѕР±С‰РµРЅРёСЏ.</summary>
-	/// <value>Р—Р°РіРѕР»РѕРІРѕРє СЃРѕРѕР±С‰РµРЅРёСЏ.</value>
+	/// <summary>Возвращает заголовок сообщения.</summary>
+	/// <value>Заголовок сообщения.</value>
 	public string Title { get; init; }
 
-	/// <summary>Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕРЅС‚РµРЅС‚ СЃРѕРѕР±С‰РµРЅРёСЏ.</summary>
-	/// <value>РљРѕРЅС‚РµРЅС‚ СЃРѕРѕР±С‰РµРЅРёСЏ.</value>
+	/// <summary>Возвращает контент сообщения.</summary>
+	/// <value>Контент сообщения.</value>
 	public string Message { get; init; }
 
 	#endregion

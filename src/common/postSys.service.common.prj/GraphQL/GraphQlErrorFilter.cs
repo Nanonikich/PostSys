@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 
 using HotChocolate;
+using HotChocolate.Execution;
 
 using PostSys.Service.Common.Exceptions;
 

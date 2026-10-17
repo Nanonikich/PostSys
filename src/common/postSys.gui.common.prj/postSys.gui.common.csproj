@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Description>Общие настройки для GUI.</Description>
     <RootNamespace>PostSys.Gui.Common</RootNamespace>
   </PropertyGroup>
@@ -15,11 +15,12 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia" />
-    <PackageReference Include="Avalonia.Diagnostics" />
-    <PackageReference Include="Avalonia.ReactiveUI" />
+    <PackageReference Include="AvaloniaUI.DiagnosticsSupport" />
+    <PackageReference Include="ReactiveUI.Avalonia" />
     <PackageReference Include="Avalonia.Themes.Fluent" />
-    <PackageReference Include="Avalonia.Xaml.Interactivity" />
     <PackageReference Include="MessageBox.Avalonia" />
+    <PackageReference Include="ReactiveUI.Disposables" />
+    <PackageReference Include="System.Reactive" />
     <PackageReference Include="Microsoft.Build.CopyOnWrite">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

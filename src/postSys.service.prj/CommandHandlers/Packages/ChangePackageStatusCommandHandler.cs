@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +14,7 @@ using PostSys.Service.Subscriptions;
 
 namespace PostSys.Service.CommandHandlers.Packages;
 
-/// <summary>РћРїСЂРµРґРµР»СЏРµС‚ РѕР±СЂР°Р±РѕС‚С‡РёРє РєРѕРјР°РЅРґС‹ РёР·РјРµРЅРµРЅРёСЏ РґР°РЅРЅС‹С… Рѕ СЃС‚Р°С‚СѓСЃРµ РїРѕСЃС‹Р»РєРё.</summary>
+/// <summary>Определяет обработчик команды изменения данных о статусе посылки.</summary>
 /// <param name="repository"><see cref="IPackageRepository"/>.</param>
 /// <param name="topicEventSender"><see cref="ITopicEventSender"/>.</param>
 public class ChangePackageStatusCommandHandler(IPackageRepository repository, ITopicEventSender topicEventSender)

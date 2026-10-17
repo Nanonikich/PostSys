@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Globalization;
 
 using Avalonia;
@@ -7,7 +7,7 @@ using Avalonia.Data.Converters;
 
 namespace PostSys.Gui.Converters;
 
-/// <summary>РљРѕРЅРІРµСЂС‚РµСЂ РјРѕРґРµР»Рё РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ Рє РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЋ.</summary>
+/// <summary>Конвертер модели представления к представлению.</summary>
 public class ViewModelToViewConverter : IValueConverter
 {
 	#region Methods

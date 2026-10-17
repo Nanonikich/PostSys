@@ -1,20 +1,21 @@
-п»їusing System;
+using System;
 
 namespace PostSys.Service.Common.Converters;
 
-/// <summary>РљРѕРЅРІРµСЂС‚РµСЂ РѕРґРёРЅР°РєРѕРІС‹С… enum.</summary>
-/// <typeparam name="TInput">РўРёРї РІС…РѕРґРЅРѕРіРѕ enum.</typeparam>
-/// <typeparam name="TOutput">РўРёРї РІРѕР·РІСЂР°С‰Р°РµРјРѕРіРѕ enum.</typeparam>
+/// <summary>Конвертер одинаковых enum.</summary>
+/// <typeparam name="TInput">Тип входного enum.</typeparam>
+/// <typeparam name="TOutput">Тип возвращаемого enum.</typeparam>
 public static class EnumConverter<TInput, TOutput>
 {
 	#region Methods
 
-	/// <summary>РљРѕРЅРІРµСЂС‚РёСЂСѓРµС‚ Р·РЅР°С‡РµРЅРёРµ РѕРґРЅРѕРіРѕ enum РІ Р·РЅР°С‡РµРЅРёРµ РґСЂСѓРіРѕРіРѕ enum.</summary>
-	/// <param name="inputEnum">Enum РґР»СЏ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ.</param>
-	/// <returns>Enum Р·Р°РґР°РЅРЅРѕРіРѕ С‚РёРїР°.</returns>
+	/// <summary>Конвертирует значение одного enum в значение другого enum.</summary>
+	/// <param name="inputEnum">Enum для преобразования.</param>
+	/// <returns>Enum заданного типа.</returns>
 	public static TOutput Convert(TInput inputEnum)
 	{
-		return (TOutput)Enum.Parse(typeof(TInput), inputEnum.ToString());
+		ArgumentNullException.ThrowIfNull(inputEnum);
+		return (TOutput)Enum.Parse(typeof(TOutput), inputEnum.ToString()!);
 	}
 
 	#endregion
